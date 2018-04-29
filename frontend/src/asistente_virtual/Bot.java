@@ -6,21 +6,98 @@ import java.util.GregorianCalendar;
 
 public class Bot {
 
-	static String MSG_NO_ENTIENDO = "No entiendo lo que me estas diciendo";
+	private String nombre;
+	
+	public final static String USUARIO = "delucas";	
+	static String MSG_NO_ENTIENDO = "Disculpa... no entiendo el pedido, @" + USUARIO + " ¿podrías repetirlo?";
+	
 	private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+	
+	public Bot(String nombre) {
+		this.nombre = nombre;
+	}
 	
 	public String leerMensaje(String mensaje) {
 		
+		mensaje = removerTildes(mensaje.toLowerCase());
 		String respuesta = "";
 		
-		switch (mensaje) {
-		default : respuesta = MSG_NO_ENTIENDO;
-			
+		if(mensaje.contains("hola") || mensaje.contains("buen") || mensaje.contains("hey")) {
+			respuesta = "¡Hola, @" + USUARIO + "!";
 		}
 		
-		return respuesta;
+		if(mensaje.contains("gracias")) {
+			respuesta = "No es nada, @" + USUARIO;
+		}
+		
+		if(mensaje.contains("hora")) {
+			respuesta = "@" + USUARIO + " son las 3:15 PM";
+		}
+		
+		if(mensaje.contains("dia es") || mensaje.contains("fecha")) {
+			respuesta = "@" + USUARIO + " hoy es 1 de abril de 2018";
+		}
+		
+		if(mensaje.contains("semana")) {
+			respuesta = "@" + USUARIO + " hoy es domingo";
+		}
+		
+		if(mensaje.contains("que dia sera") && mensaje.indexOf("dias") >= 0) {
+			respuesta = "@" + USUARIO + " será el martes 3 de abril de 2018";
+		}
+
+		if(mensaje.contains("que dia sera") && mensaje.indexOf("meses") >= 0) {
+			respuesta = "@" + USUARIO + " será el viernes 1 de junio de 2018";
+		}
+		
+		if(mensaje.contains("que dia sera") && mensaje.indexOf("anos") >= 0) {
+			respuesta = "@" + USUARIO + " será el miércoles 1 de abril de 2020";
+		}
+		
+		if(mensaje.contains("que dia fue") && mensaje.indexOf("ayer") >= 0) {
+			respuesta = "@" + USUARIO + " fue sábado 31 de marzo de 2018";
+		}
+
+		if(mensaje.contains("que dia fue") && mensaje.indexOf("dias") >= 0) {
+			respuesta = "@" + USUARIO + " fue jueves 29 de marzo de 2018";
+		}
+		
+		if(mensaje.contains("que dia fue") && mensaje.indexOf("meses") >= 0) {
+			respuesta = "@" + USUARIO + " fue el jueves 1 de febrero de 2018";
+		}
+		
+		if(mensaje.contains("que dia fue") && mensaje.indexOf("anos") >= 0) {
+			respuesta = "@" + USUARIO + " fue el viernes 1 de abril de 2016";
+		}
+		
+		if(mensaje.contains("desde")) {
+			respuesta = "@" + USUARIO + " entre el 1 de abril de 2017 y el 1 de abril de 2018 pasaron 365 días";
+		}
+		
+		if(mensaje.contains("faltan")) {
+			respuesta = "@" + USUARIO + " faltan 9 días";
+		}
+		
+		if(mensaje.contains("cuanto es")) {
+			respuesta = "@" + USUARIO + " 3";
+		}
+		
+		return respuesta == "" ? MSG_NO_ENTIENDO : respuesta;
 	}
 	
+	
+	// Remueve los tildes del String que recibe.
+	private String removerTildes(String texto) {
+	    String original = "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖØÙÚÛÜİßàáâãäåæçèéêëìíîïğñòóôõöøùúûüıÿ";
+	    // Cadena de caracteres ASCII que reemplazarán los originales.
+	    String ascii = "AAAAAAACEEEEIIIIDNOOOOOOUUUUYBaaaaaaaceeeeiiiionoooooouuuuyy";
+	    String output = texto;
+	    for (int i = 0; i < original.length(); i++) {
+	    // Reemplazamos los caracteres especiales.
+	    	output = output.replace(original.charAt(i), ascii.charAt(i));
+	    }
+	    return output;
+	}
 	
 	/**
 	 * @param cantidad (mayor o menor a cero segun fecha hacia

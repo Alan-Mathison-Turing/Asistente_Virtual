@@ -11,8 +11,8 @@ public class BotTests {
 	Bot bot;
 	
 	@Before
-	public void InstanciarBot() {
-		bot = new Bot();
+	public void instanciarBot() {
+		bot = new Bot("jenkins");
 	}
 	
 	@Test
@@ -26,5 +26,5 @@ public class BotTests {
 		String rta = bot.leerMensaje("");
 		assertEquals(Bot.MSG_NO_ENTIENDO, rta);
 	}
-	
+
 }
