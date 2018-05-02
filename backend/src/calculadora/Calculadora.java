@@ -15,6 +15,17 @@ public class Calculadora {
 	 * Centa en las calculadora. <br>
 	 */
 	private String cuenta;
+
+	/**
+	 * Índice de la posición de los números en la cuenta. <br>
+	 */
+	private int indiceNumero = 0;
+
+	/**
+	 * Índice de la posición de los símbolos en la cuenta. <br>
+	 */
+	private int indiceSimbolo = 0;
+
 	/**
 	 * Números de la cuenta. <br>
 	 */
@@ -32,7 +43,7 @@ public class Calculadora {
 	/**
 	 * Regex de símbolos de una cuenta. <br>
 	 */
-	private static final Pattern simbolo = Pattern.compile("[\\+\\-\\*\\/]");
+	private static final Pattern simbolo = Pattern.compile("[\\+\\-\\*\\/\\(\\)]");
 
 	/**
 	 * Matcheador para los regex. <br>
@@ -62,52 +73,54 @@ public class Calculadora {
 	public double resolver() {
 		double resultado = 0;
 		double auxiliar = 0;
-		int indiceNumero = 0;
-		int indiceSimbolo = 0;
-		// El siguiente valor a incorporar es un número.
-		// boolean numeroSiguiente = true;
 
-		// this.simbolos[indiceSimbolo] != '-'
-
-		resultado += this.numeros[indiceNumero];
+		auxiliar = this.numeros[indiceNumero];
 		indiceNumero++;
 
 		while (indiceNumero + indiceSimbolo < this.cuenta.length()) {
-			// if (numeroSiguiente) {
-			// auxiliar += this.numeros[indiceNumero];
-			//
-			// System.out.println("Auxiliar: " + auxiliar);
-			//
-			// indiceNumero++;
-			// numeroSiguiente = false;
-			// } else {
-			switch (this.simbolos[indiceSimbolo]) {
+			switch (this.simbolos[this.indiceSimbolo]) {
 			case '+':
-				auxiliar = 0;
-				auxiliar += this.numeros[indiceNumero];
 				resultado += auxiliar;
+				auxiliar = this.numeros[this.indiceNumero];
 				break;
 			case '-':
-				auxiliar = 0;
-				auxiliar += this.numeros[indiceNumero];
-				resultado -= auxiliar;
+				resultado += auxiliar;
+				auxiliar = this.numeros[this.indiceNumero] * (-1);
 				break;
 			case '*':
-				auxiliar *= this.numeros[indiceNumero];
-				// numeroSiguiente = false;
+				// Compruebo si el próximo símbolo es un paréntesis. De serlo,
+				// resuelvo todo lo de adentro y eso lo multiplico.
+				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
+					this.indiceSimbolo++;
+					auxiliar *= this.resolver();
+				} else {
+					auxiliar *= this.numeros[this.indiceNumero];
+				}
 				break;
+			case '/':
+				auxiliar /= this.numeros[this.indiceNumero];
+				break;
+			case '(':
+				// Para que no se pase el índice.
+				this.indiceNumero--;
+				break;
+			case ')':
+				// Este caso no nos interesa el break ya que nos interesa el
+				// resultado adentro de los paréntesis.
+				this.indiceNumero++;
+				this.indiceSimbolo++;
+				return resultado + auxiliar;
 			}
-			indiceNumero++;
-			indiceSimbolo++;
+			this.indiceNumero++;
+			this.indiceSimbolo++;
 		}
-		// }
-		return resultado;
+		return resultado + auxiliar;
 	}
 
-	private void corregirCuenta(){
-		
+	private void corregirCuenta() {
+
 	}
-	
+
 	/**
 	 * Inicializa los vectores auxiliares. <br>
 	 */
@@ -124,7 +137,6 @@ public class Calculadora {
 		this.matcher = numero.matcher(this.cuenta);
 		while (this.matcher.find()) {
 			this.numeros[i] = Double.parseDouble(this.matcher.group());
-			// System.out.println(this.numeros[i]);
 			i++;
 		}
 	}
@@ -137,7 +149,6 @@ public class Calculadora {
 		this.matcher = simbolo.matcher(this.cuenta);
 		while (this.matcher.find()) {
 			this.simbolos[i] = this.matcher.group().charAt(0);
-			// System.out.println(this.simbolos[i]);
 			i++;
 		}
 	}
