@@ -1,3 +1,4 @@
+package calculadora;
 import static org.junit.Assert.*;
 
 import org.junit.Ignore;
@@ -80,8 +81,59 @@ public class TestCalculadora {
 	}
 
 	@Test
+	public void TestParentesisSumar() {
+		Calculadora calculadora = new Calculadora("3+(2+1)");
+		assertEquals(6.0, calculadora.resolver(), 0);
+	}
+
+	@Test
+	public void TestParentesisRestar() {
+		Calculadora calculadora = new Calculadora("3-(2+1)");
+		assertEquals(0.0, calculadora.resolver(), 0);
+	}
+
+	@Test
 	public void TestParentesisMultiplicar() {
 		Calculadora calculadora = new Calculadora("3*(2+1)");
 		assertEquals(9.0, calculadora.resolver(), 0);
+	}
+
+	@Test
+	public void TestParentesisDividir() {
+		Calculadora calculadora = new Calculadora("3/(2+1)");
+		assertEquals(1.0, calculadora.resolver(), 0);
+	}
+
+	@Test
+	public void testGramatica1() {
+		try {
+			Calculadora calculadora = new Calculadora("3/(2+1");
+			calculadora.resolver();
+			assertTrue(false);
+		} catch (IllegalArgumentException e) {
+			assertTrue(true);
+		}
+	}
+
+	@Test
+	public void testGramatica2() {
+		try {
+			Calculadora calculadora = new Calculadora("3/(2+1)*");
+			calculadora.resolver();
+			assertTrue(false);
+		} catch (IllegalArgumentException e) {
+			assertTrue(true);
+		}
+	}
+
+	@Test
+	public void testGramatica3() {
+		try {
+			Calculadora calculadora = new Calculadora("/3/(2+1)");
+			calculadora.resolver();
+			assertTrue(false);
+		} catch (IllegalArgumentException e) {
+			assertTrue(true);
+		}
 	}
 }
