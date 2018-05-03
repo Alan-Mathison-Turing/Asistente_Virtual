@@ -60,7 +60,7 @@ public class Bot {
 		}
 		
 		if(mensaje.contains("que dia sera") && mensaje.indexOf("anos") >= 0) {
-			respuesta = "@" + USUARIO + " será el mi�rcoles 1 de abril de 2020";
+			respuesta = "@" + USUARIO + " será el miércoles 1 de abril de 2020";
 		}
 		
 		if(mensaje.contains("que dia fue") && mensaje.indexOf("ayer") >= 0) {
@@ -98,7 +98,7 @@ public class Bot {
 	// Remueve los tildes del String que recibe.
 	private String removerTildes(String texto) {
 	    String original = "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýÿ";
-	    // Cadena de caracteres ASCII que reemplazar�n los originales.
+	    // Cadena de caracteres ASCII que reemplazarán los originales.
 	    String ascii = "AAAAAAACEEEEIIIIDNOOOOOOUUUUYBaaaaaaaceeeeiiiionoooooouuuuyy";
 	    String output = texto;
 	    for (int i = 0; i < original.length(); i++) {
