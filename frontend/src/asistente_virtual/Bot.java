@@ -9,7 +9,7 @@ public class Bot {
 	private String nombre;
 	
 	public final static String USUARIO = "delucas";	
-	static String MSG_NO_ENTIENDO = "Disculpa... no entiendo el pedido, @" + USUARIO + " �podr�as repetirlo?";
+	static String MSG_NO_ENTIENDO = "Disculpa... no entiendo el pedido, @" + USUARIO + " ¿podrías repetirlo?";
 	
 	private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 	
@@ -32,7 +32,7 @@ public class Bot {
 		String respuesta = "";
 		
 		if(mensaje.contains("hola") || mensaje.contains("buen") || mensaje.contains("hey")) {
-			respuesta = "�Hola, @" + USUARIO + "!";
+			respuesta = "¡Hola, @" + USUARIO + "!";
 		}
 		
 		if(mensaje.contains("gracias")) {
@@ -52,19 +52,19 @@ public class Bot {
 		}
 		
 		if(mensaje.contains("que dia sera") && mensaje.indexOf("dias") >= 0) {
-			respuesta = "@" + USUARIO + " ser� el martes 3 de abril de 2018";
+			respuesta = "@" + USUARIO + " será el martes 3 de abril de 2018";
 		}
 
 		if(mensaje.contains("que dia sera") && mensaje.indexOf("meses") >= 0) {
-			respuesta = "@" + USUARIO + " ser� el viernes 1 de junio de 2018";
+			respuesta = "@" + USUARIO + " será el viernes 1 de junio de 2018";
 		}
 		
 		if(mensaje.contains("que dia sera") && mensaje.indexOf("anos") >= 0) {
-			respuesta = "@" + USUARIO + " ser� el mi�rcoles 1 de abril de 2020";
+			respuesta = "@" + USUARIO + " será el mi�rcoles 1 de abril de 2020";
 		}
 		
 		if(mensaje.contains("que dia fue") && mensaje.indexOf("ayer") >= 0) {
-			respuesta = "@" + USUARIO + " fue s�bado 31 de marzo de 2018";
+			respuesta = "@" + USUARIO + " fue sábado 31 de marzo de 2018";
 		}
 
 		if(mensaje.contains("que dia fue") && mensaje.indexOf("dias") >= 0) {
@@ -80,11 +80,11 @@ public class Bot {
 		}
 		
 		if(mensaje.contains("desde")) {
-			respuesta = "@" + USUARIO + " entre el 1 de abril de 2017 y el 1 de abril de 2018 pasaron 365 d�as";
+			respuesta = "@" + USUARIO + " entre el 1 de abril de 2017 y el 1 de abril de 2018 pasaron 365 días";
 		}
 		
 		if(mensaje.contains("faltan")) {
-			respuesta = "@" + USUARIO + " faltan 9 d�as";
+			respuesta = "@" + USUARIO + " faltan 9 días";
 		}
 		
 		if(mensaje.contains("cuanto es")) {
@@ -97,7 +97,7 @@ public class Bot {
 	
 	// Remueve los tildes del String que recibe.
 	private String removerTildes(String texto) {
-	    String original = "������������������������������������������������������������";
+	    String original = "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýÿ";
 	    // Cadena de caracteres ASCII que reemplazar�n los originales.
 	    String ascii = "AAAAAAACEEEEIIIIDNOOOOOOUUUUYBaaaaaaaceeeeiiiionoooooouuuuyy";
 	    String output = texto;
