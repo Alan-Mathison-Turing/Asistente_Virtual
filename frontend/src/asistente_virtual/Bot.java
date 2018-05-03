@@ -9,7 +9,7 @@ public class Bot {
 	private String nombre;
 	
 	public final static String USUARIO = "delucas";	
-	static String MSG_NO_ENTIENDO = "Disculpa... no entiendo el pedido, @" + USUARIO + " ¿podrías repetirlo?";
+	static String MSG_NO_ENTIENDO = "Disculpa... no entiendo el pedido, @" + USUARIO + " ï¿½podrï¿½as repetirlo?";
 	
 	private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 	
@@ -17,13 +17,22 @@ public class Bot {
 		this.nombre = nombre;
 	}
 	
+	private final static String FORMATO_MES = "MMMM";
+	private final static String FORMATO_DIA_SEMANA = "EEEE";
+	private final static String FORMATO_HORA = "HH:mm a";
+	private final static SimpleDateFormat sdfDia = new SimpleDateFormat(FORMATO_DIA_SEMANA);
+	private final static SimpleDateFormat sdfMes = new SimpleDateFormat(FORMATO_MES);
+	private final static SimpleDateFormat sfdHora = new SimpleDateFormat(FORMATO_HORA);
+	
+	private Calendar calendarAhora;
+	
 	public String leerMensaje(String mensaje) {
 		
 		mensaje = removerTildes(mensaje.toLowerCase());
 		String respuesta = "";
 		
 		if(mensaje.contains("hola") || mensaje.contains("buen") || mensaje.contains("hey")) {
-			respuesta = "¡Hola, @" + USUARIO + "!";
+			respuesta = "ï¿½Hola, @" + USUARIO + "!";
 		}
 		
 		if(mensaje.contains("gracias")) {
@@ -43,19 +52,19 @@ public class Bot {
 		}
 		
 		if(mensaje.contains("que dia sera") && mensaje.indexOf("dias") >= 0) {
-			respuesta = "@" + USUARIO + " será el martes 3 de abril de 2018";
+			respuesta = "@" + USUARIO + " serï¿½ el martes 3 de abril de 2018";
 		}
 
 		if(mensaje.contains("que dia sera") && mensaje.indexOf("meses") >= 0) {
-			respuesta = "@" + USUARIO + " será el viernes 1 de junio de 2018";
+			respuesta = "@" + USUARIO + " serï¿½ el viernes 1 de junio de 2018";
 		}
 		
 		if(mensaje.contains("que dia sera") && mensaje.indexOf("anos") >= 0) {
-			respuesta = "@" + USUARIO + " será el miércoles 1 de abril de 2020";
+			respuesta = "@" + USUARIO + " serï¿½ el miï¿½rcoles 1 de abril de 2020";
 		}
 		
 		if(mensaje.contains("que dia fue") && mensaje.indexOf("ayer") >= 0) {
-			respuesta = "@" + USUARIO + " fue sábado 31 de marzo de 2018";
+			respuesta = "@" + USUARIO + " fue sï¿½bado 31 de marzo de 2018";
 		}
 
 		if(mensaje.contains("que dia fue") && mensaje.indexOf("dias") >= 0) {
@@ -71,11 +80,11 @@ public class Bot {
 		}
 		
 		if(mensaje.contains("desde")) {
-			respuesta = "@" + USUARIO + " entre el 1 de abril de 2017 y el 1 de abril de 2018 pasaron 365 días";
+			respuesta = "@" + USUARIO + " entre el 1 de abril de 2017 y el 1 de abril de 2018 pasaron 365 dï¿½as";
 		}
 		
 		if(mensaje.contains("faltan")) {
-			respuesta = "@" + USUARIO + " faltan 9 días";
+			respuesta = "@" + USUARIO + " faltan 9 dï¿½as";
 		}
 		
 		if(mensaje.contains("cuanto es")) {
@@ -88,8 +97,8 @@ public class Bot {
 	
 	// Remueve los tildes del String que recibe.
 	private String removerTildes(String texto) {
-	    String original = "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖØÙÚÛÜİßàáâãäåæçèéêëìíîïğñòóôõöøùúûüıÿ";
-	    // Cadena de caracteres ASCII que reemplazarán los originales.
+	    String original = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+	    // Cadena de caracteres ASCII que reemplazarï¿½n los originales.
 	    String ascii = "AAAAAAACEEEEIIIIDNOOOOOOUUUUYBaaaaaaaceeeeiiiionoooooouuuuyy";
 	    String output = texto;
 	    for (int i = 0; i < original.length(); i++) {
@@ -174,9 +183,25 @@ public class Bot {
 		return respuesta;
 	}
 	
+
 	private int diferenciaEnDias(Calendar fechaDesde, Calendar fechaHasta) {
         int dias = (int) ((fechaHasta.getTimeInMillis() - fechaDesde.getTimeInMillis()) / 86400000);
         return dias;
+
+	public String obtenerFechaHoy() {
+		calendarAhora = Calendar.getInstance();
+		return "hoy es " +  calendarAhora.get(Calendar.DAY_OF_MONTH) + " de " + 
+				sdfMes.format(calendarAhora.getTime()) + " de " + calendarAhora.get(Calendar.YEAR);
+	}
+	
+	public String obtenerDiaSemanaHoy() {
+		calendarAhora = Calendar.getInstance();
+		return "hoy es " + sdfDia.format(calendarAhora.getTime());
+	}
+	
+	public String obtenerHora() {
+		calendarAhora = Calendar.getInstance();
+		return "son las " + sfdHora.format(calendarAhora.getTime());
 	}
 	
 }
