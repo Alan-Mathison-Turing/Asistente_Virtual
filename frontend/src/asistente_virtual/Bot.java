@@ -187,6 +187,7 @@ public class Bot {
 	private int diferenciaEnDias(Calendar fechaDesde, Calendar fechaHasta) {
         int dias = (int) ((fechaHasta.getTimeInMillis() - fechaDesde.getTimeInMillis()) / 86400000);
         return dias;
+	}
 
 	public String obtenerFechaHoy() {
 		calendarAhora = Calendar.getInstance();
