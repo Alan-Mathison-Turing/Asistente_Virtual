@@ -22,41 +22,41 @@ public class RF04Tests {
 	@Test
 	public void diaDentroDe() {
 		Assert.assertEquals(
-				"@delucas será el martes 3 de abril de 2018",
-				jenkins.leerMensaje("@jenkins qué día será dentro de 2 días?")
+				"@delucas serÃ¡ el martes 3 de abril de 2018",
+				jenkins.leerMensaje("@jenkins quÃ© dÃ­a serÃ¡ dentro de 2 dÃ­as?")
 			);
 		
 		Assert.assertEquals(
-				"@delucas será el viernes 1 de junio de 2018",
-				jenkins.leerMensaje("@jenkins qué día será dentro de 2 meses?")
+				"@delucas serï¿½ el viernes 1 de junio de 2018",
+				jenkins.leerMensaje("@jenkins quÃ© dÃ­a serÃ¡ dentro de 2 meses?")
 			);
 		
 		Assert.assertEquals(
-				"@delucas será el miércoles 1 de abril de 2020",
-				jenkins.leerMensaje("@jenkins qué día será dentro de 2 años?")
+				"@delucas serï¿½ el miï¿½rcoles 1 de abril de 2020",
+				jenkins.leerMensaje("@jenkins quï¿½ dï¿½a serï¿½ dentro de 2 aï¿½os?")
 			);
 	}
 	
 	@Test
 	public void diaHace() {
 		Assert.assertEquals(
-				"@delucas fue sábado 31 de marzo de 2018",
-				jenkins.leerMensaje("@jenkins qué día fue ayer?")
+				"@delucas fue sï¿½bado 31 de marzo de 2018",
+				jenkins.leerMensaje("@jenkins quï¿½ dï¿½a fue ayer?")
 			);
 		
 		Assert.assertEquals(
 				"@delucas fue jueves 29 de marzo de 2018",
-				jenkins.leerMensaje("@jenkins qué día fue hace 3 días?")
+				jenkins.leerMensaje("@jenkins quï¿½ dï¿½a fue hace 3 dï¿½as?")
 			);
 		
 		Assert.assertEquals(
 				"@delucas fue el jueves 1 de febrero de 2018",
-				jenkins.leerMensaje("@jenkins qué día fue hace 2 meses?")
+				jenkins.leerMensaje("@jenkins quï¿½ dï¿½a fue hace 2 meses?")
 			);
 		
 		Assert.assertEquals(
 				"@delucas fue el viernes 1 de abril de 2016",
-				jenkins.leerMensaje("@jenkins qué día fue hace 2 años?")
+				jenkins.leerMensaje("@jenkins quï¿½ dï¿½a fue hace 2 aï¿½os?")
 			);
 	}
 	
@@ -64,8 +64,8 @@ public class RF04Tests {
 	@Test
 	public void tiempoDesde() {
 		Assert.assertEquals(
-				"@delucas entre el 1 de abril de 2017 y el 1 de abril de 2018 pasaron 365 días",
-				jenkins.leerMensaje("@jenkins cuántos días pasaron desde el 1 de abril de 2017?")
+				"@delucas entre el 1 de abril de 2017 y el 1 de abril de 2018 pasaron 365 dï¿½as",
+				jenkins.leerMensaje("@jenkins cuï¿½ntos dï¿½as pasaron desde el 1 de abril de 2017?")
 			);
 		
 		// agregar casos de prueba
@@ -74,11 +74,46 @@ public class RF04Tests {
 	@Test
 	public void tiempoHasta() {
 		Assert.assertEquals(
-				"@delucas faltan 9 días",
-				jenkins.leerMensaje("@jenkins cuántos días faltan para el 10 de abril?")
+				"@delucas faltan 9 dï¿½as",
+				jenkins.leerMensaje("@jenkins cuï¿½ntos dï¿½as faltan para el 10 de abril?")
 			);
 		
 		// agregar casos de prueba
 	}
 	
+	@Test
+	public void formatearFechaViewDosDigitosTest() {
+		String fechaRetornada = jenkins.formatearFechaView("14/05/2018");
+		Assert.assertEquals("lunes 14 de mayo de 2018", fechaRetornada);
+	}
+	
+	@Test
+	public void formatearFechaViewUnDigitoTest() {
+		String fechaRetornada = jenkins.formatearFechaView("4/5/2018");
+		Assert.assertEquals("viernes 4 de mayo de 2018", fechaRetornada);
+	}
+	
+	@Test
+	public void fechaDentroDeTest() {
+		String fechaRetornada = jenkins.fechaDentroDe(4, "meses");
+		Assert.assertEquals("viernes 4 de mayo de 2018", fechaRetornada);
+	}
+	
+	@Test
+	public void tiempoDesdeHastaEnMesesTest() {
+		int fechaRetornada = jenkins.tiempoDesdeHasta("4/5/2018", "5/6/2019", "meses");
+		Assert.assertEquals(13, fechaRetornada);
+	}
+	
+	@Test
+	public void tiempoDesdeHastaEnDiasTest() {
+		int fechaRetornada = jenkins.tiempoDesdeHasta("4/5/2018", "5/6/2019", "dias");
+		Assert.assertEquals(397, fechaRetornada);
+	}
+	
+	@Test
+	public void tiempoDesdeHastaEnAniosTest() {
+		int fechaRetornada = jenkins.tiempoDesdeHasta("4/5/2018", "5/6/2019", "anios");
+		Assert.assertEquals(1, fechaRetornada);
+	}
 }

@@ -1,5 +1,6 @@
 package asistente_virtual;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -111,25 +112,34 @@ public class Bot {
 	/**
 	 * @param cantidad (mayor o menor a cero segun fecha hacia
 	 * delante o fecha hacia atras respectivamente)
-	 * @param mesesDiasSemanas ("meses"|"dias"|"semanas")
-	 * @return
-	 * @throws Exception 
+	 * @param mesesDiasSemanas ("dias"|"meses")
+	 * @return string
 	 */
-	public String fechaDentroDe(int cantidad, String mesesDiasSemanas) throws Exception {
+	public String fechaDentroDe(int cantidad, String mesesDiasSemanas){
 		Calendar cal = Calendar.getInstance();
-		cal.add(obtenerFieldCalendar(mesesDiasSemanas), cantidad);
+		try {
+			cal.add(obtenerFieldCalendar(mesesDiasSemanas), cantidad);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
 		return formatter.format(cal.getTime());
 	}
 
+	/**
+	 * @param mesesDiasSemanas ("dias"|"meses"|"anios")
+	 * @return int
+	 * @throws Exception
+	 */
 	private int obtenerFieldCalendar(String mesesDiasSemanas) throws Exception {
 		int field = -1;
 		if("dias".equals(mesesDiasSemanas)){
 			field = Calendar.DATE;
 		}else if ("meses".equals(mesesDiasSemanas)) {
 			field = Calendar.MONTH;
-		}else if ("semanas".equals(mesesDiasSemanas)) {
-			field = Calendar.WEEK_OF_MONTH;
-		}else if ("semanas".equals(mesesDiasSemanas)) {
+//		}else if ("semanas".equals(mesesDiasSemanas)) {
+//			field = Calendar.WEEK_OF_MONTH;
+		}else if ("anios".equals(mesesDiasSemanas)) {
 			field = Calendar.YEAR;
 		}else{
 			throw new Exception();
@@ -137,50 +147,39 @@ public class Bot {
 		return field;
 	}
 	
-	public int tiempoDesdeHasta(String fechaDesde, String fechaHasta, String mesesDiasSemanas) throws Exception{
+	/**
+	 * @param fechaDesde
+	 * @param fechaHasta
+	 * @param mesesDiasSemanas ("dias"|"meses"|"anios")
+	 * @return int
+	 */
+	public int tiempoDesdeHasta(String fechaDesde, String fechaHasta, String mesesDiasSemanas){
 		
 		Calendar dateDesde = new GregorianCalendar();
 		Calendar dateHasta = new GregorianCalendar();
-		dateDesde.setTime(formatter.parse(fechaDesde));
-		dateHasta.setTime(formatter.parse(fechaHasta));
+		try {
+			dateDesde.setTime(formatter.parse(fechaDesde));
+			dateHasta.setTime(formatter.parse(fechaHasta));
 
-		int respuesta = 0;
-		
-		//SOLUCION 1
-		int field = obtenerFieldCalendar(mesesDiasSemanas);
-		if(Calendar.DATE == field || Calendar.WEEK_OF_MONTH == field){
-			respuesta = diferenciaEnDias(dateDesde, dateHasta);
-			if(Calendar.WEEK_OF_MONTH == field){
-				respuesta = respuesta/7;
+			int respuesta = 0;
+			int field = obtenerFieldCalendar(mesesDiasSemanas);
+
+			if(Calendar.DATE == field || Calendar.WEEK_OF_MONTH == field){
+				respuesta = diferenciaEnDias(dateDesde, dateHasta);
+//				if(Calendar.WEEK_OF_MONTH == field){
+//					respuesta = respuesta/7;
+//				}
+			}else{
+				respuesta = dateHasta.get(Calendar.YEAR) - dateDesde.get(Calendar.YEAR);
+				if(Calendar.MONTH == field){
+					respuesta = respuesta * 12 + dateHasta.get(Calendar.MONTH) - dateDesde.get(Calendar.MONTH);
+				}
 			}
-		}else{
-			respuesta = dateHasta.get(Calendar.YEAR) - dateDesde.get(Calendar.YEAR);
-			if(Calendar.YEAR == field){
-				respuesta = respuesta * 12 + dateHasta.get(Calendar.MONTH) - dateDesde.get(Calendar.MONTH);
-			}
+			return respuesta;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
 		}
-		//FIN SOLUCION 1
-		
-		//SOLUCION 2
-		switch (obtenerFieldCalendar(mesesDiasSemanas)) {
-		case Calendar.DATE:
-			respuesta = diferenciaEnDias(dateDesde, dateHasta);
-			break;
-		case Calendar.WEEK_OF_MONTH:
-			respuesta = diferenciaEnDias(dateDesde, dateHasta)/7;
-			break;
-		case Calendar.MONTH:
-			int diferenciaAnios = dateHasta.get(Calendar.YEAR) - dateDesde.get(Calendar.YEAR);
-			respuesta = diferenciaAnios * 12 + dateHasta.get(Calendar.MONTH) - dateDesde.get(Calendar.MONTH);
-			break;
-		case Calendar.YEAR:
-			respuesta = dateHasta.get(Calendar.YEAR) - dateDesde.get(Calendar.YEAR);
-			break;
-		default:
-			throw new Exception();
-		}
-		//FIN SOLUCION 2;
-		return respuesta;
 	}
 	
 
@@ -204,5 +203,18 @@ public class Bot {
 		calendarAhora = Calendar.getInstance();
 		return "son las " + sfdHora.format(calendarAhora.getTime());
 	}
+
+	public String formatearFechaView(String fechaEntrada) {
+		SimpleDateFormat formatoSalida = new SimpleDateFormat("EEEE d 'de' MMMM 'de' yyyy");
+		SimpleDateFormat formatoEntrada = new SimpleDateFormat("dd/MM/yyyy");
+		String fechaSalida = "";
+		try {
+			fechaSalida = formatoSalida.format(formatoEntrada.parse(fechaEntrada));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return fechaSalida;
+	}
+
 	
 }
