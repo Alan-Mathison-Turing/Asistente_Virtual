@@ -11,6 +11,9 @@ import java.util.regex.Pattern;
  * complejos. <br>
  */
 public class Calculadora {
+
+	private int cantidad = 0;
+
 	/**
 	 * Centa en las calculadora. <br>
 	 */
@@ -39,15 +42,16 @@ public class Calculadora {
 	/**
 	 * Regex del formato de una cuenta.
 	 * <p>
-	 * Permite espacios que luego van a ser quitados por el corrector. <br>
+	 * Permite espacios que luego van a ser ignorados. <br>
 	 */
-	private static final Pattern formato_cuenta = Pattern.compile("^[\\d\\+\\-\\/\\*\\.\\^ \\(\\)]*$");
+	private static final Pattern formato_cuenta = Pattern.compile("^[\\d\\+\\-\\/\\*\\.\\^\\%\\(\\)de ]*$");
 
 	/**
 	 * Regex para controlar que no haya símbolos al principio o al final de la
 	 * cuenta de manera ilegal. <br>
 	 */
-	private static final Pattern control_simbolos = Pattern.compile("(^[\\/\\*\\^\\)]|[\\+\\-\\/\\*\\^\\.\\(]$)");
+	private static final Pattern control_sintaxis_erronea = Pattern
+			.compile("(^[\\/\\*\\^\\)\\%]|[\\+\\-\\/\\*\\^\\.\\(\\%]$)");
 
 	/**
 	 * Regex de un número real. <br>
@@ -57,7 +61,7 @@ public class Calculadora {
 	/**
 	 * Regex de símbolos de una cuenta. <br>
 	 */
-	private static final Pattern simbolo = Pattern.compile("[\\+\\-\\*\\/\\^\\(\\)]");
+	private static final Pattern simbolo = Pattern.compile("[\\+\\-\\*\\/\\^\\%\\(\\)]");
 
 	/**
 	 * Matcheador para los regex. <br>
@@ -74,6 +78,7 @@ public class Calculadora {
 	 *             El formato de la cuenta no es correcto. <br>
 	 */
 	public Calculadora(final String cuenta) throws IllegalArgumentException {
+
 		try {
 			this.validarFormato(cuenta);
 		} catch (IllegalArgumentException e) {
@@ -98,17 +103,19 @@ public class Calculadora {
 		auxiliar = this.numeros[indiceNumero];
 		indiceNumero++;
 
-		while (indiceNumero + indiceSimbolo < this.cuenta.length()) {
+		while (indiceNumero + indiceSimbolo < cantidad) {
 			switch (this.simbolos[this.indiceSimbolo]) {
 			case '+':
 				resultado += auxiliar;
 				// Compruebo si el próximo símbolo es un paréntesis. De serlo,
 				// resuelvo todo lo de adentro y eso lo multiplico.
 				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
-					this.indiceSimbolo++;
+					this.indiceSimbolo += 2;
 					auxiliar = this.resolver();
 				} else {
 					auxiliar = this.numeros[this.indiceNumero];
+					this.indiceNumero++;
+					this.indiceSimbolo++;
 				}
 				break;
 
@@ -117,10 +124,12 @@ public class Calculadora {
 				// Compruebo si el próximo símbolo es un paréntesis. De serlo,
 				// resuelvo todo lo de adentro y eso lo multiplico.
 				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
-					this.indiceSimbolo++;
+					this.indiceSimbolo += 2;
 					auxiliar = this.resolver() * (-1);
 				} else {
 					auxiliar = this.numeros[this.indiceNumero] * (-1);
+					this.indiceNumero++;
+					this.indiceSimbolo++;
 				}
 				break;
 
@@ -128,10 +137,12 @@ public class Calculadora {
 				// Compruebo si el próximo símbolo es un paréntesis. De serlo,
 				// resuelvo todo lo de adentro y eso lo multiplico.
 				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
-					this.indiceSimbolo++;
+					this.indiceSimbolo += 2;
 					auxiliar *= this.resolver();
 				} else {
 					auxiliar *= this.numeros[this.indiceNumero];
+					this.indiceNumero++;
+					this.indiceSimbolo++;
 				}
 				break;
 
@@ -139,27 +150,70 @@ public class Calculadora {
 				// Compruebo si el próximo símbolo es un paréntesis. De serlo,
 				// resuelvo todo lo de adentro y eso lo multiplico.
 				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
-					this.indiceSimbolo++;
+					this.indiceSimbolo += 2;
 					auxiliar /= this.resolver();
 				} else {
 					auxiliar /= this.numeros[this.indiceNumero];
+					this.indiceNumero++;
+					this.indiceSimbolo++;
 				}
 				break;
 
 			case '(':
-				// Para que no se pase el índice.
+				// Para que no se pase el índice. En este caso volvemos uno
+				// atrás para número.
+				this.indiceSimbolo++;
 				this.indiceNumero--;
+				auxiliar = this.resolver();
+
 				break;
 
 			case ')':
 				// Este caso no nos interesa el break ya que nos interesa el
 				// resultado adentro de los paréntesis.
-				this.indiceNumero++;
+
+				resultado += auxiliar;
+
 				this.indiceSimbolo++;
-				return resultado + auxiliar;
+				return resultado;
+			case '^':
+
+				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
+					this.indiceSimbolo += 2;
+					auxiliar = Math.pow(auxiliar, this.resolver());
+				} else {
+					auxiliar = Math.pow(auxiliar, this.numeros[this.indiceNumero]);
+					this.indiceNumero++;
+					this.indiceSimbolo++;
+				}
+
+				break;
+
+			case '?': // este seria el caso de raiz, si el caracter fuera ?.
+						// Para probar, usar el test raizCuadrada
+
+				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
+					this.indiceSimbolo += 2;
+					auxiliar = Math.sqrt(this.resolver());
+				} else {
+					auxiliar = Math.sqrt(auxiliar);
+					this.indiceNumero++;
+					this.indiceSimbolo++;
+				}
+
+				break;
+
+			case '%':
+				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
+					this.indiceSimbolo += 2;
+					auxiliar = this.resolver() * auxiliar / 100;
+				} else {
+					auxiliar = this.numeros[this.indiceNumero] * auxiliar / 100;
+					this.indiceNumero++;
+					this.indiceSimbolo++;
+				}
+				break;
 			}
-			this.indiceNumero++;
-			this.indiceSimbolo++;
 		}
 		return resultado + auxiliar;
 	}
@@ -175,16 +229,19 @@ public class Calculadora {
 	private void validarFormato(final String cuenta) throws IllegalArgumentException {
 		int contadorAperturaParentesis = 0, contadorCierreParentesis = 0;
 
+		// Compruebo que no haya carecteres que no sean de una cuenta.
 		this.matcher = formato_cuenta.matcher(cuenta);
 		if (!this.matcher.find()) {
-			throw new IllegalArgumentException("El formato general de la cuenta no es correcto.");
-		}
-		this.matcher = control_simbolos.matcher(cuenta);
-		if (this.matcher.find()) {
-			throw new IllegalArgumentException(
-					"No se pueden tener símbolos al final de una cuenta sin ningún número, exceptuando el cierre de un paréntesis.");
+			throw new IllegalArgumentException("Hay caracteres que no pertenecen a la sintáxis de una cuenta.");
 		}
 
+		// Comprubo que no haya errores de sintáxis.
+		this.matcher = control_sintaxis_erronea.matcher(cuenta);
+		if (this.matcher.find()) {
+			throw new IllegalArgumentException("Hay errores de sintaxis.");
+		}
+
+		// Compruebo que haya tantas aperturas de paréntesis como cierres.
 		this.matcher = Pattern.compile("\\(").matcher(cuenta);
 		while (this.matcher.find()) {
 			contadorAperturaParentesis++;
@@ -202,15 +259,23 @@ public class Calculadora {
 	 * Corrige la cuenta para evitar problemas de procesamiento de números. <br>
 	 */
 	private void corregirCuenta() {
-
+		cuenta = cuenta.replace(")-", ")+0-");
+		cuenta = cuenta.replace("(-", "(0-");
+		cuenta = cuenta.replace("++", "+");
+		cuenta = cuenta.replace("+-", "-");
+		cuenta = cuenta.replace("-+", "-");
+		cuenta = cuenta.replace("--", "+");
+		if (cuenta.charAt(0) == '-') {
+			cuenta = '0' + cuenta;
+		}
 	}
 
 	/**
 	 * Inicializa los vectores auxiliares. <br>
 	 */
 	private void iniciarVectores() {
-		this.numeros = new double[this.cuenta.length()];
-		this.simbolos = new char[this.cuenta.length()];
+		this.numeros = new double[this.cuenta.length() + 1];
+		this.simbolos = new char[this.cuenta.length() + 1];
 	}
 
 	/**
@@ -223,6 +288,7 @@ public class Calculadora {
 			this.numeros[i] = Double.parseDouble(this.matcher.group());
 			i++;
 		}
+		this.cantidad += i;
 	}
 
 	/**
@@ -235,5 +301,6 @@ public class Calculadora {
 			this.simbolos[i] = this.matcher.group().charAt(0);
 			i++;
 		}
+		this.cantidad += i;
 	}
 }

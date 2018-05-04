@@ -1,4 +1,5 @@
 package calculadora;
+
 import static org.junit.Assert.*;
 
 import org.junit.Ignore;
@@ -105,6 +106,12 @@ public class TestCalculadora {
 	}
 
 	@Test
+	public void parentesisAlPrincipio() {
+		Calculadora calculadora = new Calculadora("(2+2)*3");
+		assertEquals(12.0, calculadora.resolver(), 0);
+	}
+
+	@Test
 	public void testGramatica1() {
 		try {
 			Calculadora calculadora = new Calculadora("3/(2+1");
@@ -135,5 +142,107 @@ public class TestCalculadora {
 		} catch (IllegalArgumentException e) {
 			assertTrue(true);
 		}
+	}
+
+	@Test
+	public void testGramaticaEspacios() {
+		Calculadora calculadora = new Calculadora("(4-8)*2 + 4 / ( 1 + 1)");
+		assertEquals(-6.0, calculadora.resolver(), 0);
+	}
+
+	@Test
+	public void testCuentaMixta() {
+		Calculadora calculadora = new Calculadora("-2-(3*1)+4");
+		assertEquals(-1.0, calculadora.resolver(), 0);
+	}
+
+	@Test
+	public void testCuentaMixta2() {
+		Calculadora calculadora = new Calculadora("-2+(-5)/5*2-10");
+		assertEquals(-14.0, calculadora.resolver(), 0);
+	}
+
+	@Test
+	public void testCuentaMixta3() {
+		Calculadora calculadora = new Calculadora("-2+(-5)/(5*2)-10");
+		assertEquals(-12.5, calculadora.resolver(), 0);
+	}
+
+	@Test
+	public void testSignosIguales() { // ++
+		Calculadora calculadora = new Calculadora("(2++2)");
+		assertEquals(4.0, calculadora.resolver(), 0);
+	}
+
+	@Test
+	public void testSignosIguales2() { // +-
+		Calculadora calculadora = new Calculadora("(2+-2)");
+		assertEquals(0.0, calculadora.resolver(), 0);
+	}
+
+	@Test
+	public void testSignosIguales3() { // -+
+		Calculadora calculadora = new Calculadora("(2-+2)");
+		assertEquals(0.0, calculadora.resolver(), 0);
+	}
+
+	@Test
+	public void testSignosIguales4() { // --
+		Calculadora calculadora = new Calculadora("(2--2)");
+		assertEquals(4.0, calculadora.resolver(), 0);
+	}
+
+	@Test
+	public void testPotencia() {
+		Calculadora calculadora = new Calculadora("2^2");
+		assertEquals(4.0, calculadora.resolver(), 0);
+	}
+
+	@Test
+	public void testPotenciaConParentesis() {
+		Calculadora calculadora = new Calculadora("2^(2*2)");
+		assertEquals(16.0, calculadora.resolver(), 0);
+	}
+
+	@Test
+	public void testPotenciaConAlgoDespues() {
+		Calculadora calculadora = new Calculadora("2^2*2");
+		assertEquals(8.0, calculadora.resolver(), 0);
+	}
+
+	@Test
+	public void testPotenciaNegativaEntreParentesis() {
+		Calculadora calculadora = new Calculadora("2^(-2)");
+		assertEquals(0.25, calculadora.resolver(), 0);
+	}
+
+	@Ignore
+	public void testRaizCuadrada() {
+		Calculadora calculadora = new Calculadora("4?(2)");
+		assertEquals(2.0, calculadora.resolver(), 0);
+	}
+
+	@Test
+	public void testPorcentaje() {
+		Calculadora calculadora = new Calculadora("10% de 100");
+		assertEquals(10.0, calculadora.resolver(), 0);
+	}
+
+	@Test
+	public void testPorcentajeIntermedio() {
+		Calculadora calculadora = new Calculadora("50% de 50");
+		assertEquals(25.0, calculadora.resolver(), 0);
+	}
+
+	@Test
+	public void testPorcentajeAvanzado() {
+		Calculadora calculadora = new Calculadora("10% de (120-20)");
+		assertEquals(10.0, calculadora.resolver(), 0);
+	}
+
+	@Test
+	public void testPorcentajeExperto() {
+		Calculadora calculadora = new Calculadora("10% de (150-(25*2/1))");
+		assertEquals(10.0, calculadora.resolver(), 0);
 	}
 }
