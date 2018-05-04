@@ -5,9 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import calculadora.Calculadora;
-
-public class TestCalculadora {
+public class CalculadoraTests {
 
 	@Test
 	public void testSumaBinaria() {
