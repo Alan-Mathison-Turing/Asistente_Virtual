@@ -4,10 +4,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import calculadora.Calculadora;
-import java.util.Locale;
 
 
 public class Bot {
@@ -94,11 +95,40 @@ public class Bot {
 		}
 		
 		if(mensaje.contains("desde")) {
-			respuesta = "@" + USUARIO + " entre el 1 de abril de 2017 y el 1 de abril de 2018 pasaron 365 días";
+			int posicion = mensaje.indexOf("el") + 3;
+			String fecha = mensaje.substring(posicion, mensaje.length()-1);
+			try {
+				Calendar fechaParseada = parseFechaInput(fecha);
+				Calendar now = Calendar.getInstance();
+				now.set(Calendar.MILLISECOND, 0);
+				now.set(Calendar.SECOND, 0);
+				now.set(Calendar.MINUTE, 0);
+				now.set(Calendar.HOUR, 0);
+				int dias = diferenciaEnDias(fechaParseada, now);
+				respuesta = "@" + USUARIO + " entre el " + fecha + " y el " + parseCalendarToString(now) + " pasaron " + dias + " días";
+			} catch (ParseException e) {
+				e.printStackTrace();
+				return respuesta == "" ? MSG_NO_ENTIENDO : respuesta;
+			}
+			
 		}
 		
 		if(mensaje.contains("faltan")) {
-			respuesta = "@" + USUARIO + " faltan 9 días";
+			int posicion = mensaje.indexOf("el") + 3;
+			try {
+				Calendar fechaParseada = parseFechaInput(mensaje.substring(posicion, mensaje.length()-1));
+				Calendar now = Calendar.getInstance();
+				now.set(Calendar.MILLISECOND, 0);
+				now.set(Calendar.SECOND, 0);
+				now.set(Calendar.MINUTE, 0);
+				now.set(Calendar.HOUR, 0);
+				int dias = diferenciaEnDias(now, fechaParseada);
+				respuesta = "@" + USUARIO + " faltan " + dias + " días";
+			} catch (ParseException e) {
+				e.printStackTrace();
+				return respuesta == "" ? MSG_NO_ENTIENDO : respuesta;
+			}
+			
 		}
 		
 		if(mensaje.contains("cuanto es")) {
@@ -137,7 +167,9 @@ public class Bot {
 	}
 	
 	private String saludar(String saludo) {
-		Calendar calendario = new GregorianCalendar();
+		return "¡Hola, @" + Bot.USUARIO + "!"; 
+		/*Calendar calendario = new GregorianCalendar();
+		saludo = saludo.toLowerCase();
 		if(saludo.contains("hola") || saludo.contains("hey")) {
 			 return "¡Hola, @" + Bot.USUARIO + "!";
 		}
@@ -159,7 +191,7 @@ public class Bot {
 						 return "Buenas noches @" + Bot.USUARIO;
 				 }
 		}
-		return MSG_NO_ENTIENDO;
+		return MSG_NO_ENTIENDO;*/
 	}
 	 
 	private String agradecer(String palabra) {
@@ -173,7 +205,7 @@ public class Bot {
 	 * @param mesesDiasSemanas ("dias"|"meses")
 	 * @return string
 	 */
-	public String fechaDentroDe(int cantidad, String mesesDiasSemanas){
+	private String fechaDentroDe(int cantidad, String mesesDiasSemanas){
 		Calendar cal = Calendar.getInstance();
 		try {
 			cal.add(obtenerFieldCalendar(mesesDiasSemanas), cantidad);
@@ -211,7 +243,7 @@ public class Bot {
 	 * @param mesesDiasSemanas ("dias"|"meses"|"anios")
 	 * @return int
 	 */
-	public int tiempoDesdeHasta(String fechaDesde, String fechaHasta, String mesesDiasSemanas){
+	private int tiempoDesdeHasta(String fechaDesde, String fechaHasta, String mesesDiasSemanas){
 		
 		Calendar dateDesde = new GregorianCalendar();
 		Calendar dateHasta = new GregorianCalendar();
@@ -269,12 +301,12 @@ public class Bot {
 	 * Metodo que devuelve la hora actual, en formato AM/PM
 	 * @return
 	 */
-	public String obtenerHora() {
+	private String obtenerHora() {
 		calendarAhora = Calendar.getInstance();
 		return "@" + USUARIO + " son las " + sfdHora.format(calendarAhora.getTime());
 	}
 
-	public String formatearFechaView(String fechaEntrada) {
+	private String formatearFechaView(String fechaEntrada) {
 		SimpleDateFormat formatoSalida = new SimpleDateFormat("EEEE d 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
 		SimpleDateFormat formatoEntrada = new SimpleDateFormat("dd/MM/yyyy");
 		String fechaSalida = "";
@@ -284,6 +316,21 @@ public class Bot {
 			e.printStackTrace();
 		}
 		return fechaSalida;
+	}
+	
+	private String parseCalendarToString(Calendar cal) {
+		SimpleDateFormat format1 = new SimpleDateFormat("d 'de' MMMM 'de' yyyy", new Locale("es","ES"));
+		
+		return format1.format(cal.getTime());
+	}
+	
+	private Calendar parseFechaInput(String fechaEntrada) throws ParseException {
+		Calendar cal = Calendar.getInstance();
+		int ano = cal.get(Calendar.YEAR);
+		fechaEntrada += " de " + ano;
+		SimpleDateFormat formatoEntrada = new SimpleDateFormat("d 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
+		cal.setTime(formatoEntrada.parse(fechaEntrada));
+		return cal;
 	}
 
 	
