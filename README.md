@@ -1,2 +1,1 @@
-# TP del taller de Programacion AVanzada 2018 C1
-mira como te rompí el repo
+# TP del taller de Programacion Avanzada 2018 C1
