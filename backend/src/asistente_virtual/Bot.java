@@ -18,8 +18,6 @@ public class Bot {
 	
 	private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 	
-	private Matcher matcher;
-	
 	public Bot(String nombre) {
 		this.nombre = nombre;
 	}
@@ -71,23 +69,27 @@ public class Bot {
 		
 		if(mensaje.contains("que dia sera") && mensaje.indexOf("anos") >= 0) {
 			int numero = obtenerNumero(mensaje, formato_numero);
-			return respuesta = "@" + USUARIO + " será el " + formatearFechaView(fechaDentroDe(numero, "anos"));
+			return respuesta = "@" + USUARIO + " será el " + formatearFechaView(fechaDentroDe(numero, "anios"));
 		}
 		
 		if(mensaje.contains("que dia fue") && mensaje.indexOf("ayer") >= 0) {
-			respuesta = "@" + USUARIO + " fue sábado 31 de marzo de 2018";
+			return respuesta = "@" + USUARIO + " fue " + formatearFechaView(fechaDentroDe(-1, "dias"));
 		}
 
 		if(mensaje.contains("que dia fue") && mensaje.indexOf("dias") >= 0) {
-			respuesta = "@" + USUARIO + " fue jueves 29 de marzo de 2018";
+			int numero = obtenerNumero(mensaje, formato_numero);
+			return respuesta = "@" + USUARIO + " fue " + formatearFechaView(fechaDentroDe(-numero, "dias"));
 		}
 		
 		if(mensaje.contains("que dia fue") && mensaje.indexOf("meses") >= 0) {
-			respuesta = "@" + USUARIO + " fue el jueves 1 de febrero de 2018";
+			int numero = obtenerNumero(mensaje, formato_numero);
+			return respuesta = "@" + USUARIO + " fue " + formatearFechaView(fechaDentroDe(-numero, "meses"));
 		}
 		
+		
 		if(mensaje.contains("que dia fue") && mensaje.indexOf("anos") >= 0) {
-			respuesta = "@" + USUARIO + " fue el viernes 1 de abril de 2016";
+			int numero = obtenerNumero(mensaje, formato_numero);
+			return respuesta = "@" + USUARIO + " fue " + formatearFechaView(fechaDentroDe(-numero, "anios"));
 		}
 		
 		if(mensaje.contains("desde")) {
@@ -99,9 +101,14 @@ public class Bot {
 		}
 		
 		if(mensaje.contains("cuanto es")) {
-			Calculadora calculadora = new Calculadora(mensaje);
-			double resultado = calculadora.resolver();
-			respuesta = "@" + USUARIO + " " + resultado;
+			int posicionInicial;
+			if (mensaje.contains("el"))
+				posicionInicial = mensaje.indexOf("el") + 2;
+			else
+				posicionInicial = mensaje.indexOf("es") + 2;
+			Calculadora calculadora = new Calculadora(mensaje.substring(posicionInicial, mensaje.length()));
+			int resultado = (int)calculadora.resolver();
+			return respuesta = "@" + USUARIO + " " + resultado;
 		}
 		
 		return respuesta == "" ? MSG_NO_ENTIENDO : respuesta;
@@ -109,12 +116,11 @@ public class Bot {
 
 
 	private int obtenerNumero(String mensaje, Pattern formato_numero) {
-		this.matcher = formato_numero.matcher(mensaje);
-		this.matcher.find();
-		int numero = Integer.parseInt(this.matcher.group());
+		Matcher matcher = formato_numero.matcher(mensaje);
+		matcher.find();
+		int numero = Integer.parseInt(matcher.group());
 		return numero;
 	}
-	
 	
 	// Remueve los tildes del String que recibe.
 	private String removerTildes(String texto) {
@@ -155,7 +161,7 @@ public class Bot {
 		return MSG_NO_ENTIENDO;
 	}
 	 
-	 private String agradecer(String palabra) {
+	private String agradecer(String palabra) {
 		 return "No es nada, @" + Bot.USUARIO;
 	 }
 	

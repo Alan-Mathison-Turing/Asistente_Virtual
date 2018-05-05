@@ -22,9 +22,9 @@ public class RF03Tests {
 	@Test
 	public void hora() {
 		String[] mensajes = {
-				"¿qué hora es, @jenkins?",
+				"Â¿Que hora es, @jenkins?",
 				"@jenkins, la hora por favor",
-				"me decís la hora @jenkins?"
+				"me decÃ­s la hora @jenkins?"
 		};
 		for (String mensaje : mensajes) {
 			Assert.assertEquals(
@@ -37,9 +37,9 @@ public class RF03Tests {
 	@Test
 	public void fecha() {
 		String[] mensajes = {
-				"¿qué día es, @jenkins?",
+				"que dia es, @jenkins?",
 				"@jenkins, la fecha por favor",
-				"me decís la fecha @jenkins?"
+				"me decÃ­s la fecha @jenkins?"
 		};
 		for (String mensaje : mensajes) {
 			Assert.assertEquals(
@@ -52,11 +52,11 @@ public class RF03Tests {
 	@Test
 	public void diaDeLaSemana() {
 		String[] mensajes = {
-				"¿qué día de la semana es hoy, @jenkins?"
+				"Â¿que dia de la semana es hoy, @jenkins?"
 		};
 		for (String mensaje : mensajes) {
 			Assert.assertEquals(
-					"@delucas hoy es domingo",
+					"@delucas hoy es viernes",
 					jenkins.leerMensaje(mensaje)
 			);
 		}
