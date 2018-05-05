@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public class Bot {
 
@@ -21,9 +22,9 @@ public class Bot {
 	private final static String FORMATO_MES = "MMMM";
 	private final static String FORMATO_DIA_SEMANA = "EEEE";
 	private final static String FORMATO_HORA = "HH:mm a";
-	private final static SimpleDateFormat sdfDia = new SimpleDateFormat(FORMATO_DIA_SEMANA);
-	private final static SimpleDateFormat sdfMes = new SimpleDateFormat(FORMATO_MES);
-	private final static SimpleDateFormat sfdHora = new SimpleDateFormat(FORMATO_HORA);
+	private final static SimpleDateFormat sdfDia = new SimpleDateFormat(FORMATO_DIA_SEMANA, new Locale("es", "ES"));
+	private final static SimpleDateFormat sdfMes = new SimpleDateFormat(FORMATO_MES, new Locale("es", "ES"));
+	private final static SimpleDateFormat sfdHora = new SimpleDateFormat(FORMATO_HORA, new Locale("es", "ES"));
 	
 	private Calendar calendarAhora;
 	
@@ -187,25 +188,37 @@ public class Bot {
         int dias = (int) ((fechaHasta.getTimeInMillis() - fechaDesde.getTimeInMillis()) / 86400000);
         return dias;
 	}
-
+	
+	/**
+	 * Metodo que devuelve la fecha de hoy, en castellano
+	 * @return
+	 */
 	public String obtenerFechaHoy() {
 		calendarAhora = Calendar.getInstance();
 		return "hoy es " +  calendarAhora.get(Calendar.DAY_OF_MONTH) + " de " + 
 				sdfMes.format(calendarAhora.getTime()) + " de " + calendarAhora.get(Calendar.YEAR);
 	}
 	
+	/**
+	 * Metodo que devuelve el dia de la semana de hoy, en castellano
+	 * @return
+	 */
 	public String obtenerDiaSemanaHoy() {
 		calendarAhora = Calendar.getInstance();
 		return "hoy es " + sdfDia.format(calendarAhora.getTime());
 	}
 	
+	/**
+	 * Metodo que devuelve la hora actual, en formato AM/PM
+	 * @return
+	 */
 	public String obtenerHora() {
 		calendarAhora = Calendar.getInstance();
 		return "son las " + sfdHora.format(calendarAhora.getTime());
 	}
 
 	public String formatearFechaView(String fechaEntrada) {
-		SimpleDateFormat formatoSalida = new SimpleDateFormat("EEEE d 'de' MMMM 'de' yyyy");
+		SimpleDateFormat formatoSalida = new SimpleDateFormat("EEEE d 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
 		SimpleDateFormat formatoEntrada = new SimpleDateFormat("dd/MM/yyyy");
 		String fechaSalida = "";
 		try {
