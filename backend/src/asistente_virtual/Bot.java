@@ -14,7 +14,7 @@ public class Bot {
 	private String nombre;
 	
 	public final static String USUARIO = "delucas";	
-	static String MSG_NO_ENTIENDO = "Disculpa... no entiendo el pedido, @" + USUARIO + " Â¿podrÃ­as repetirlo?";
+	static String MSG_NO_ENTIENDO = "Disculpa... no entiendo el pedido, @" + USUARIO + " ¿podrás repetirlo?";
 	
 	private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 	
