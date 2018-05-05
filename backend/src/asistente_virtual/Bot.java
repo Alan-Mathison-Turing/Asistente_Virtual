@@ -4,6 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import calculadora.Calculadora;
 
 public class Bot {
 
@@ -13,6 +17,8 @@ public class Bot {
 	static String MSG_NO_ENTIENDO = "Disculpa... no entiendo el pedido, @" + USUARIO + " Â¿podrÃ­as repetirlo?";
 	
 	private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+	
+	private Matcher matcher;
 	
 	public Bot(String nombre) {
 		this.nombre = nombre;
@@ -30,6 +36,7 @@ public class Bot {
 	public String leerMensaje(String mensaje) {
 		
 		mensaje = removerTildes(mensaje.toLowerCase());
+		Pattern formato_numero = Pattern.compile("[\\d\\.]+");
 		String respuesta = "";
 		
 		if(mensaje.contains("hola") || mensaje.contains("buen") || mensaje.contains("hey")) {
@@ -41,27 +48,30 @@ public class Bot {
 		}
 		
 		if(mensaje.contains("hora")) {
-			respuesta = "@" + USUARIO + " son las 3:15 PM";
+			return respuesta = obtenerHora();
 		}
 		
 		if(mensaje.contains("dia es") || mensaje.contains("fecha")) {
-			respuesta = obtenerFechaHoy();
+			return respuesta = obtenerFechaHoy();
 		}
 		
 		if(mensaje.contains("semana")) {
-			respuesta = obtenerHora();
+			return respuesta = obtenerDiaSemanaHoy();
 		}
 		
 		if(mensaje.contains("que dia sera") && mensaje.indexOf("dias") >= 0) {
-			respuesta = "@" + USUARIO + " será el martes 3 de abril de 2018";
+			int numero = obtenerNumero(mensaje, formato_numero);
+			return respuesta = "@" + USUARIO + " será el " + formatearFechaView(fechaDentroDe(numero, "dias"));
 		}
 
 		if(mensaje.contains("que dia sera") && mensaje.indexOf("meses") >= 0) {
-			respuesta = "@" + USUARIO + " será el viernes 1 de junio de 2018";
+			int numero = obtenerNumero(mensaje, formato_numero);
+			return respuesta = "@" + USUARIO + " será el " + formatearFechaView(fechaDentroDe(numero, "meses"));
 		}
 		
 		if(mensaje.contains("que dia sera") && mensaje.indexOf("anos") >= 0) {
-			respuesta = "@" + USUARIO + " serà el miÃ©rcoles 1 de abril de 2020";
+			int numero = obtenerNumero(mensaje, formato_numero);
+			return respuesta = "@" + USUARIO + " será el " + formatearFechaView(fechaDentroDe(numero, "anos"));
 		}
 		
 		if(mensaje.contains("que dia fue") && mensaje.indexOf("ayer") >= 0) {
@@ -89,10 +99,20 @@ public class Bot {
 		}
 		
 		if(mensaje.contains("cuanto es")) {
-			respuesta = "@" + USUARIO + " 3";
+			Calculadora calculadora = new Calculadora(mensaje);
+			double resultado = calculadora.resolver();
+			respuesta = "@" + USUARIO + " " + resultado;
 		}
 		
 		return respuesta == "" ? MSG_NO_ENTIENDO : respuesta;
+	}
+
+
+	private int obtenerNumero(String mensaje, Pattern formato_numero) {
+		this.matcher = formato_numero.matcher(mensaje);
+		this.matcher.find();
+		int numero = Integer.parseInt(this.matcher.group());
+		return numero;
 	}
 	
 	
@@ -227,7 +247,7 @@ public class Bot {
 	
 	public String obtenerDiaSemanaHoy() {
 		calendarAhora = Calendar.getInstance();
-		return "hoy es " + sdfDia.format(calendarAhora.getTime());
+		return "@" + USUARIO + " hoy es " + sdfDia.format(calendarAhora.getTime());
 	}
 	
 	public String obtenerHora() {
