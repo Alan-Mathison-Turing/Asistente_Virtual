@@ -45,11 +45,11 @@ public class Bot {
 		}
 		
 		if(mensaje.contains("dia es") || mensaje.contains("fecha")) {
-			respuesta = "@" + USUARIO + " hoy es 1 de abril de 2018";
+			respuesta = obtenerFechaHoy();
 		}
 		
 		if(mensaje.contains("semana")) {
-			respuesta = "@" + USUARIO + " hoy es domingo";
+			respuesta = obtenerHora();
 		}
 		
 		if(mensaje.contains("que dia sera") && mensaje.indexOf("dias") >= 0) {
@@ -218,10 +218,10 @@ public class Bot {
         int dias = (int) ((fechaHasta.getTimeInMillis() - fechaDesde.getTimeInMillis()) / 86400000);
         return dias;
 	}
-
+	 
 	public String obtenerFechaHoy() {
 		calendarAhora = Calendar.getInstance();
-		return "hoy es " +  calendarAhora.get(Calendar.DAY_OF_MONTH) + " de " + 
+		return "@" + USUARIO + " hoy es " +  calendarAhora.get(Calendar.DAY_OF_MONTH) + " de " + 
 				sdfMes.format(calendarAhora.getTime()) + " de " + calendarAhora.get(Calendar.YEAR);
 	}
 	
@@ -232,7 +232,7 @@ public class Bot {
 	
 	public String obtenerHora() {
 		calendarAhora = Calendar.getInstance();
-		return "son las " + sfdHora.format(calendarAhora.getTime());
+		return "@" + USUARIO + " son las " + sfdHora.format(calendarAhora.getTime());
 	}
 
 	public String formatearFechaView(String fechaEntrada) {
