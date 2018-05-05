@@ -10,7 +10,7 @@ public class Bot {
 	private String nombre;
 	
 	public final static String USUARIO = "delucas";	
-	static String MSG_NO_ENTIENDO = "Disculpa... no entiendo el pedido, @" + USUARIO + " ¿podrías repetirlo?";
+	static String MSG_NO_ENTIENDO = "Disculpa... no entiendo el pedido, @" + USUARIO + " Â¿podrÃ­as repetirlo?";
 	
 	private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 	
@@ -33,11 +33,11 @@ public class Bot {
 		String respuesta = "";
 		
 		if(mensaje.contains("hola") || mensaje.contains("buen") || mensaje.contains("hey")) {
-			respuesta = "¡Hola, @" + USUARIO + "!";
+			return respuesta = saludar(mensaje);
 		}
 		
 		if(mensaje.contains("gracias")) {
-			respuesta = "No es nada, @" + USUARIO;
+			return respuesta = agradecer(mensaje);
 		}
 		
 		if(mensaje.contains("hora")) {
@@ -61,7 +61,7 @@ public class Bot {
 		}
 		
 		if(mensaje.contains("que dia sera") && mensaje.indexOf("anos") >= 0) {
-			respuesta = "@" + USUARIO + " será el miércoles 1 de abril de 2020";
+			respuesta = "@" + USUARIO + " serà el miÃ©rcoles 1 de abril de 2020";
 		}
 		
 		if(mensaje.contains("que dia fue") && mensaje.indexOf("ayer") >= 0) {
@@ -99,7 +99,7 @@ public class Bot {
 	// Remueve los tildes del String que recibe.
 	private String removerTildes(String texto) {
 	    String original = "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýÿ";
-	    // Cadena de caracteres ASCII que reemplazarán los originales.
+	    // Cadena de caracteres ASCII que reemplazarÃ¡n los originales.
 	    String ascii = "AAAAAAACEEEEIIIIDNOOOOOOUUUUYBaaaaaaaceeeeiiiionoooooouuuuyy";
 	    String output = texto;
 	    for (int i = 0; i < original.length(); i++) {
@@ -108,6 +108,37 @@ public class Bot {
 	    }
 	    return output;
 	}
+	
+	private String saludar(String saludo) {
+		Calendar calendario = new GregorianCalendar();
+		if(saludo.contains("hola") || saludo.contains("hey")) {
+			 return "¡Hola, @" + Bot.USUARIO + "!";
+		}
+		 
+		if(saludo.contains("chau")) {
+			 return "Hasta luego @" + Bot.USUARIO;
+		}
+		 
+		if(saludo.contains("buen")) {
+				 if(calendario.get(Calendar.HOUR_OF_DAY)>= 13 && calendario.get(Calendar.HOUR_OF_DAY) <= 19 
+						 || calendario.get(Calendar.HOUR) > 01 && calendario.get(Calendar.HOUR) <= 07) {
+					 return "Buenas tardes @" + Bot.USUARIO;
+				 }
+				 else {
+					 if(calendario.get(Calendar.HOUR_OF_DAY) < 13) {
+						 return "Buenos dias @" + Bot.USUARIO;
+						 }
+					 else
+						 return "Buenas noches @" + Bot.USUARIO;
+				 }
+		}
+		return MSG_NO_ENTIENDO;
+	}
+	 
+	 private String agradecer(String palabra) {
+		 return "No es nada, @" + Bot.USUARIO;
+	 }
+	
 	
 	/**
 	 * @param cantidad (mayor o menor a cero segun fecha hacia

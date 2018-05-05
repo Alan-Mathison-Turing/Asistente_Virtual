@@ -17,15 +17,15 @@ public class RF01Tests {
 	@Test
 	public void saludo() {
 		String[] mensajes = {
-				"¡Hola, @jenkins!",
+				"Â¡Hola, @jenkins!",
 				"@jenkins hola!",
-				"buen día @jenkins",
+				"buen dÃ­a @jenkins",
 				"@jenkins, buenas tardes",
 				"hey @jenkins"
 		};
 		for (String mensaje : mensajes) {
 			Assert.assertEquals(
-					"¡Hola, @delucas!",
+					"Â¡Hola, @delucas!",
 					jenkins.leerMensaje(mensaje)
 			);
 		}
