@@ -2,13 +2,6 @@ package conversor_unidades;
 
 import java.text.DecimalFormat;
 
-/*
- * Como usuario quiero pedirle al asistente conversiones de unidades de medida 
- * para agilizar mis cálculos. 25pts. Debe incluir al menos 3 unidades de cada 
- * tipo: masa, longitud, capacidad y tiempo tanto del Sistema Internacional como del 
- * Sistema Imperial.
- */
-
 public class ConversorUnidades implements Unidad {
 
 	private Unidad next;
@@ -18,7 +11,9 @@ public class ConversorUnidades implements Unidad {
 	
 	public double convertirUnidad(double numero, String desde, String hasta){
 		Masa masa = new Masa();
+		Longitud longitud = new Longitud();
 		this.setNext(masa);
+		masa.setNext(longitud);
 		return next.convertirUnidad(numero, desde, hasta);
 	}
 	
