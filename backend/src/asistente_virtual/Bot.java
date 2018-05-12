@@ -1,5 +1,6 @@
 package asistente_virtual;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -143,12 +144,14 @@ public class Bot {
 			return respuesta = "@" + USUARIO + " " + resultado;
 		}
 		
-		if(mensaje.contains("gramo") || mensaje.contains("kilo") || mensaje.contains("onza")) {
-			int posicion = mensaje.indexOf("cuantos") + 8;
-			String conversion = mensaje.substring(posicion, mensaje.length());
-			double numero = obtenerNumero(conversion, formato_numero);
-			ConversorUnidades cu = new ConversorUnidades(numero, conversion);
-			return respuesta = "@" + USUARIO + cu.convertirUnidad();   
+		if(mensaje.matches("@(\\w*) (?:cuantas|cuantos) (\\w*) (?:son|hay en) (\\d+) (\\w+)")) {
+			String[] palabras = mensaje.split(" ");
+			String hasta = palabras[2];
+			String desde = palabras[palabras.length - 1];
+			DecimalFormat df = new DecimalFormat("#.00");
+			double numero = obtenerNumero(mensaje, formato_numero);
+			ConversorUnidades cu = new ConversorUnidades();
+			return respuesta = "@" + USUARIO + " " + df.format(numero) + " " + desde + " equivale a " + df.format(cu.convertirUnidad(numero, desde, hasta)) + " " + hasta;   
 		}
 		
 		return respuesta == "" ? MSG_NO_ENTIENDO : respuesta;

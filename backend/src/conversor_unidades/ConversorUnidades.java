@@ -9,38 +9,27 @@ import java.text.DecimalFormat;
  * Sistema Imperial.
  */
 
-public class ConversorUnidades {
+public class ConversorUnidades implements Unidad {
 
-	private String desde;
-	private String hasta;
-	private double numero;
-	
-	public ConversorUnidades(double numero, String mensaje) {
-		this.numero = numero;
-		String[] palabras = mensaje.split(" ");
-		this.desde = palabras[0];
-		this.hasta = palabras[palabras.length - 1];
-	}
-	
-	public String convertirUnidad(){
-		DecimalFormat df = new DecimalFormat("#.00");
-		if(this.desde.contains("gramo") && this.hasta.endsWith("kilo")){
-			return " " + df.format(this.numero) + " kilo equivale a " + df.format(gramosToKilos()) + " gramos";			
-		}
+	private Unidad next;
+	public ConversorUnidades() {
 
-		return "";
 	}
 	
-	private double kilosToGramos() {
-		return this.numero / 1000;
+	public double convertirUnidad(double numero, String desde, String hasta){
+		Masa masa = new Masa();
+		this.setNext(masa);
+		return next.convertirUnidad(numero, desde, hasta);
 	}
 	
-	private double gramosToKilos() {
-		return this.numero * 1000;
+	@Override
+	public void setNext(Unidad unidad) {
+		next = unidad;
 	}
 
-	private double gramosToOnzas() {
-		return this.numero * 0.035274;
+	@Override
+	public Unidad getNext() {
+		return next;
 	}
-	
+
 }
