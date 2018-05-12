@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import calculadora.Calculadora;
+import conversor_unidades.ConversorUnidades;
 
 
 public class Bot {
@@ -142,15 +143,21 @@ public class Bot {
 			return respuesta = "@" + USUARIO + " " + resultado;
 		}
 		
+		if(mensaje.contains("gramo") || mensaje.contains("kilo") || mensaje.contains("onza")) {
+			int posicion = mensaje.indexOf("cuantos") + 8;
+			String conversion = mensaje.substring(posicion, mensaje.length());
+			double numero = obtenerNumero(conversion, formato_numero);
+			ConversorUnidades cu = new ConversorUnidades(numero, conversion);
+			return respuesta = "@" + USUARIO + cu.convertirUnidad();   
+		}
+		
 		return respuesta == "" ? MSG_NO_ENTIENDO : respuesta;
 	}
-
 
 	private int obtenerNumero(String mensaje, Pattern formato_numero) {
 		Matcher matcher = formato_numero.matcher(mensaje);
 		matcher.find();
-		int numero = Integer.parseInt(matcher.group());
-		return numero;
+		return Integer.parseInt(matcher.group());
 	}
 	
 	// Remueve los tildes del String que recibe.

@@ -219,4 +219,28 @@ public class BotTests {
 		// agregar otros casos
 	}
 	
+	@Test
+	public void unidadesDeMasa() {
+		Assert.assertEquals(
+				"@delucas 1,00 kilo equivale a 1000,00 gramos",
+				jenkins.leerMensaje("@jenkins cuántos gramos son 1 kilo")
+			);
+		/*
+		Assert.assertEquals(
+				"@delucas 2 kilo equivale a 2000 gramos",
+				jenkins.leerMensaje("@jenkins cuántos gramos son 2 kilo")
+			);
+		
+		Assert.assertEquals(
+				"@delucas 1000 gramos equivalen a 1 kilo",
+				jenkins.leerMensaje("@jenkins cuántos kilos son 1000 gramos")
+			);
+		
+		Assert.assertEquals(
+				"@delucas 1000 gramos equivalen a 35.27 onzas",
+				jenkins.leerMensaje("@jenkins cuántas onzas son 1000 gramos")
+			);		*/
+	}
+	
+	
 }
