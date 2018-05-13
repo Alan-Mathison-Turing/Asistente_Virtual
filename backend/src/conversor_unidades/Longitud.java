@@ -5,47 +5,49 @@ public class Longitud implements IUnidad{
 	private IUnidad next;
 	
 	@Override
-	public void setNext(IUnidad unidad) {
+	public void setNextUnidad(IUnidad unidad) {
 		next = unidad;		
 	}
 
 	@Override
-	public IUnidad getNext() {
+	public IUnidad getNextUnidad() {
 		return next;
 	}
 
 	@Override
 	public double convertirUnidad(double numero, String desde, String hasta) {
-		if(desde.contains("metro") && hasta.contains("centimetro")) {
-			return metrosToCentimetros(numero);
+		if(desde.matches("(?:centimetro|metro|pulgada|pie)(\\w?)") && hasta.matches("(?:centimetro|metro|pulgada|pie)(\\w?)")) {
+			if(desde.contains("metro") && hasta.contains("centimetro")) {
+				return metrosToCentimetros(numero);
+			}
+			if(desde.contains("centimetro") && hasta.contains("metro")) {
+				return centimetrosToMetros(numero);
+			}
+			if(desde.contains("pulgada") && hasta.contains("centimetro")) {
+				return pulgadasToCentimetros(numero);
+			}
+			if(desde.contains("centimetro") && hasta.contains("pulgada")) {
+				return centimetrosToPulgadas(numero);
+			}
+			if(desde.contains("pie") && hasta.contains("centimetro")) {
+				return piesToCentimetros(numero);
+			}
+			if(desde.contains("centimetro") && hasta.contains("pie")) {
+				return centimetrosToPies(numero);
+			}		
+			if(desde.contains("metro") && hasta.contains("pie")) {
+				return metrosToPies(numero);
+			}
+			if(desde.contains("pie") && hasta.contains("metro")) {
+				return piesToMetros(numero);
+			}
+			if(desde.contains("metro") && hasta.contains("pulgada")) {
+				return metrosToPulgadas(numero);
+			}
+			if(desde.contains("pulgada") && hasta.contains("metro")) {
+				return pulgadasToMetros(numero);
+			}			
 		}
-		if(desde.contains("centimetro") && hasta.contains("metro")) {
-			return centimetrosToMetros(numero);
-		}
-		if(desde.contains("pulgada") && hasta.contains("centimetro")) {
-			return pulgadasToCentimetros(numero);
-		}
-		if(desde.contains("centimetro") && hasta.contains("pulgada")) {
-			return centimetrosToPulgadas(numero);
-		}
-		if(desde.contains("pie") && hasta.contains("centimetro")) {
-			return piesToCentimetros(numero);
-		}
-		if(desde.contains("centimetro") && hasta.contains("pie")) {
-			return centimetrosToPies(numero);
-		}		
-		if(desde.contains("metro") && hasta.contains("pie")) {
-			return metrosToPies(numero);
-		}
-		if(desde.contains("pie") && hasta.contains("metro")) {
-			return piesToMetros(numero);
-		}
-		if(desde.contains("metro") && hasta.contains("pulgada")) {
-			return metrosToPulgadas(numero);
-		}
-		if(desde.contains("pulgada") && hasta.contains("metro")) {
-			return pulgadasToMetros(numero);
-		}		
 		return next.convertirUnidad(numero, desde, hasta);
 	}
 	

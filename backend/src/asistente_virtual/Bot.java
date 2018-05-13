@@ -144,7 +144,7 @@ public class Bot {
 			return respuesta = "@" + USUARIO + " " + resultado;
 		}
 		
-		if(mensaje.matches("@(\\w*) (?:cuantas|cuantos) (\\w*) (?:son|hay en) (\\d+) (\\w+)")) {
+		if(mensaje.matches("@(\\w*) (?:cuantas|cuantos) (\\w*) (?:son|hay en) (\\d+) (\\w+)(?:\\s*\\??|\\?)?")) {
 			String[] palabras = mensaje.split(" ");
 			String hasta = palabras[2];
 			String desde = palabras[palabras.length - 1];

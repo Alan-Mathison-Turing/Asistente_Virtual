@@ -2,7 +2,7 @@ package conversor_unidades;
 
 public class ConversorUnidad implements IUnidad {
 
-	private IUnidad next;
+	private IUnidad nextUnidad;
 	
 	@Override
 	public double convertirUnidad(double numero, String desde, String hasta){
@@ -11,11 +11,11 @@ public class ConversorUnidad implements IUnidad {
 			Longitud longitud = new Longitud();
 			Capacidad capacidad = new Capacidad();
 			Tiempo tiempo = new Tiempo();
-			this.setNext(masa);
-			masa.setNext(longitud);
-			longitud.setNext(capacidad);
-			capacidad.setNext(tiempo);
-			return redondearDecimales(next.convertirUnidad(numero, desde, hasta), 2);		
+			this.setNextUnidad(masa);
+			masa.setNextUnidad(longitud);
+			longitud.setNextUnidad(capacidad);
+			capacidad.setNextUnidad(tiempo);
+			return redondearDecimales(nextUnidad.convertirUnidad(numero, desde, hasta), 2);		
 		}
 		catch(Exception e){
 			return -1;
@@ -24,13 +24,13 @@ public class ConversorUnidad implements IUnidad {
 	}
 	
 	@Override
-	public void setNext(IUnidad unidad) {
-		next = unidad;
+	public void setNextUnidad(IUnidad unidad) {
+		nextUnidad = unidad;
 	}
 
 	@Override
-	public IUnidad getNext() {
-		return next;
+	public IUnidad getNextUnidad() {
+		return nextUnidad;
 	}
 	
     private double redondearDecimales(double valorInicial, int cantidadDecimales) {

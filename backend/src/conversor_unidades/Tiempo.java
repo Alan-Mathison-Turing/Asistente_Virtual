@@ -5,52 +5,54 @@ public class Tiempo implements IUnidad {
 	private IUnidad next;
 	
 	@Override
-	public void setNext(IUnidad unidad) {
+	public void setNextUnidad(IUnidad unidad) {
 		next = unidad;
 	}
 
 	@Override
-	public IUnidad getNext() {
+	public IUnidad getNextUnidad() {
 		return next;
 	}
 
 	@Override
 	public double convertirUnidad(double numero, String desde, String hasta) {
-		if(desde.contains("segundo") && hasta.contains("minuto")) {
-			return segundosToMinutos(numero);
-		}
-		if(desde.contains("minuto") && hasta.contains("segundo")) {
-			return minutosToSegundos(numero);
-		}
-		if(desde.contains("segundo") && hasta.contains("hora")) {
-			return segundosToHoras(numero);
-		}
-		if(desde.contains("hora") && hasta.contains("segundo")) {
-			return horasToSegundos(numero);
-		}
-		if(desde.contains("segundo") && hasta.contains("dia")) {
-			return segundosToDias(numero);
-		}
-		if(desde.contains("dia") && hasta.contains("segundo")) {
-			return diasToSegundos(numero);
-		}
-		if(desde.contains("minuto") && hasta.contains("hora")) {
-			return minutosToHoras(numero);
-		}
-		if(desde.contains("hora") && hasta.contains("minuto")) {
-			return horasToMinutos(numero);
-		}
-		if(desde.contains("minuto") && hasta.contains("dia")) {
-			return minutosToDias(numero);
-		}
-		if(desde.contains("dia") && hasta.contains("minuto")) {
-			return diasToMinutos(numero);
-		}
-		if(desde.contains("hora") && hasta.contains("dia")) {
-			return horasToDias(numero);
-		}
-		if(desde.contains("dia") && hasta.contains("hora")) {
-			return diasToHoras(numero);
+		if(desde.matches("(?:segundo|minuto|hora|dia)(\\w?)") && hasta.matches("(?:segundo|minuto|hora|dia)(\\w?)")) {
+			if(desde.contains("segundo") && hasta.contains("minuto")) {
+				return segundosToMinutos(numero);
+			}
+			if(desde.contains("minuto") && hasta.contains("segundo")) {
+				return minutosToSegundos(numero);
+			}
+			if(desde.contains("segundo") && hasta.contains("hora")) {
+				return segundosToHoras(numero);
+			}
+			if(desde.contains("hora") && hasta.contains("segundo")) {
+				return horasToSegundos(numero);
+			}
+			if(desde.contains("segundo") && hasta.contains("dia")) {
+				return segundosToDias(numero);
+			}
+			if(desde.contains("dia") && hasta.contains("segundo")) {
+				return diasToSegundos(numero);
+			}
+			if(desde.contains("minuto") && hasta.contains("hora")) {
+				return minutosToHoras(numero);
+			}
+			if(desde.contains("hora") && hasta.contains("minuto")) {
+				return horasToMinutos(numero);
+			}
+			if(desde.contains("minuto") && hasta.contains("dia")) {
+				return minutosToDias(numero);
+			}
+			if(desde.contains("dia") && hasta.contains("minuto")) {
+				return diasToMinutos(numero);
+			}
+			if(desde.contains("hora") && hasta.contains("dia")) {
+				return horasToDias(numero);
+			}
+			if(desde.contains("dia") && hasta.contains("hora")) {
+				return diasToHoras(numero);
+			}	
 		}
 		return next.convertirUnidad(numero, desde, hasta);
 	}

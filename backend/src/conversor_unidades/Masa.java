@@ -5,47 +5,49 @@ public class Masa implements IUnidad{
 	private IUnidad next;
 	
 	@Override
-	public void setNext(IUnidad unidad) {
+	public void setNextUnidad(IUnidad unidad) {
 		next = unidad;
 	}
 
 	@Override
-	public IUnidad getNext() {
+	public IUnidad getNextUnidad() {
 		return next;
 	}
 
 	@Override
 	public double convertirUnidad(double numero, String desde, String hasta) {	
-		if(desde.contains("gramo") && hasta.contains("kilo")) {
-			return gramosToKilos(numero);			
+		if(desde.matches("(?:kilo|gramo|tonelada|onza)(\\w?)") && hasta.matches("(?:kilo|gramo|tonelada|onza)(\\w?)")){
+			if(desde.contains("gramo") && hasta.contains("kilo")) {
+				return gramosToKilos(numero);			
+			}
+			if(desde.contains("kilo") && hasta.contains("gramo")) {
+				return kilosToGramos(numero);			
+			}
+			if(desde.contains("gramo") && hasta.contains("onza")) {
+				return gramosToOnzas(numero);
+			}
+			if(desde.contains("onza") && hasta.contains("gramo")) {
+				return onzasToGramos(numero);
+			}
+			if(desde.contains("kilo") && hasta.contains("tonelada")) {
+				return kilosToToneladas(numero);
+			}
+			if(desde.contains("tonelada") && hasta.contains("kilo")) {
+				return toneladasToKilos(numero);
+			}
+			if(desde.contains("gramo") && hasta.contains("tonelada")) {
+				return gramosToToneladas(numero);
+			}
+			if(desde.contains("tonelada") && hasta.contains("gramo")) {
+				return toneladasToGramos(numero);
+			}
+			if(desde.contains("onza") && hasta.contains("tonelada")) {
+				return onzasToToneladas(numero);
+			}
+			if(desde.contains("tonelada") && hasta.contains("onza")) {
+				return toneladasToOnzas(numero);
+			}		
 		}
-		if(desde.contains("kilo") && hasta.contains("gramo")) {
-			return kilosToGramos(numero);			
-		}
-		if(desde.contains("gramo") && hasta.contains("onza")) {
-			return gramosToOnzas(numero);
-		}
-		if(desde.contains("onza") && hasta.contains("gramo")) {
-			return onzasToGramos(numero);
-		}
-		if(desde.contains("kilo") && hasta.contains("tonelada")) {
-			return kilosToToneladas(numero);
-		}
-		if(desde.contains("tonelada") && hasta.contains("kilo")) {
-			return toneladasToKilos(numero);
-		}
-		if(desde.contains("gramo") && hasta.contains("tonelada")) {
-			return gramosToToneladas(numero);
-		}
-		if(desde.contains("tonelada") && hasta.contains("gramo")) {
-			return toneladasToGramos(numero);
-		}
-		if(desde.contains("onza") && hasta.contains("tonelada")) {
-			return onzasToToneladas(numero);
-		}
-		if(desde.contains("tonelada") && hasta.contains("onza")) {
-			return toneladasToOnzas(numero);
-		}		
 		return next.convertirUnidad(numero, desde, hasta);
 	}
 	
