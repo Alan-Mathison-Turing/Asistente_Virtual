@@ -151,7 +151,13 @@ public class Bot {
 			DecimalFormat df = new DecimalFormat("#.00");
 			double numero = obtenerNumero(mensaje, formato_numero);
 			ConversorUnidades cu = new ConversorUnidades();
-			return respuesta = "@" + USUARIO + " " + df.format(numero) + " " + desde + " equivale a " + df.format(cu.convertirUnidad(numero, desde, hasta)) + " " + hasta;   
+			double resultado = cu.convertirUnidad(numero, desde, hasta);
+			if(resultado == -1) {
+				return MSG_NO_ENTIENDO;
+			}else {
+				return respuesta = "@" + USUARIO + " " + df.format(numero) + " " + desde + 
+						" equivale a " + df.format(resultado) + " " + hasta;				
+			}
 		}
 		
 		return respuesta == "" ? MSG_NO_ENTIENDO : respuesta;
