@@ -6,11 +6,11 @@ import org.junit.Test;
 
 public class ConversorUnidadesTests {
 
-	private ConversorUnidades cu;
+	private ConversorUnidad cu;
 	
 	@Before
 	public void setup() {
-		cu = new ConversorUnidades();
+		cu = new ConversorUnidad();
 	}
 	
 	@Test

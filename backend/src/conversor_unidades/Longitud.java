@@ -1,16 +1,16 @@
 package conversor_unidades;
 
-public class Longitud implements Unidad{
+public class Longitud implements IUnidad{
 
-	private Unidad next;
+	private IUnidad next;
 	
 	@Override
-	public void setNext(Unidad unidad) {
+	public void setNext(IUnidad unidad) {
 		next = unidad;		
 	}
 
 	@Override
-	public Unidad getNext() {
+	public IUnidad getNext() {
 		return next;
 	}
 

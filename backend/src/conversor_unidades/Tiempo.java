@@ -1,16 +1,16 @@
 package conversor_unidades;
 
-public class Tiempo implements Unidad {
+public class Tiempo implements IUnidad {
 
-	private Unidad next;
+	private IUnidad next;
 	
 	@Override
-	public void setNext(Unidad unidad) {
+	public void setNext(IUnidad unidad) {
 		next = unidad;
 	}
 
 	@Override
-	public Unidad getNext() {
+	public IUnidad getNext() {
 		return next;
 	}
 

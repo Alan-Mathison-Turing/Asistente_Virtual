@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import calculadora.Calculadora;
-import conversor_unidades.ConversorUnidades;
+import conversor_unidades.ConversorUnidad;
 
 
 public class Bot {
@@ -150,7 +150,7 @@ public class Bot {
 			String desde = palabras[palabras.length - 1];
 			DecimalFormat df = new DecimalFormat("#.00");
 			double numero = obtenerNumero(mensaje, formato_numero);
-			ConversorUnidades cu = new ConversorUnidades();
+			ConversorUnidad cu = new ConversorUnidad();
 			double resultado = cu.convertirUnidad(numero, desde, hasta);
 			if(resultado == -1) {
 				return MSG_NO_ENTIENDO;

@@ -1,8 +1,8 @@
 package conversor_unidades;
 
-public class ConversorUnidades implements Unidad {
+public class ConversorUnidad implements IUnidad {
 
-	private Unidad next;
+	private IUnidad next;
 	
 	@Override
 	public double convertirUnidad(double numero, String desde, String hasta){
@@ -24,12 +24,12 @@ public class ConversorUnidades implements Unidad {
 	}
 	
 	@Override
-	public void setNext(Unidad unidad) {
+	public void setNext(IUnidad unidad) {
 		next = unidad;
 	}
 
 	@Override
-	public Unidad getNext() {
+	public IUnidad getNext() {
 		return next;
 	}
 	
