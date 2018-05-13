@@ -36,10 +36,10 @@ public class ConversorUnidades implements Unidad {
     private double redondearDecimales(double valorInicial, int cantidadDecimales) {
         double parteEntera, resultado;
         resultado = valorInicial;
-        parteEntera = Math.floor(resultado);
+        parteEntera = (int)Math.floor(resultado);
         resultado = (resultado - parteEntera) * Math.pow(10, cantidadDecimales);
         resultado = Math.round(resultado);
-        resultado = (resultado / Math.pow(10, cantidadDecimales)) + parteEntera;
+        resultado = (resultado / Math.pow(10, cantidadDecimales))  + parteEntera;
         return resultado;
     }
 

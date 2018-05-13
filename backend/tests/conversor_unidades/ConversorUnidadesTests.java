@@ -48,4 +48,30 @@ public class ConversorUnidadesTests {
 		Assert.assertEquals(70548.0, cu.convertirUnidad(2, "toneladas", "onzas"), 0);
 	}
 	
+	@Test
+	public void unidadCapacidad() {
+		Assert.assertEquals(1700.00, cu.convertirUnidad(1.7, "litros", "cm3"), 0);
+		Assert.assertEquals(4.57, cu.convertirUnidad(4566, "cm3", "litros"), 0);
+		Assert.assertEquals(2.20, cu.convertirUnidad(10, "litros", "galon"), 0);
+		Assert.assertEquals(45.46, cu.convertirUnidad(10, "galon", "litros"), 0);
+		Assert.assertEquals(0.42, cu.convertirUnidad(1899, "cm3", "galon"), 0);
+		Assert.assertEquals(44142.53, cu.convertirUnidad(9.71, "galon", "cm3"), 0);		
+	}
+	
+	@Test
+	public void unidadTiempo() {
+		Assert.assertEquals(1.48, cu.convertirUnidad(89, "segundos", "minutos"), 0);
+		Assert.assertEquals(186, cu.convertirUnidad(3.10, "minutos", "segundos"), 0);
+		Assert.assertEquals(1.00, cu.convertirUnidad(3600, "segundos", "horas"), 0);
+		Assert.assertEquals(12600.00, cu.convertirUnidad(3.5, "horas", "segundos"), 0);
+		Assert.assertEquals(0.23, cu.convertirUnidad(20000, "segundos", "dias"), 0);
+		Assert.assertEquals(838944.00, cu.convertirUnidad(9.71, "dias", "segundos"), 0);		
+		Assert.assertEquals(250.00, cu.convertirUnidad(15000, "minutos", "horas"), 0);
+		Assert.assertEquals(210.00, cu.convertirUnidad(3.5, "horas", "minutos"), 0);
+		Assert.assertEquals(10.42, cu.convertirUnidad(15000, "minutos", "dias"), 0);
+		Assert.assertEquals(13982.40, cu.convertirUnidad(9.71, "dias", "minutos"), 0);
+		Assert.assertEquals(1.5, cu.convertirUnidad(36, "horas", "dias"), 0);
+		Assert.assertEquals(864, cu.convertirUnidad(36, "dias", "horas"), 0);	
+	}
+	
 }
