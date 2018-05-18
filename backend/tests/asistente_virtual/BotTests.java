@@ -220,11 +220,34 @@ public class BotTests {
 	}
 	
 	@Test
+	public void magnitudInvalida() {
+		Assert.assertEquals(
+				Bot.MSG_NO_ENTIENDO,
+				jenkins.leerMensaje("@jenkins cuántos gramos son 1 rama")
+			);
+	}
+	
+	@Test
 	public void unidadesDeMasa() {
 		
 		Assert.assertEquals(
 				"@delucas 1,00 kilo equivale a 1000,00 gramos",
 				jenkins.leerMensaje("@jenkins cuántos gramos son 1 kilo")
+			);
+
+		Assert.assertEquals(
+				"@delucas 1,00 kilo equivale a 1000,00 gramos",
+				jenkins.leerMensaje("@jenkins cuántos gramos son 1 kilo?")
+			);
+		
+		Assert.assertEquals(
+				"@delucas 1,00 kilo equivale a 1000,00 gramos",
+				jenkins.leerMensaje("@jenkins cuántos gramos son 1 kilo ?")
+			);
+		
+		Assert.assertEquals(
+				"@delucas 1,00 kilo equivale a 1000,00 gramos",
+				jenkins.leerMensaje("@jenkins cuántos gramos son 1 kilo   ?")
 			);
 		
 		Assert.assertEquals(
@@ -236,11 +259,63 @@ public class BotTests {
 				"@delucas 1000,00 gramos equivale a 1,00 kilos",
 				jenkins.leerMensaje("@jenkins cuántos kilos son 1000 gramos")
 			);
+		
 		Assert.assertEquals(
 				"@delucas 1000,00 gramos equivale a 35,27 onzas",
 				jenkins.leerMensaje("@jenkins cuántas onzas son 1000 gramos")
-			);	
+			);
+		
+		Assert.assertEquals(
+				"@delucas 4000000,00 gramos equivale a 4,00 toneladas",
+				jenkins.leerMensaje("@jenkins cuántas toneladas son 4000000 gramos")
+			);
+		
+		Assert.assertEquals(
+				"@delucas 1,70 toneladas equivale a 1700,00 kilos",
+				jenkins.leerMensaje("@jenkins cuántos kilos son 1.7 toneladas")
+			);
+	}
+
+	@Test
+	public void unidadesDeTiempo() {
+		Assert.assertEquals(
+				"@delucas 60,00 segundos equivale a 1,00 minutos",
+				jenkins.leerMensaje("@jenkins cuántos minutos hay en 60 segundos")
+			);
+
+		Assert.assertEquals(
+				"@delucas 3,50 horas equivale a 12600,00 segundos",
+				jenkins.leerMensaje("@jenkins cuántos segundos hay en 3.5 horas?")
+			);
+		
 	}
 	
+	@Test
+	public void unidadesDeCapacidad() {
+		Assert.assertEquals(
+				"@delucas 3500,00 cm3 equivale a 3,50 litros",
+				jenkins.leerMensaje("@jenkins cuántos litros hay en 3500 cm3")
+			);
+
+		Assert.assertEquals(
+				"@delucas 10,00 galones equivale a 45,46 litros",
+				jenkins.leerMensaje("@jenkins cuántos litros son 10 galones?")
+			);
+		
+	}
+	
+	@Test
+	public void unidadesDeLongitud() {
+		Assert.assertEquals(
+				"@delucas 1000,00 metros equivale a 1,00 kilometros",
+				jenkins.leerMensaje("@jenkins cuántos kilometros hay en 1000 metros")
+			);
+
+		Assert.assertEquals(
+				"@delucas 1,00 pulgada equivale a 2,54 centimetros",
+				jenkins.leerMensaje("@jenkins cuántos centímetros son 1 pulgada?")
+			);
+		
+	}
 	
 }

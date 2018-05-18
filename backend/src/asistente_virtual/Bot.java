@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,8 +39,29 @@ public class Bot {
 	public String leerMensaje(String mensaje) {
 		
 		mensaje = removerTildes(mensaje.toLowerCase());
-		Pattern formato_numero = Pattern.compile("[\\d\\.]+");
+		Pattern formato_numero = Pattern.compile("(\\d*\\.*\\d)");
 		String respuesta = "";
+		
+		// Ingreso a ConversorUnidad si cumple con el regex.
+		if(mensaje.matches("@(\\w*) (?:cuantas|cuantos) (\\w*) (?:son|hay en) (\\d*\\.*\\d) (\\w+)(?:\\s* \\?|\\?)?")) {
+			mensaje = mensaje.replace("?", "");
+			String[] palabras = mensaje.split(" ");
+			String hasta = palabras[2];
+			String desde = palabras[palabras.length - 1];
+	
+			DecimalFormat df = new DecimalFormat("#.00");
+			
+			double numero = obtenerNumero(mensaje, formato_numero);
+			
+			ConversorUnidad cu = new ConversorUnidad();
+
+			double resultado = cu.convertirUnidad(numero, primerMayuscula(aSingular(desde)), primerMayuscula(aSingular(hasta)));
+			
+			if(resultado == -1) return MSG_NO_ENTIENDO;
+			if(resultado == -2) return "@" + USUARIO + " las magnitudes no pueden ser negativas.";
+			return respuesta = "@" + USUARIO + " " + df.format(numero) + " " + desde + 
+						" equivale a " + df.format(resultado) + " " + hasta;				
+		}
 		
 		if(mensaje.contains("hola") || mensaje.contains("buen") || mensaje.contains("hey")) {
 			return respuesta = saludar(mensaje);
@@ -62,17 +84,17 @@ public class Bot {
 		}
 		
 		if(mensaje.contains("que dia sera") && mensaje.indexOf("dias") >= 0) {
-			int numero = obtenerNumero(mensaje, formato_numero);
+			int numero = (int) obtenerNumero(mensaje, formato_numero);
 			return respuesta = "@" + USUARIO + " será el " + formatearFechaView(fechaDentroDe(numero, "dias"));
 		}
 
 		if(mensaje.contains("que dia sera") && mensaje.indexOf("meses") >= 0) {
-			int numero = obtenerNumero(mensaje, formato_numero);
+			int numero = (int) obtenerNumero(mensaje, formato_numero);
 			return respuesta = "@" + USUARIO + " será el " + formatearFechaView(fechaDentroDe(numero, "meses"));
 		}
 		
 		if(mensaje.contains("que dia sera") && mensaje.indexOf("anos") >= 0) {
-			int numero = obtenerNumero(mensaje, formato_numero);
+			int numero = (int) obtenerNumero(mensaje, formato_numero);
 			return respuesta = "@" + USUARIO + " será el " + formatearFechaView(fechaDentroDe(numero, "anios"));
 		}
 		
@@ -81,18 +103,18 @@ public class Bot {
 		}
 
 		if(mensaje.contains("que dia fue") && mensaje.indexOf("dias") >= 0) {
-			int numero = obtenerNumero(mensaje, formato_numero);
+			int numero = (int) obtenerNumero(mensaje, formato_numero);
 			return respuesta = "@" + USUARIO + " fue " + formatearFechaView(fechaDentroDe(-numero, "dias"));
 		}
 		
 		if(mensaje.contains("que dia fue") && mensaje.indexOf("meses") >= 0) {
-			int numero = obtenerNumero(mensaje, formato_numero);
+			int numero = (int) obtenerNumero(mensaje, formato_numero);
 			return respuesta = "@" + USUARIO + " fue " + formatearFechaView(fechaDentroDe(-numero, "meses"));
 		}
 		
 		
 		if(mensaje.contains("que dia fue") && mensaje.indexOf("anos") >= 0) {
-			int numero = obtenerNumero(mensaje, formato_numero);
+			int numero = (int) obtenerNumero(mensaje, formato_numero);
 			return respuesta = "@" + USUARIO + " fue " + formatearFechaView(fechaDentroDe(-numero, "anios"));
 		}
 		
@@ -144,29 +166,53 @@ public class Bot {
 			return respuesta = "@" + USUARIO + " " + resultado;
 		}
 		
-		if(mensaje.matches("@(\\w*) (?:cuantas|cuantos) (\\w*) (?:son|hay en) (\\d+) (\\w+)(?:\\s*\\??|\\?)?")) {
-			String[] palabras = mensaje.split(" ");
-			String hasta = palabras[2];
-			String desde = palabras[palabras.length - 1];
-			DecimalFormat df = new DecimalFormat("#.00");
-			double numero = obtenerNumero(mensaje, formato_numero);
-			ConversorUnidad cu = new ConversorUnidad();
-			double resultado = cu.convertirUnidad(numero, desde, hasta);
-			if(resultado == -1) {
-				return MSG_NO_ENTIENDO;
-			}else {
-				return respuesta = "@" + USUARIO + " " + df.format(numero) + " " + desde + 
-						" equivale a " + df.format(resultado) + " " + hasta;				
-			}
-		}
-		
 		return respuesta == "" ? MSG_NO_ENTIENDO : respuesta;
 	}
+	
+	/**
+	 * @param palara: palabra a evaluar.
+	 * @return string: retorna palabra al singular si existe en HashMap.
+	 */
+	private String aSingular(String palabra) {
+	    if(palabra.substring(palabra.length() - 1).equals("s")) {
+		    String singular;
+		    HashMap<String,String> pluralSingular = new HashMap<>();
+		    pluralSingular.put("gramos","gramo");
+		    pluralSingular.put("kilos","kilo");
+		    pluralSingular.put("onzas","onza");
+		    pluralSingular.put("toneladas","tonelada");
+		    pluralSingular.put("galones","galon");
+		    pluralSingular.put("litros","litro");
+		    pluralSingular.put("centimetros","centimetro");
+		    pluralSingular.put("metros","metro");
+		    pluralSingular.put("kilometros","kilometro");
+		    pluralSingular.put("pies","pie");
+		    pluralSingular.put("pulgadas","pulgada");
+		    pluralSingular.put("segundos","segundo");
+		    pluralSingular.put("minutos","minuto");
+		    pluralSingular.put("horas","hora");
+		    pluralSingular.put("dias","dia");
+		    singular = pluralSingular.get(palabra);
+		    return singular != null ? singular : palabra;
+	    }
+	    return palabra;
+	}
+	
+	/**
+	 * @param palara: palabra a evaluar.
+	 * @return string: retorna la palabra con su primer letra en mayuscula.
+	 */
+	private String primerMayuscula(String palabra) {
+		if (palabra == null || palabra.isEmpty()) return palabra;            
+		else {
+		    return palabra.substring(0, 1).toUpperCase() + palabra.substring(1); 
+		  }
+		}
 
-	private int obtenerNumero(String mensaje, Pattern formato_numero) {
+	private double obtenerNumero(String mensaje, Pattern formato_numero) {
 		Matcher matcher = formato_numero.matcher(mensaje);
 		matcher.find();
-		return Integer.parseInt(matcher.group());
+		return Double.parseDouble(matcher.group());
 	}
 	
 	// Remueve los tildes del String que recibe.
