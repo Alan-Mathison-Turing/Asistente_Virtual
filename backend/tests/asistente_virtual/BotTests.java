@@ -1,7 +1,6 @@
 package asistente_virtual;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -124,17 +123,17 @@ public class BotTests {
 	@Test
 	public void diaDentroDe() {
 		Assert.assertEquals(
-				"@delucas será el lunes 7 de mayo de 2018",
+				"@delucas será el domingo 20 de mayo de 2018",
 				jenkins.leerMensaje("@jenkins qué día será dentro de 2 días?")
 			);
 		
 		Assert.assertEquals(
-				"@delucas será el jueves 5 de julio de 2018",
+				"@delucas será el miércoles 18 de julio de 2018",
 				jenkins.leerMensaje("@jenkins qué día será dentro de 2 meses?")
 			);
 		
 		Assert.assertEquals(
-				"@delucas será el martes 5 de mayo de 2020",
+				"@delucas será el lunes 18 de mayo de 2020",
 				jenkins.leerMensaje("@jenkins qué día será dentro de 2 años?")
 			);
 	}
@@ -228,11 +227,24 @@ public class BotTests {
 	}
 	
 	@Test
+	public void convertirCeroUnidad() {
+		Assert.assertEquals(
+				"@delucas 0,00 galones equivale a 0,00 litros",
+				jenkins.leerMensaje("@jenkins cuántos litros son 0 galones?")
+			);
+	}
+	
+	@Test
 	public void unidadesDeMasa() {
 		
 		Assert.assertEquals(
 				"@delucas 1,00 kilo equivale a 1000,00 gramos",
 				jenkins.leerMensaje("@jenkins cuántos gramos son 1 kilo")
+			);
+		
+		Assert.assertEquals(
+				"@delucas 1,00 kilogramo equivale a 1000,00 gr",
+				jenkins.leerMensaje("@jenkins cuántos gr son 1 kilogramo")
 			);
 
 		Assert.assertEquals(
@@ -288,6 +300,15 @@ public class BotTests {
 				jenkins.leerMensaje("@jenkins cuántos segundos hay en 3.5 horas?")
 			);
 		
+		Assert.assertEquals(
+				"@delucas 3,50 horas equivale a 12600,00 seg.",
+				jenkins.leerMensaje("@jenkins cuántas seg. hay en 3.5 horas?")
+			);
+
+		Assert.assertEquals(
+				"@delucas 3,50 hs. equivale a 12600,00 segundo",
+				jenkins.leerMensaje("@jenkins cuántas segundo hay en 3.5 hs.?")
+			);
 	}
 	
 	@Test
@@ -301,7 +322,6 @@ public class BotTests {
 				"@delucas 10,00 galones equivale a 45,46 litros",
 				jenkins.leerMensaje("@jenkins cuántos litros son 10 galones?")
 			);
-		
 	}
 	
 	@Test
@@ -314,6 +334,11 @@ public class BotTests {
 		Assert.assertEquals(
 				"@delucas 1,00 pulgada equivale a 2,54 centimetros",
 				jenkins.leerMensaje("@jenkins cuántos centímetros son 1 pulgada?")
+			);
+		
+		Assert.assertEquals(
+				"@delucas 100,00 mts. equivale a 10000,00 cms",
+				jenkins.leerMensaje("@jenkins cuántos cms son 100 mts.?")
 			);
 		
 	}

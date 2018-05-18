@@ -43,19 +43,19 @@ public class Bot {
 		String respuesta = "";
 		
 		// Ingreso a ConversorUnidad si cumple con el regex.
-		if(mensaje.matches("@(\\w*) (?:cuantas|cuantos) (\\w*) (?:son|hay en) (\\d*\\.*\\d) (\\w+)(?:\\s* \\?|\\?)?")) {
+		if(mensaje.matches("@(\\w*) (?:cuantas|cuantos) (\\w*\\.*) (?:son|hay en) (\\d*\\.*\\d) (\\w+)(?:\\s* \\?|\\.*\\?)?")) {
 			mensaje = mensaje.replace("?", "");
 			String[] palabras = mensaje.split(" ");
 			String hasta = palabras[2];
 			String desde = palabras[palabras.length - 1];
 	
-			DecimalFormat df = new DecimalFormat("#.00");
+			DecimalFormat df = new DecimalFormat("#0.00");
 			
 			double numero = obtenerNumero(mensaje, formato_numero);
 			
 			ConversorUnidad cu = new ConversorUnidad();
 
-			double resultado = cu.convertirUnidad(numero, primerMayuscula(aSingular(desde)), primerMayuscula(aSingular(hasta)));
+			double resultado = cu.convertirUnidad(numero, diccionario(desde), diccionario(hasta));
 			
 			if(resultado == -1) return MSG_NO_ENTIENDO;
 			if(resultado == -2) return "@" + USUARIO + " las magnitudes no pueden ser negativas.";
@@ -169,45 +169,7 @@ public class Bot {
 		return respuesta == "" ? MSG_NO_ENTIENDO : respuesta;
 	}
 	
-	/**
-	 * @param palara: palabra a evaluar.
-	 * @return string: retorna palabra al singular si existe en HashMap.
-	 */
-	private String aSingular(String palabra) {
-	    if(palabra.substring(palabra.length() - 1).equals("s")) {
-		    String singular;
-		    HashMap<String,String> pluralSingular = new HashMap<>();
-		    pluralSingular.put("gramos","gramo");
-		    pluralSingular.put("kilos","kilo");
-		    pluralSingular.put("onzas","onza");
-		    pluralSingular.put("toneladas","tonelada");
-		    pluralSingular.put("galones","galon");
-		    pluralSingular.put("litros","litro");
-		    pluralSingular.put("centimetros","centimetro");
-		    pluralSingular.put("metros","metro");
-		    pluralSingular.put("kilometros","kilometro");
-		    pluralSingular.put("pies","pie");
-		    pluralSingular.put("pulgadas","pulgada");
-		    pluralSingular.put("segundos","segundo");
-		    pluralSingular.put("minutos","minuto");
-		    pluralSingular.put("horas","hora");
-		    pluralSingular.put("dias","dia");
-		    singular = pluralSingular.get(palabra);
-		    return singular != null ? singular : palabra;
-	    }
-	    return palabra;
-	}
-	
-	/**
-	 * @param palara: palabra a evaluar.
-	 * @return string: retorna la palabra con su primer letra en mayuscula.
-	 */
-	private String primerMayuscula(String palabra) {
-		if (palabra == null || palabra.isEmpty()) return palabra;            
-		else {
-		    return palabra.substring(0, 1).toUpperCase() + palabra.substring(1); 
-		  }
-		}
+
 
 	private double obtenerNumero(String mensaje, Pattern formato_numero) {
 		Matcher matcher = formato_numero.matcher(mensaje);
@@ -395,5 +357,99 @@ public class Bot {
 		return cal;
 	}
 
+
+	/**
+	 * @param palara: palabra a evaluar.
+	 * @return string: retorna palabra asociada en el HashMap si existe.
+	 */
+	private String diccionario(String palabra) {
+	    String singular;
+	    HashMap<String,String> diccionario = new HashMap<>();
+	    diccionario.put("gr","Gramo");
+	    diccionario.put("gr.","Gramo");
+	    diccionario.put("grs","Gramo");
+	    diccionario.put("grs.","Gramo");
+	    diccionario.put("gramo","Gramo");
+	    diccionario.put("gramos","Gramo");
+	    diccionario.put("kilo","Kilo");
+	    diccionario.put("kilos","Kilo");
+	    diccionario.put("kg","Kilo");
+	    diccionario.put("kg.","Kilo");
+	    diccionario.put("kilogramo","Kilo");
+	    diccionario.put("kilogramos","Kilo");
+	    diccionario.put("onza","Onza");
+	    diccionario.put("onzas","Onza");
+	    diccionario.put("tonelada","Tonelada");
+	    diccionario.put("toneladas","Tonelada");
+	    diccionario.put("cm3","Cm3");
+	    diccionario.put("cm3.","Cm3");
+	    diccionario.put("cm.3","Cm3");
+	    diccionario.put("centimetro3","Cm3");
+	    diccionario.put("centimetros3","Cm3");
+	    diccionario.put("gal","Galon");
+	    diccionario.put("gal.","Galon");
+	    diccionario.put("galon","Galon");
+	    diccionario.put("galones","Galon");
+	    diccionario.put("lt","Litro");
+	    diccionario.put("lt.","Litro");
+	    diccionario.put("lts","Litro");
+	    diccionario.put("lts.","Litro");
+	    diccionario.put("litro","Litro");
+	    diccionario.put("litros","Litro");
+	    diccionario.put("mm","Milimetro");
+	    diccionario.put("mm.","Milimetro");
+	    diccionario.put("mms","Milimetro");
+	    diccionario.put("mms.","Milimetro");
+	    diccionario.put("milimetro","Milimetro");
+	    diccionario.put("milimetros","Milimetro");
+	    diccionario.put("cm","Centimetro");
+	    diccionario.put("cm.","Centimetro");
+	    diccionario.put("cms","Centimetro");
+	    diccionario.put("cms.","Centimetro");
+	    diccionario.put("centimetro","Centimetro");
+	    diccionario.put("centimetros","Centimetro");
+	    diccionario.put("mt","Metro");
+	    diccionario.put("mt.","Metro");
+	    diccionario.put("mts","Metro");
+	    diccionario.put("mts.","Metro");
+	    diccionario.put("metro","Metro");
+	    diccionario.put("metros","Metro");
+	    diccionario.put("km","Kilometro");
+	    diccionario.put("km.","Kilometro");
+	    diccionario.put("kms","Kilometro");
+	    diccionario.put("kms.","Kilometro");
+	    diccionario.put("kilometro","Kilometro");
+	    diccionario.put("kilometros","Kilometro");
+	    diccionario.put("pie","Pie");
+	    diccionario.put("pies","Pie");
+	    diccionario.put("plg","Pulgada");
+	    diccionario.put("plg.","Pulgada");
+	    diccionario.put("pulg","Pulgada");
+	    diccionario.put("pulg.","Pulgada");
+	    diccionario.put("pulgada","Pulgada");
+	    diccionario.put("pulgadas","Pulgada");
+	    diccionario.put("seg","Segundo");
+	    diccionario.put("seg.","Segundo");
+	    diccionario.put("segs","Segundo");
+	    diccionario.put("segs.","Segundo");
+	    diccionario.put("segundo","Segundo");
+	    diccionario.put("segundos","Segundo");
+	    diccionario.put("min","Minuto");
+	    diccionario.put("min.","Minuto");
+	    diccionario.put("mins","Minuto");
+	    diccionario.put("mins.","Minuto");
+	    diccionario.put("minuto","Minuto");
+	    diccionario.put("minutos","Minuto");
+	    diccionario.put("h","Hora");
+	    diccionario.put("h.","Hora");
+	    diccionario.put("hs","Hora");
+	    diccionario.put("hs.","Hora");
+	    diccionario.put("hora","Hora");
+	    diccionario.put("horas","Hora");
+	    diccionario.put("dia","Dia");
+	    diccionario.put("dias","Dia");
+	    singular = diccionario.get(palabra);
+	    return singular != null ? singular : palabra;
+	}	
 	
 }
