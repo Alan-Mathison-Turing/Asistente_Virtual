@@ -218,6 +218,9 @@ public class BotTests {
 		// agregar otros casos
 	}
 	
+	
+	
+	// Desde acá tests de ConversorUnidad (REQ #11).
 	@Test
 	public void magnitudInvalida() {
 		Assert.assertEquals(
@@ -235,21 +238,25 @@ public class BotTests {
 	}
 	
 	@Test
-	public void unidadesDeMasa() {
-		
+	public void convertirUnidadRegex() {
 		Assert.assertEquals(
 				"@delucas 1,00 kilo equivale a 1000,00 gramos",
-				jenkins.leerMensaje("@jenkins cuántos gramos son 1 kilo")
+				jenkins.leerMensaje("@jenkins cuántos gramos son 1 kilo?")
 			);
 		
 		Assert.assertEquals(
-				"@delucas 1,00 kilogramo equivale a 1000,00 gr",
-				jenkins.leerMensaje("@jenkins cuántos gr son 1 kilogramo")
+				"@delucas 1,00 kilo equivale a 1000,00 gramos",
+				jenkins.leerMensaje("@jenkins cuántos gramos hay en 1 kilo?")
 			);
 
 		Assert.assertEquals(
 				"@delucas 1,00 kilo equivale a 1000,00 gramos",
-				jenkins.leerMensaje("@jenkins cuántos gramos son 1 kilo?")
+				jenkins.leerMensaje("@jenkins cuántas gramos son 1 kilo?")
+			);
+		
+		Assert.assertEquals(
+				"@delucas 1,00 kilo equivale a 1000,00 gramos",
+				jenkins.leerMensaje("@jenkins cuántas gramos hay en 1 kilo?")
 			);
 		
 		Assert.assertEquals(
@@ -262,6 +269,46 @@ public class BotTests {
 				jenkins.leerMensaje("@jenkins cuántos gramos son 1 kilo   ?")
 			);
 		
+		Assert.assertEquals(
+				"@delucas 100,00 mts. equivale a 10000,00 cms.",
+				jenkins.leerMensaje("@jenkins cuántos cms. son 100 mts.?")
+			);
+		
+		Assert.assertEquals(
+				"@delucas 100,00 mts equivale a 10000,00 cms.",
+				jenkins.leerMensaje("@jenkins cuántos cms. son 100 mts?")
+			);
+		
+		Assert.assertEquals(
+				"@delucas 100,00 mts. equivale a 10000,00 cms",
+				jenkins.leerMensaje("@jenkins cuántos cms son 100 mts.?")
+			);
+		
+		Assert.assertEquals(
+				"@delucas 100,00 mts. equivale a 10000,00 cms.",
+				jenkins.leerMensaje("@jenkins cuántos cms. son 100 mts. ?")
+			);
+		
+		Assert.assertEquals(
+				"@delucas 100,00 mts. equivale a 10000,00 cms.",
+				jenkins.leerMensaje("@jenkins cuántos cms. son 100 mts.  ?")
+			);
+		
+	}
+	
+	@Test
+	public void unidadesDeMasa() {
+		
+		Assert.assertEquals(
+				"@delucas 1,00 kilo equivale a 1000,00 gramos",
+				jenkins.leerMensaje("@jenkins cuántos gramos son 1 kilo")
+			);
+		
+		Assert.assertEquals(
+				"@delucas 1,00 kilogramo equivale a 1000,00 gr",
+				jenkins.leerMensaje("@jenkins cuántos gr son 1 kilogramo")
+			);
+
 		Assert.assertEquals(
 				"@delucas 2,00 kilos equivale a 2000,00 gramos",
 				jenkins.leerMensaje("@jenkins cuántos gramos son 2 kilos")
@@ -321,6 +368,11 @@ public class BotTests {
 		Assert.assertEquals(
 				"@delucas 10,00 galones equivale a 45,46 litros",
 				jenkins.leerMensaje("@jenkins cuántos litros son 10 galones?")
+			);
+		
+		Assert.assertEquals(
+				"@delucas 10,00 lts. equivale a 10000,00 cm3.",
+				jenkins.leerMensaje("@jenkins cuántos cm3. son 10 lts.?")
 			);
 	}
 	

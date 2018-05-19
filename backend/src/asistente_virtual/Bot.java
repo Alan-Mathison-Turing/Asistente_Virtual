@@ -39,11 +39,11 @@ public class Bot {
 	public String leerMensaje(String mensaje) {
 		
 		mensaje = removerTildes(mensaje.toLowerCase());
-		Pattern formato_numero = Pattern.compile("(\\d*\\.*\\d)");
+		Pattern formato_numero = Pattern.compile("(\\s+\\d*\\.*\\d)");
 		String respuesta = "";
 		
 		// Ingreso a ConversorUnidad si cumple con el regex.
-		if(mensaje.matches("@(\\w*) (?:cuantas|cuantos) (\\w*\\.*) (?:son|hay en) (\\d*\\.*\\d) (\\w+)(?:\\s* \\?|\\.*\\?)?")) {
+		if(mensaje.matches("@(\\w*) (?:cuantas|cuantos) (\\w*\\.*) (?:son|hay en) (\\d*\\.*\\d) (\\w+)(?:\\s* \\?|\\.*\\s*\\?)?")) {
 			mensaje = mensaje.replace("?", "");
 			String[] palabras = mensaje.split(" ");
 			String hasta = palabras[2];
@@ -383,7 +383,6 @@ public class Bot {
 	    diccionario.put("toneladas","Tonelada");
 	    diccionario.put("cm3","Cm3");
 	    diccionario.put("cm3.","Cm3");
-	    diccionario.put("cm.3","Cm3");
 	    diccionario.put("centimetro3","Cm3");
 	    diccionario.put("centimetros3","Cm3");
 	    diccionario.put("gal","Galon");
