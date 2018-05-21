@@ -4,10 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import junit.framework.Assert;
 
 public class SqliteConnectionTests {
 
