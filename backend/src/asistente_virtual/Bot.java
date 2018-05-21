@@ -1,14 +1,17 @@
 package asistente_virtual;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import calculadora.Calculadora;
+import conversor_unidades.ConversorUnidad;
 
 
 public class Bot {
@@ -36,8 +39,29 @@ public class Bot {
 	public String leerMensaje(String mensaje) {
 		
 		mensaje = removerTildes(mensaje.toLowerCase());
-		Pattern formato_numero = Pattern.compile("[\\d\\.]+");
+		Pattern formato_numero = Pattern.compile("(\\s+\\d*\\.*\\d)");
 		String respuesta = "";
+		
+		// Ingreso a ConversorUnidad si cumple con el regex.
+		if(mensaje.matches("@(\\w*) (?:cuantas|cuantos) (\\w*\\.*) (?:son|hay en) (\\d*\\.*\\d) (\\w+)(?:\\s* \\?|\\.*\\s*\\?)?")) {
+			mensaje = mensaje.replace("?", "");
+			String[] palabras = mensaje.split(" ");
+			String hasta = palabras[2];
+			String desde = palabras[palabras.length - 1];
+	
+			DecimalFormat df = new DecimalFormat("#0.00");
+			
+			double numero = obtenerNumero(mensaje, formato_numero);
+			
+			ConversorUnidad cu = new ConversorUnidad();
+
+			double resultado = cu.convertirUnidad(numero, diccionario(desde), diccionario(hasta));
+			
+			if(resultado == -1) return MSG_NO_ENTIENDO;
+			if(resultado == -2) return "@" + USUARIO + " las magnitudes no pueden ser negativas.";
+			return respuesta = "@" + USUARIO + " " + df.format(numero) + " " + desde + 
+						" equivale a " + df.format(resultado) + " " + hasta;				
+		}
 		
 		if(mensaje.contains("hola") || mensaje.contains("buen") || mensaje.contains("hey")) {
 			return respuesta = saludar(mensaje);
@@ -60,17 +84,17 @@ public class Bot {
 		}
 		
 		if(mensaje.contains("que dia sera") && mensaje.indexOf("dias") >= 0) {
-			int numero = obtenerNumero(mensaje, formato_numero);
+			int numero = (int) obtenerNumero(mensaje, formato_numero);
 			return respuesta = "@" + USUARIO + " será el " + formatearFechaView(fechaDentroDe(numero, "dias"));
 		}
 
 		if(mensaje.contains("que dia sera") && mensaje.indexOf("meses") >= 0) {
-			int numero = obtenerNumero(mensaje, formato_numero);
+			int numero = (int) obtenerNumero(mensaje, formato_numero);
 			return respuesta = "@" + USUARIO + " será el " + formatearFechaView(fechaDentroDe(numero, "meses"));
 		}
 		
 		if(mensaje.contains("que dia sera") && mensaje.indexOf("anos") >= 0) {
-			int numero = obtenerNumero(mensaje, formato_numero);
+			int numero = (int) obtenerNumero(mensaje, formato_numero);
 			return respuesta = "@" + USUARIO + " será el " + formatearFechaView(fechaDentroDe(numero, "anios"));
 		}
 		
@@ -79,18 +103,18 @@ public class Bot {
 		}
 
 		if(mensaje.contains("que dia fue") && mensaje.indexOf("dias") >= 0) {
-			int numero = obtenerNumero(mensaje, formato_numero);
+			int numero = (int) obtenerNumero(mensaje, formato_numero);
 			return respuesta = "@" + USUARIO + " fue " + formatearFechaView(fechaDentroDe(-numero, "dias"));
 		}
 		
 		if(mensaje.contains("que dia fue") && mensaje.indexOf("meses") >= 0) {
-			int numero = obtenerNumero(mensaje, formato_numero);
+			int numero = (int) obtenerNumero(mensaje, formato_numero);
 			return respuesta = "@" + USUARIO + " fue " + formatearFechaView(fechaDentroDe(-numero, "meses"));
 		}
 		
 		
 		if(mensaje.contains("que dia fue") && mensaje.indexOf("anos") >= 0) {
-			int numero = obtenerNumero(mensaje, formato_numero);
+			int numero = (int) obtenerNumero(mensaje, formato_numero);
 			return respuesta = "@" + USUARIO + " fue " + formatearFechaView(fechaDentroDe(-numero, "anios"));
 		}
 		
@@ -144,13 +168,13 @@ public class Bot {
 		
 		return respuesta == "" ? MSG_NO_ENTIENDO : respuesta;
 	}
+	
 
 
-	private int obtenerNumero(String mensaje, Pattern formato_numero) {
+	private double obtenerNumero(String mensaje, Pattern formato_numero) {
 		Matcher matcher = formato_numero.matcher(mensaje);
 		matcher.find();
-		int numero = Integer.parseInt(matcher.group());
-		return numero;
+		return Double.parseDouble(matcher.group());
 	}
 	
 	// Remueve los tildes del String que recibe.
@@ -333,5 +357,98 @@ public class Bot {
 		return cal;
 	}
 
+
+	/**
+	 * @param palara: palabra a evaluar.
+	 * @return string: retorna palabra asociada en el HashMap si existe.
+	 */
+	private String diccionario(String palabra) {
+	    String singular;
+	    HashMap<String,String> diccionario = new HashMap<>();
+	    diccionario.put("gr","Gramo");
+	    diccionario.put("gr.","Gramo");
+	    diccionario.put("grs","Gramo");
+	    diccionario.put("grs.","Gramo");
+	    diccionario.put("gramo","Gramo");
+	    diccionario.put("gramos","Gramo");
+	    diccionario.put("kilo","Kilo");
+	    diccionario.put("kilos","Kilo");
+	    diccionario.put("kg","Kilo");
+	    diccionario.put("kg.","Kilo");
+	    diccionario.put("kilogramo","Kilo");
+	    diccionario.put("kilogramos","Kilo");
+	    diccionario.put("onza","Onza");
+	    diccionario.put("onzas","Onza");
+	    diccionario.put("tonelada","Tonelada");
+	    diccionario.put("toneladas","Tonelada");
+	    diccionario.put("cm3","Cm3");
+	    diccionario.put("cm3.","Cm3");
+	    diccionario.put("centimetro3","Cm3");
+	    diccionario.put("centimetros3","Cm3");
+	    diccionario.put("gal","Galon");
+	    diccionario.put("gal.","Galon");
+	    diccionario.put("galon","Galon");
+	    diccionario.put("galones","Galon");
+	    diccionario.put("lt","Litro");
+	    diccionario.put("lt.","Litro");
+	    diccionario.put("lts","Litro");
+	    diccionario.put("lts.","Litro");
+	    diccionario.put("litro","Litro");
+	    diccionario.put("litros","Litro");
+	    diccionario.put("mm","Milimetro");
+	    diccionario.put("mm.","Milimetro");
+	    diccionario.put("mms","Milimetro");
+	    diccionario.put("mms.","Milimetro");
+	    diccionario.put("milimetro","Milimetro");
+	    diccionario.put("milimetros","Milimetro");
+	    diccionario.put("cm","Centimetro");
+	    diccionario.put("cm.","Centimetro");
+	    diccionario.put("cms","Centimetro");
+	    diccionario.put("cms.","Centimetro");
+	    diccionario.put("centimetro","Centimetro");
+	    diccionario.put("centimetros","Centimetro");
+	    diccionario.put("mt","Metro");
+	    diccionario.put("mt.","Metro");
+	    diccionario.put("mts","Metro");
+	    diccionario.put("mts.","Metro");
+	    diccionario.put("metro","Metro");
+	    diccionario.put("metros","Metro");
+	    diccionario.put("km","Kilometro");
+	    diccionario.put("km.","Kilometro");
+	    diccionario.put("kms","Kilometro");
+	    diccionario.put("kms.","Kilometro");
+	    diccionario.put("kilometro","Kilometro");
+	    diccionario.put("kilometros","Kilometro");
+	    diccionario.put("pie","Pie");
+	    diccionario.put("pies","Pie");
+	    diccionario.put("plg","Pulgada");
+	    diccionario.put("plg.","Pulgada");
+	    diccionario.put("pulg","Pulgada");
+	    diccionario.put("pulg.","Pulgada");
+	    diccionario.put("pulgada","Pulgada");
+	    diccionario.put("pulgadas","Pulgada");
+	    diccionario.put("seg","Segundo");
+	    diccionario.put("seg.","Segundo");
+	    diccionario.put("segs","Segundo");
+	    diccionario.put("segs.","Segundo");
+	    diccionario.put("segundo","Segundo");
+	    diccionario.put("segundos","Segundo");
+	    diccionario.put("min","Minuto");
+	    diccionario.put("min.","Minuto");
+	    diccionario.put("mins","Minuto");
+	    diccionario.put("mins.","Minuto");
+	    diccionario.put("minuto","Minuto");
+	    diccionario.put("minutos","Minuto");
+	    diccionario.put("h","Hora");
+	    diccionario.put("h.","Hora");
+	    diccionario.put("hs","Hora");
+	    diccionario.put("hs.","Hora");
+	    diccionario.put("hora","Hora");
+	    diccionario.put("horas","Hora");
+	    diccionario.put("dia","Dia");
+	    diccionario.put("dias","Dia");
+	    singular = diccionario.get(palabra);
+	    return singular != null ? singular : palabra;
+	}	
 	
 }
