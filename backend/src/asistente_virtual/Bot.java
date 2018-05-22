@@ -21,7 +21,7 @@ public class Bot {
 	public final static String USUARIO = "delucas";	
 	static String MSG_NO_ENTIENDO = "Disculpa... no entiendo el pedido, @" + USUARIO + " ¿podrás repetirlo?";
 	
-	private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+	private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", new Locale("es", "ES"));
 	
 	public Bot(String nombre) {
 		this.nombre = nombre;
