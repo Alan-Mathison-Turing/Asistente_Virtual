@@ -3,6 +3,8 @@ package calculadora;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import asistente_virtual.IDecision;
+
 /**
  * Clase que administra una calculadora.
  * <p>
@@ -10,7 +12,7 @@ import java.util.regex.Pattern;
  * y porcentajes. Administra distintos niveles de paréntesis para cálculos más
  * complejos. <br>
  */
-public class Calculadora {
+public class Calculadora implements IDecision{
 
 	private int cantidad = 0;
 
@@ -68,6 +70,12 @@ public class Calculadora {
 	 */
 	private Matcher matcher;
 
+	
+	/*
+	 * Utilizado para indicar cual es el siguiente que debe intentar resolver la solicitud.
+	 */
+	private IDecision siguienteDecision;
+	
 	/**
 	 * Crea una cuenta a resolver usando las características de una calculadora.
 	 * <br>
@@ -90,6 +98,41 @@ public class Calculadora {
 		this.extraerNumeros();
 		this.extraerSimbolos();
 	}
+
+	// Constructor genérico para poder implementar Chain of Responsability.
+	public Calculadora() {
+	}
+	
+	
+	@Override
+	public String leerMensaje(String mensaje, String usuario) {
+		if(mensaje.contains("cuanto es")) {
+			int posicionInicial;
+			String respuesta = "";
+			if (mensaje.contains("el"))
+				posicionInicial = mensaje.indexOf("el") + 2;
+			else
+				posicionInicial = mensaje.indexOf("es") + 2;
+			Calculadora calculadora = new Calculadora(mensaje.substring(posicionInicial, mensaje.length()));
+			int resultado = (int)calculadora.resolver();
+			return respuesta = "@" + usuario + " " + resultado;
+		}
+		return  siguienteDecision.leerMensaje(mensaje, usuario);
+	}
+
+	@Override
+	public IDecision getSiguienteDecision() {
+		return siguienteDecision;
+	}
+
+	@Override
+	public void setSiguienteDecision(IDecision decision) {
+		siguienteDecision = decision;
+	}
+	
+	
+	
+	
 
 	/**
 	 * Resuelve la cuenta. <br>
@@ -303,4 +346,5 @@ public class Calculadora {
 		}
 		this.cantidad += i;
 	}
+
 }
