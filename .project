@@ -14,11 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>main</name>
-			<type>2</type>
-			<location>C:/Users/Ezequiel/Documents/GitHub/Asistente_Virtual/backend/main</location>
-		</link>
-	</linkedResources>
 </projectDescription>
