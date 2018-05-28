@@ -10,6 +10,7 @@ import java.util.List;
 import edu.unlam.asistente.calendario.Calendario;
 import edu.unlam.asistente.database.pojo.Evento;
 import edu.unlam.asistente.database.pojo.Usuario;
+import edu.unlam.asistente.database.dao.BaseDao;
 
 public class EventoUsuarioDao extends BaseDao{
 
@@ -22,7 +23,7 @@ public class EventoUsuarioDao extends BaseDao{
 		List<Evento> listaEventos = new ArrayList<>();
 		Statement stmt = null;
 		try {
-			stmt = super.db.getConnection().createStatement();
+			//stmt = super.db.getConnection().createStatement();
 			StringBuffer query = new StringBuffer();
 			
 			query.append("select e.id, e.fecha, e.descripcion ");

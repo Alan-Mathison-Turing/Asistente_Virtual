@@ -10,6 +10,16 @@
          <generator class="native"/>
       </id>
       
+      <set name="usuarios" table="usuarioEventos" 
+        	inverse="false" lazy="true" fetch="select" cascade="all" >
+            <key>
+                <column name="id_evento" not-null="true" />
+            </key>
+            <many-to-many entity-name="edu.unlam.asistente.database.pojo.Usuario">
+                <column name="id_usuario" not-null="true" />
+            </many-to-many>
+        </set>
+      
       <property name = "fecha" column = "fecha" type = "java.util.Date"/>
       <property name = "descripcion" column = "descripcion" type = "string"/>
    </class>

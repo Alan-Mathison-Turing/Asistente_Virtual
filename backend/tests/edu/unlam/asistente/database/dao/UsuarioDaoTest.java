@@ -19,7 +19,7 @@ public class UsuarioDaoTest {
 	public void setUp() throws SQLException {
 		testUser = new Usuario();
 		testUser.setId(1L);
-		testUser.setLogin("testUser");
+		testUser.setUsuario("testUser");
 		
 		userDao = new UsuarioDao();
 	}

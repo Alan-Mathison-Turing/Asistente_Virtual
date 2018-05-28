@@ -10,10 +10,15 @@
          <generator class="native"/>
       </id>
       
-      <set name = "eventos" cascade="save-update" table="usuarioEventos">
-         <key column = "id_usuario"/>
-         <many-to-many column = "id_evento" class="Evento"/>
-      </set>
+      <set name="eventos" table="usuarioEventos" 
+        	inverse="false" lazy="true" fetch="select" cascade="all" >
+            <key>
+                <column name="id_usuario" not-null="true" />
+            </key>
+            <many-to-many entity-name="edu.unlam.asistente.database.pojo.Evento">
+                <column name="id_evento" not-null="true" />
+            </many-to-many>
+        </set>
       
       <property name = "usuario" column = "usuario" type = "string"/>
    </class>

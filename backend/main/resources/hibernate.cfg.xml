@@ -5,11 +5,11 @@
    <session-factory>
    
       <property name = "hibernate.dialect">
-         org.hibernate.dialect.MySQLDialect
+         com.enigmabridge.hibernate.dialect.SQLiteDialect
       </property>
       
       <property name = "hibernate.connection.driver_class">
-         com.mysql.jdbc.Driver
+         org.sqlite.JDBC
       </property>
       
       <property name = "hibernate.connection.url">
@@ -17,8 +17,8 @@
       </property>
       
       <!-- List of XML mapping files -->
-      <mapping resource = "database.hibernate.cfg.Usuario-hbm.xml"/>
-      <mapping resource = "database.hibernate.cfg.Evento-hbm.xml"/>
+      <mapping resource = "edu/unlam/asistente/database/hibernate/cfg/Usuario.hbm.xml"/>
+      <mapping resource = "edu/unlam/asistente/database/hibernate/cfg/Evento.hbm.xml"/>
       
    </session-factory>
 </hibernate-configuration>
