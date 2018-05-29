@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import edu.unlam.asistente.database.pojo.Evento;
@@ -62,9 +63,13 @@ public class EventoDao extends BaseDao {
 	public void createEvent(Evento evento) {
 
 		Session session = null;
+		Transaction tx = null;
 		try {
 			session = factory.openSession();
+			tx = session.beginTransaction();
 			session.saveOrUpdate(evento);
+			
+			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

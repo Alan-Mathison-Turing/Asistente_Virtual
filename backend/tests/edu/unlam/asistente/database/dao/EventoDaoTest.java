@@ -19,15 +19,18 @@ import org.junit.Assert;
 
 public class EventoDaoTest {
 	
-	List<Evento> listaEventos;
-	Evento nuevoEvento;
-	Usuario user;
-	EventoDao eventoDao;
+	private List<Evento> listaEventos;
+	private Evento nuevoEvento;
+	private Evento evento;
+	private Usuario user;
+	private EventoDao eventoDao;
 	
 	@Before
 	public void setUp() throws SQLException, ParseException {
 		
 		eventoDao = new EventoDao();
+		
+		evento = new Evento(1, "2018-05-22 01:10:08", "test event 1");
 		
 		user = new Usuario();
 		user.setId(1);
@@ -50,6 +53,12 @@ public class EventoDaoTest {
 	public void obtenerEventosPorUsuarioTest() {
 		List<Evento> resultado = eventoDao.obtenerEventosPorUsuario(user);
 		Assert.assertTrue(listaEventos.equals(resultado));
+	}
+	
+	@Test
+	public void obtenerEventoPorId() {
+		Evento resultado = eventoDao.obtenerEventoPorId(1);
+		Assert.assertEquals(evento, resultado);
 	}
 	
 	@Test

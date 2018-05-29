@@ -5,14 +5,11 @@ import java.util.Set;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -50,11 +47,7 @@ public class Usuario implements java.io.Serializable{
 		this.usuario = usuario;
 	}
 	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "usuarioEventos", joinColumns = { 
-		@JoinColumn(name = "id_usuario", nullable = false, updatable = false) }, 
-			inverseJoinColumns = { @JoinColumn(name = "id_evento", 
-	   	    nullable = false, updatable = false) })
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "usuarios")
 	public Set<Evento> getEventos() {
 		return eventos;
 	}

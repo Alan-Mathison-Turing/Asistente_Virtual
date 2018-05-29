@@ -15,8 +15,8 @@ import org.junit.Assert;
 
 public class UsuarioDaoTest {
 	
-	Usuario testUser;
-	UsuarioDao userDao;
+	private Usuario testUser;
+	private UsuarioDao userDao;
 	
 	@Before
 	public void setUp() throws SQLException {
