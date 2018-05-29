@@ -28,7 +28,13 @@ public class UsuarioDao extends BaseDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			session.close();
+			if (session != null) {
+				try {
+					session.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 			return user;
 		}
 		
