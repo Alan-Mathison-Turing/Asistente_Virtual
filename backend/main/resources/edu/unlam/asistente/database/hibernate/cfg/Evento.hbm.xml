@@ -4,14 +4,14 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
 
 <hibernate-mapping>
-   <class name = "edu.unlam.asistente.database.pojo.Evento" table = "EVENTOS">
+   <class name = "edu.unlam.asistente.database.pojo.Evento" table = "eventos">
       
-      <id name = "id" type = "int" column = "id">
+      <id name = "id" type = "java.lang.Integer" column = "id">
          <generator class="native"/>
       </id>
-      
+       
       <set name="usuarios" table="usuarioEventos" 
-        	inverse="false" lazy="true" fetch="select" cascade="all" >
+        	inverse="true" lazy="false" fetch="select" cascade="all" >
             <key>
                 <column name="id_evento" not-null="true" />
             </key>
@@ -20,7 +20,7 @@
             </many-to-many>
         </set>
       
-      <property name = "fecha" column = "fecha" type = "java.util.Date"/>
-      <property name = "descripcion" column = "descripcion" type = "string"/>
+      <property name = "fecha" column = "fecha" type = "java.lang.String"/>
+      <property name = "descripcion" column = "descripcion" type = "java.lang.String"/>
    </class>
 </hibernate-mapping>

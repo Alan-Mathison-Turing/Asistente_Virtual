@@ -2,24 +2,46 @@ package edu.unlam.asistente.database.pojo;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import static javax.persistence.GenerationType.IDENTITY;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
 import edu.unlam.asistente.database.pojo.Evento;
 
-public class Usuario {
+@Entity
+@Table(name = "usuarios")
+public class Usuario implements java.io.Serializable{
 	
-	long id;
-	String usuario;
-	Set<Evento> eventos = new HashSet<Evento>(0);
+	private static final long serialVersionUID = 3873258900375429710L;
+	
+	private Integer id;
+	private String usuario;
+	private Set<Evento> eventos = new HashSet<Evento>(0);
 	
 	public Usuario() {}
-
-	public long getId() {
+	
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "id", unique = true, nullable = false)
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
-
+	
+	@Column(name = "usuario", nullable = false)
 	public String getUsuario() {
 		return usuario;
 	}
@@ -27,24 +49,20 @@ public class Usuario {
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
 	}
-
-	public Set getEventos() {
+	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "usuarioEventos", joinColumns = { 
+		@JoinColumn(name = "id_usuario", nullable = false, updatable = false) }, 
+			inverseJoinColumns = { @JoinColumn(name = "id_evento", 
+	   	    nullable = false, updatable = false) })
+	public Set<Evento> getEventos() {
 		return eventos;
 	}
 
-	public void setEventos(Set eventos) {
+	public void setEventos(Set<Evento> eventos) {
 		this.eventos = eventos;
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((eventos == null) ? 0 : eventos.hashCode());
-		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
-		return result;
-	}
+	
 
 	@Override
 	public boolean equals(Object obj) {
@@ -55,12 +73,10 @@ public class Usuario {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		if (eventos == null) {
-			if (other.eventos != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!eventos.equals(other.eventos))
-			return false;
-		if (id != other.id)
+		} else if (!id.equals(other.id))
 			return false;
 		if (usuario == null) {
 			if (other.usuario != null)
@@ -69,8 +85,15 @@ public class Usuario {
 			return false;
 		return true;
 	}
+	//TODO: REVISAR POR QUE SE ROMPE CON HASHCODE
+//	@Override
+//	public int hashCode() {
+//		final int prime = 31;
+//		int result = 1;
+//		result = prime * result + ((id == null) ? 0 : id.hashCode());
+//		result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
+//		return result;
+//	}
 
-	
-	
 	
 }

@@ -31,9 +31,7 @@ public class EventoUsuarioDaoTest {
 		user.setId(1L);
 		user.setUsuario("testUser");
 		
-		listaEventos = new ArrayList<>();
-		//listaEventos.add(new Evento(1L, Calendario.getDateFromString("2018-05-22 01:10:08"), "test event 1"));
-		//listaEventos.add(new Evento(2L, Calendario.getDateFromString("2018-12-30 05:00:00"), "test event 2"));
+		
 	}
 	
 	@Test
