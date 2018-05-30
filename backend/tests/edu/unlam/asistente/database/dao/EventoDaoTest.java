@@ -63,7 +63,7 @@ public class EventoDaoTest {
 	
 	@Test
 	public void crearEventoTest() {
-		eventoDao.createEvent(nuevoEvento);
+		eventoDao.crearEvento(nuevoEvento);
 		Evento aux = eventoDao.obtenerEventoPorId(nuevoEvento.getId());
 		Assert.assertEquals(nuevoEvento, aux);
 		

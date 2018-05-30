@@ -60,7 +60,7 @@ public class EventoDao extends BaseDao {
 		}
 	}
 
-	public void createEvent(Evento evento) {
+	public void crearEvento(Evento evento) {
 
 		Session session = null;
 		Transaction tx = null;
