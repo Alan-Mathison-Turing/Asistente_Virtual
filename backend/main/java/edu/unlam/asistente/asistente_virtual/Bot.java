@@ -7,6 +7,7 @@ import edu.unlam.asistente.calculadora.Calculadora;
 import edu.unlam.asistente.calendario.Calendario;
 import edu.unlam.asistente.conversor_unidades.ConversorUnidad;
 import edu.unlam.asistente.cordialidad.Cordialidad;
+import edu.unlam.asistente.recordatorio_eventos.GestionRecordatorio;
 
 
 public class Bot implements IDecision {
@@ -41,10 +42,12 @@ public class Bot implements IDecision {
 			Calculadora calculadora = new Calculadora();
 			ConversorUnidad conversorUnidad = new ConversorUnidad();
 			Calendario calendario = new Calendario();
+			GestionRecordatorio gestionRecordatorio = new GestionRecordatorio();
 			this.setSiguienteDecision(cordialidad);
 			cordialidad.setSiguienteDecision(calculadora);
 			calculadora.setSiguienteDecision(conversorUnidad);
 			conversorUnidad.setSiguienteDecision(calendario);
+			calendario.setSiguienteDecision(gestionRecordatorio);
 			return siguienteDecision.leerMensaje(mensaje, usuario);
 		}
 		catch(Exception e) {

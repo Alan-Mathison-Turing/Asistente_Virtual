@@ -2,14 +2,19 @@ package edu.unlam.asistente.calendario;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import edu.unlam.asistente.asistente_virtual.Bot;
 import edu.unlam.asistente.asistente_virtual.IDecision;
+import edu.unlam.asistente.database.pojo.Evento;
 
 public class Calendario implements IDecision{
 
@@ -32,6 +37,24 @@ public class Calendario implements IDecision{
 		return SQLITE_FORMATTER.parse(fecha);
 	}
 	
+	public static List<Date> getDateListFromEventList(Set<Evento> set) throws ParseException{
+		
+		List<Date> resultado = new ArrayList<>();
+		for (Evento evento : set) {
+			resultado.add(getDateFromString(evento.getFecha()));
+		}
+		
+		return resultado;
+	}
+	
+	public static Date getNearestDateFromList(List<Date> listaFechas) {
+		
+		if (listaFechas == null) {
+			return null;
+		}
+		
+		return new TreeSet<Date>(listaFechas).lower(Calendar.getInstance().getTime());
+	}
 
 	@Override
 	public String leerMensaje(String mensaje, String usuario) {
