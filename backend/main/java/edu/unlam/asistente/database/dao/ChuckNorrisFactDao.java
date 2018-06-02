@@ -2,6 +2,7 @@ package edu.unlam.asistente.database.dao;
 
 import java.sql.SQLException;
 
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -18,13 +19,7 @@ public class ChuckNorrisFactDao extends BaseDao {
 	 */
 	private static final String NOT_QUERY_CHUCK_FACT_USUARIO = "SELECT id, fact FROM ChuckNorrisFacts Cnf WHERE NOT EXISTS( SELECT 1 FROM Usuario U, UsuarioChuckFacts Ucf WHERE U.id = Ucf.id_usuario AND Cnf.id = Ucf.id_Fact AND U.id = :id_usuario) ORDER BY RANDOM()";
 
-	private static final String QUERY_CHUCK_FACT_USUARIO = "SELECT id, fact FROM ChuckNorrisFacts Cnf WHERE NOT EXISTS ( SELECT 1 FROM ChuckNorrisFacts CN JOIN Usuario U WHERE Cnf.id = CN.id AND U.id = :Id_Usuario ORDER BY RANDOM() )";
-
-	/**
-	 * Query para eliminar todos los facts visto por el usuario para volver a
-	 * emepzar de cero. <br>
-	 */
-	private static final String QUERY_DELETE_FACTS_USUARIO = "DELETE FFROM Usuario U JOIN ChuckNorrisFacts.Usuario Cnu WHERE Cnu.id_usuario = :Id_Usuario";
+	private static final String QUERY_CHUCK_FACT_USUARIO = "SELECT id, fact FROM ChuckNorrisFacts Cnf WHERE NOT EXISTS ( SELECT 1 FROM Usuario U JOIN ChuckNorrisFacts CN WHERE Cnf.id = CN.id AND U.id = :Id_Usuario ORDER BY RANDOM() )";
 
 	/**
 	 * Crea una instancia de facts de Chuck Norris. <br>
@@ -53,6 +48,11 @@ public class ChuckNorrisFactDao extends BaseDao {
 		Transaction transaction = null;
 		String chuckFact = null;
 		try {
+			
+			Criteria criteria = session.create
+			
+			
+			
 			session = factory.openSession();
 			transaction = session.beginTransaction();
 			Query<ChuckNorrisFacts> fact = session.createQuery(QUERY_CHUCK_FACT_USUARIO).setParameter("Id_Usuario",
@@ -60,14 +60,13 @@ public class ChuckNorrisFactDao extends BaseDao {
 			// Si no hay nada es porque se mostraron todos los facts que podían
 			// existir.
 			if (fact.list().isEmpty()) {
-				Query<Integer> query = session.createQuery(QUERY_DELETE_FACTS_USUARIO).setParameter("Id_Usuario",
-						usuario.getId());
-				query.executeUpdate();
+				// Le quitamos todos los facts que haya visto.
+				usuario.getChuckNorrisFacts().clear();
 				// Volvemos a obtener un fact.
 				fact = session.createQuery(QUERY_CHUCK_FACT_USUARIO).setParameter("Id_Usuario", usuario.getId());
 			}
 			ChuckNorrisFacts chuckNorrisFacts = (ChuckNorrisFacts) fact.list().iterator().next();
-			usuario.agregarChuckFact(chuckNorrisFacts);			
+			usuario.getChuckNorrisFacts().add(chuckNorrisFacts);
 			session.save(usuario);
 			transaction.commit();
 			chuckFact = chuckNorrisFacts.getFact();
@@ -85,5 +84,4 @@ public class ChuckNorrisFactDao extends BaseDao {
 		}
 		return chuckFact;
 	}
-
 }

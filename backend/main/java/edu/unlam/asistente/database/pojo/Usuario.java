@@ -78,10 +78,6 @@ public class Usuario implements java.io.Serializable {
 		this.chuckNorrisFacts = chuckNorrisFacts;
 	}
 
-	public void agregarChuckFact(final ChuckNorrisFacts fact) {
-		this.chuckNorrisFacts.add(fact);
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
