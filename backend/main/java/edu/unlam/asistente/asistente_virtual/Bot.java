@@ -7,6 +7,7 @@ import edu.unlam.asistente.calculadora.Calculadora;
 import edu.unlam.asistente.calendario.Calendario;
 import edu.unlam.asistente.conversor_unidades.ConversorUnidad;
 import edu.unlam.asistente.cordialidad.Cordialidad;
+import edu.unlam.asistente.leyes_robotica.LeyesRobotica;
 
 
 public class Bot implements IDecision {
@@ -38,11 +39,13 @@ public class Bot implements IDecision {
 		
 		try {
 			Cordialidad cordialidad = new Cordialidad();
+			LeyesRobotica leyesRobotica = new LeyesRobotica();
 			Calculadora calculadora = new Calculadora();
 			ConversorUnidad conversorUnidad = new ConversorUnidad();
 			Calendario calendario = new Calendario();
 			this.setSiguienteDecision(cordialidad);
-			cordialidad.setSiguienteDecision(calculadora);
+			cordialidad.setSiguienteDecision(leyesRobotica);
+			leyesRobotica.setSiguienteDecision(calculadora);
 			calculadora.setSiguienteDecision(conversorUnidad);
 			conversorUnidad.setSiguienteDecision(calendario);
 			return siguienteDecision.leerMensaje(mensaje, usuario);
