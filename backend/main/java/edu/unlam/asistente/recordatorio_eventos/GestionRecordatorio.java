@@ -27,12 +27,12 @@ public class GestionRecordatorio implements IDecision{
 		String regex="rec(a|e|i|o|u|d|m|g|t|r)*|agend(a|b|c|d|r|m|e|o|u|l)*";
 		String regex_evento= "casamiento|cumpleaños|cumple|examen|parcial|final";
 		Pattern patron =  Pattern.compile(regex);
-		Matcher m= patron.matches(mensajeMin);
+		Matcher m= patron.matcher(mensajeMin);
 		String auxiliar;
 		//if (mensajeMin.contains("recordame") || mensajeMin.contains("haceme acordar") || mensajeMin.contains("recuerdame") || mensajeMin.contains("agenda") || mensajeMin.contains("agendame"))
 		if(m.find()){
-			Pattern patron =  Pattern.compile(regex_evento);
-			Matcher m= patron.matches(mensajeMin);
+			patron =  Pattern.compile(regex_evento);
+			m= patron.matcher(mensajeMin);
 			nombre_mensaje=m.group();
 			auxiliar="Evento" + nombre_mensaje + "fecha";
 			
