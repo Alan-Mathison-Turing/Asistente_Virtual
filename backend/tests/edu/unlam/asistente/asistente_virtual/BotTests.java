@@ -415,4 +415,22 @@ public class BotTests {
 		
 	}
 	
+	@Test
+	public void leyesRobotica() {
+		String[] mensajes = {
+				"¿Cuales son las leyes de la robotica, @jenkins?",
+				"@jenkins, ¿Cuales son las leyes de la robotica?",
+				"¿me decís las leyes de la robotica @jenkins?"
+		};
+		for (String mensaje : mensajes) {
+			Assert.assertEquals(
+					"@delucas Las leyes de la robotica son 3."
+					+"1) Un robot no hará daño a un ser humano, ni permitirá con su inacción que sufra daño."
+					+"2) Un robot debe cumplir las órdenes dadas por los seres humanos, a excepción de aquellas que entrasen en conflicto con la primera ley."
+					+"3) Un robot debe proteger su propia existencia en la medida en que esta protección no entre en conflicto con la primera o con la segunda ley.",
+					jenkins.leerMensaje(mensaje, USUARIO)
+			);
+		}
+	}
+	
 }
