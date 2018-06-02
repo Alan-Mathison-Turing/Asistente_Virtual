@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.regex.*;
 
 import edu.unlam.asistente.asistente_virtual.IDecision;
 import edu.unlam.asistente.calendario.Calendario;
@@ -18,11 +19,24 @@ public class GestionRecordatorio implements IDecision{
 	
 	private IDecision siguienteDecision;
 	
+	public GestionRecordatorio() {};
 	@Override
 	public String leerMensaje(String mensaje, String usuario) {
 		String mensajeMin = mensaje.toLowerCase();
-		if (mensajeMin.contains("recordame") || mensajeMin.contains("haceme acordar") || mensajeMin.contains("recuerdame")) {
-			return guardarRecordatorioYNotificarResultado(mensajeMin, usuario);
+		String nombre_mensaje;
+		String regex="rec(a|e|i|o|u|d|m|g|t|r)*|agend(a|b|c|d|r|m|e|o|u|l)*";
+		String regex_evento= "casamiento|cumpleaños|cumple|examen|parcial|final";
+		Pattern patron =  Pattern.compile(regex);
+		Matcher m= patron.matches(mensajeMin);
+		String auxiliar;
+		//if (mensajeMin.contains("recordame") || mensajeMin.contains("haceme acordar") || mensajeMin.contains("recuerdame") || mensajeMin.contains("agenda") || mensajeMin.contains("agendame"))
+		if(m.find()){
+			Pattern patron =  Pattern.compile(regex_evento);
+			Matcher m= patron.matches(mensajeMin);
+			nombre_mensaje=m.group();
+			auxiliar="Evento" + nombre_mensaje + "fecha";
+			
+			return guardarRecordatorioYNotificarResultado(nombre_mensaje, usuario);
 		}
 		if (mensajeMin.contains("cuando sera mi proximo evento")) {
 			return mostrarProximoEvento(usuario);
@@ -79,6 +93,7 @@ public class GestionRecordatorio implements IDecision{
 			
 			
 			Evento evento = new Evento();
+			if(mensaje.em)
 			evento.setDescripcion(mensaje);
 			evento.setFecha(mensaje);
 			evento.setUsuarios( new HashSet<Usuario>(Arrays.asList(user)));
