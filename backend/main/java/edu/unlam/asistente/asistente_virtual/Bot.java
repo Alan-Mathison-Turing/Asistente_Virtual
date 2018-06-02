@@ -16,7 +16,7 @@ public class Bot implements IDecision {
 	private IDecision siguienteDecision;
 	
 	public final static String USUARIO = "delucas";	
-	public final static String MSG_NO_ENTIENDO = "Disculpa... no entiendo el pedido, @" + USUARIO + " ¿podrás repetirlo?";
+	public final static String MSG_NO_ENTIENDO = "Disculpa... no entiendo el pedido, @" + USUARIO + " Â¿podrÃ¡s repetirlo?";
 	
 	public Bot(String nombre) {
 		this.nombre = nombre;
@@ -53,17 +53,26 @@ public class Bot implements IDecision {
 
 	}
 	
-	// Obtiene el número contenido en un mensaje que matchee el regex.
+	// Obtiene el nÃºmero contenido en un mensaje que matchee el regex.
 	public static double obtenerNumero(String mensaje, Pattern formato_numero) {
 		Matcher matcher = formato_numero.matcher(mensaje);
 		matcher.find();
 		return Double.parseDouble(matcher.group());
 	}
 	
+	/*
+	//Obtiene el string contenido en un mensaje que matchee el regex (2/06)
+	public static String obtenerString (String mensaje, Pattern formato_cadena) {
+		Matcher matcher = formato_cadena.matcher(mensaje);
+		matcher.find();
+		return (matcher.group());
+	} 
+	*/
+	
 	// Remueve los tildes del String que recibe.
 	private String removerTildes(String texto) {
-	    String original = "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýÿ";
-	    // Cadena de caracteres ASCII que reemplazarÃ¡n los originales.
+	    String original = "Ã€Ã�Ã‚ÃƒÃ„Ã…Ã†Ã‡ÃˆÃ‰ÃŠÃ‹ÃŒÃ�ÃŽÃ�Ã�Ã‘Ã’Ã“Ã”Ã•Ã–Ã˜Ã™ÃšÃ›ÃœÃ�ÃŸÃ Ã¡Ã¢Ã£Ã¤Ã¥Ã¦Ã§Ã¨Ã©ÃªÃ«Ã¬Ã­Ã®Ã¯Ã°Ã±Ã²Ã³Ã´ÃµÃ¶Ã¸Ã¹ÃºÃ»Ã¼Ã½Ã¿";
+	    // Cadena de caracteres ASCII que reemplazarÃƒÂ¡n los originales.
 	    String ascii = "AAAAAAACEEEEIIIIDNOOOOOOUUUUYBaaaaaaaceeeeiiiionoooooouuuuyy";
 	    String output = texto;
 	    for (int i = 0; i < original.length(); i++) {
