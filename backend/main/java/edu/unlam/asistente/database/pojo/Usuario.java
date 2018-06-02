@@ -1,32 +1,38 @@
 package edu.unlam.asistente.database.pojo;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 import java.util.HashSet;
 import java.util.Set;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import edu.unlam.asistente.database.pojo.Evento;
-
 @Entity
 @Table(name = "usuarios")
-public class Usuario implements java.io.Serializable{
-	
+public class Usuario implements java.io.Serializable {
+
 	private static final long serialVersionUID = 3873258900375429710L;
-	
+
 	private Integer id;
 	private String usuario;
 	private Set<Evento> eventos = new HashSet<Evento>(0);
-	
-	public Usuario() {}
-	
+	/**
+	 * Chuck Norris facts que recibió el usuario. <br>
+	 */
+	private Set<ChuckNorrisFacts> chuckNorrisFacts = new HashSet<ChuckNorrisFacts>();
+
+	public Usuario() {
+	}
+
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id", unique = true, nullable = false)
@@ -37,7 +43,7 @@ public class Usuario implements java.io.Serializable{
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
 	@Column(name = "usuario", nullable = false)
 	public String getUsuario() {
 		return usuario;
@@ -46,7 +52,7 @@ public class Usuario implements java.io.Serializable{
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
 	}
-	
+
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "usuarios")
 	public Set<Evento> getEventos() {
 		return eventos;
@@ -55,7 +61,26 @@ public class Usuario implements java.io.Serializable{
 	public void setEventos(Set<Evento> eventos) {
 		this.eventos = eventos;
 	}
-	
+
+	/**
+	 * Devuelve los Chuck Norris facts del usuario. <br>
+	 * 
+	 * @return Chuck Norris facts. <br>
+	 */
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "usuarioChuckFacts", joinColumns = { @JoinColumn(name = "id_usuario") }, inverseJoinColumns = {
+			@JoinColumn(name = "id_fact") })
+	public Set<ChuckNorrisFacts> getChuckNorrisFacts() {
+		return chuckNorrisFacts;
+	}
+
+	public void setChuckNorrisFacts(Set<ChuckNorrisFacts> chuckNorrisFacts) {
+		this.chuckNorrisFacts = chuckNorrisFacts;
+	}
+
+	public void agregarChuckFact(final ChuckNorrisFacts fact) {
+		this.chuckNorrisFacts.add(fact);
+	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -78,15 +103,13 @@ public class Usuario implements java.io.Serializable{
 			return false;
 		return true;
 	}
-	//TODO: REVISAR POR QUE SE ROMPE CON HASHCODE
-//	@Override
-//	public int hashCode() {
-//		final int prime = 31;
-//		int result = 1;
-//		result = prime * result + ((id == null) ? 0 : id.hashCode());
-//		result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
-//		return result;
-//	}
-
-	
+	// TODO: REVISAR POR QUE SE ROMPE CON HASHCODE
+	// @Override
+	// public int hashCode() {
+	// final int prime = 31;
+	// int result = 1;
+	// result = prime * result + ((id == null) ? 0 : id.hashCode());
+	// result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
+	// return result;
+	// }
 }

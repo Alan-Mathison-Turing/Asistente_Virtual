@@ -24,7 +24,6 @@
       <mapping class = "edu.unlam.asistente.database.pojo.Evento"/>
       <mapping class = "edu.unlam.asistente.database.pojo.Usuario"/>
       <mapping class = "edu.unlam.asistente.database.pojo.ChuckNorrisFacts"/>
-      <mapping class = "edu.unlam.asistente.database.pojo.UsuarioChuckFacts"/>
       
    </session-factory>
 </hibernate-configuration>

@@ -1,10 +1,14 @@
 package edu.unlam.asistente.database.pojo;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 /**
@@ -25,6 +29,10 @@ public class ChuckNorrisFacts implements Serializable {
 	 * Chuck Norris fact. <br>
 	 */
 	private String fact;
+	/**
+	 * Usuarios que poseen el fact. <br>
+	 */
+	private Set<Usuario> usuarios = new HashSet<Usuario>();
 
 	/**
 	 * Constructor por default. <br>
@@ -85,6 +93,26 @@ public class ChuckNorrisFacts implements Serializable {
 	 */
 	public void setFact(String fact) {
 		this.fact = fact;
+	}
+
+	/**
+	 * Devuelve los usuarios con los facts asignados. <br>
+	 * 
+	 * @return Usuarios. <br>
+	 */
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "chuckNorrisFacts")
+	public Set<Usuario> getUsuarios() {
+		return usuarios;
+	}
+
+	/**
+	 * Establece los usuarios con los facts asignados. <br>
+	 * 
+	 * @param usuarios
+	 *            Usuarios. <br>
+	 */
+	public void setUsuarios(Set<Usuario> usuarios) {
+		this.usuarios = usuarios;
 	}
 
 	@Override
