@@ -1,13 +1,26 @@
 package edu.unlam.asistente.database.pojo;
 
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * Clase que administra un fact de Chuck Norris. <br>
  */
-public class ChuckNorrisFact {
+@Entity
+@Table(name = "chuckNorrisFacts")
+public class ChuckNorrisFacts implements Serializable {
+	/**
+	 * Serial version. <br>
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * Id del fact. <br>
 	 */
-	private int id;
+	private Integer id;
 	/**
 	 * Chuck Norris fact. <br>
 	 */
@@ -16,7 +29,7 @@ public class ChuckNorrisFact {
 	/**
 	 * Constructor por default. <br>
 	 */
-	public ChuckNorrisFact() {
+	public ChuckNorrisFacts() {
 
 	}
 
@@ -28,7 +41,7 @@ public class ChuckNorrisFact {
 	 * @param fact
 	 *            Fact sobre Chuck Norris. <br>
 	 */
-	public ChuckNorrisFact(int id, String fact) {
+	public ChuckNorrisFacts(Integer id, String fact) {
 		this.id = id;
 		this.fact = fact;
 	}
@@ -38,7 +51,9 @@ public class ChuckNorrisFact {
 	 * 
 	 * @return Id del fact. <br>
 	 */
-	public int getId() {
+	@Id
+	@Column(name = "id", columnDefinition = "INTEGER NOT NULL")
+	public Integer getId() {
 		return id;
 	}
 
@@ -48,7 +63,7 @@ public class ChuckNorrisFact {
 	 * @param id
 	 *            Id del fact. <br>
 	 */
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -57,6 +72,7 @@ public class ChuckNorrisFact {
 	 * 
 	 * @return Fact. <br>
 	 */
+	@Column(name = "fact", columnDefinition = "TEXT NOT NULL")
 	public String getFact() {
 		return fact;
 	}
@@ -75,8 +91,7 @@ public class ChuckNorrisFact {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((fact == null) ? 0 : fact.hashCode());
-		result = prime * result + id;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -88,13 +103,11 @@ public class ChuckNorrisFact {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ChuckNorrisFact other = (ChuckNorrisFact) obj;
-		if (fact == null) {
-			if (other.fact != null)
+		ChuckNorrisFacts other = (ChuckNorrisFacts) obj;
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!fact.equals(other.fact))
-			return false;
-		if (id != other.id)
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
