@@ -433,4 +433,26 @@ public class BotTests {
 		}
 	}
 	
+	@Test
+	public void chuckNorrisFacts() {
+		String mensaje ="¿@jenkins, ¿me decis un ChuckNorrisFact?";
+		String chuckNorris1 = jenkins.leerMensaje(mensaje, USUARIO);
+		String chuckNorris2 = jenkins.leerMensaje(mensaje, USUARIO);
+		String chuckNorris3 = jenkins.leerMensaje(mensaje, USUARIO);
+		String chuckNorris4 = jenkins.leerMensaje(mensaje, USUARIO);
+		String chuckNorris5 = jenkins.leerMensaje(mensaje, USUARIO);
+		String chuckNorris6 = jenkins.leerMensaje(mensaje, USUARIO);
+		String chuckNorris7 = jenkins.leerMensaje(mensaje, USUARIO);
+		String chuckNorris8 = jenkins.leerMensaje(mensaje, USUARIO);
+		String chuckNorris9 = jenkins.leerMensaje(mensaje, USUARIO);
+		Assert.assertNotEquals(chuckNorris1, chuckNorris2);
+		Assert.assertNotEquals(chuckNorris2, chuckNorris3);
+		Assert.assertNotEquals(chuckNorris3, chuckNorris4);
+		Assert.assertNotEquals(chuckNorris4, chuckNorris5);
+		Assert.assertNotEquals(chuckNorris5, chuckNorris6);
+		Assert.assertNotEquals(chuckNorris6, chuckNorris7);
+		Assert.assertNotEquals(chuckNorris7, chuckNorris8);
+		Assert.assertNotEquals(chuckNorris8, chuckNorris9);
+	}
+	
 }
