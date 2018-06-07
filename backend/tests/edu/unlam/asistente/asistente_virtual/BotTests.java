@@ -3,6 +3,7 @@ package edu.unlam.asistente.asistente_virtual;
 import static org.junit.Assert.assertEquals;
 
 import edu.unlam.asistente.asistente_virtual.Bot;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -433,5 +434,9 @@ public class BotTests {
 				jenkins.leerMensaje("@jenkins cuánto falta para mi próximo evento?", TEST_USER));
 	}
 	
-	
+	@Test
+	public void armarEventoConRegexExpresion1Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins recordame un evento test el 21 de diciembre de 2018 a las 12:12", TEST_USER));
+	}
 }

@@ -120,6 +120,13 @@ public class Evento implements java.io.Serializable{
 //		return result;
 //	}
 
+
+	@Override
+	public String toString() {
+		return "Evento [id=" + id + ", fecha=" + fecha + ", descripcion=" + descripcion + ", usuarios=" + usuarios
+				+ "]";
+	}
+
 	
 	
 	

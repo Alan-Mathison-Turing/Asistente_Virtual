@@ -30,7 +30,7 @@ public class GestionRecordatorioTest {
 	
 	@Test
 	public void armarEventoConRegexExpresion1Test() {
-		Matcher m = pattern.matcher("recordame un evento test el 21 de diciembre de 2018 a las 12:12");
+		Matcher m = pattern.matcher("@testBot recordame un evento test el 21 de diciembre de 2018 a las 12:12");
 		Evento resultado = gestRecordatorio.armarEventoConRegex(m);
 		resultado.setId(1);
 		Assert.assertEquals(evento, resultado);
@@ -38,7 +38,7 @@ public class GestionRecordatorioTest {
 	
 	@Test
 	public void armarEventoConRegexExpresion2Test() {
-		Matcher m = pattern.matcher("anotame un evento test el 21 de diciembre de 2018 a las 12:12");
+		Matcher m = pattern.matcher("@testBot anotame un evento test el 21 de diciembre de 2018 a las 12:12");
 		Evento resultado = gestRecordatorio.armarEventoConRegex(m);
 		resultado.setId(1);
 		Assert.assertEquals(evento, resultado);
@@ -46,7 +46,7 @@ public class GestionRecordatorioTest {
 	
 	@Test
 	public void armarEventoConRegexExpresion3Test() {
-		Matcher m = pattern.matcher("agendame un evento test el 21 de diciembre de 2018 a las 12:12");
+		Matcher m = pattern.matcher("@testBot agendame un evento test el 21 de diciembre de 2018 a las 12:12");
 		Evento resultado = gestRecordatorio.armarEventoConRegex(m);
 		resultado.setId(1);
 		Assert.assertEquals(evento, resultado);
@@ -54,7 +54,7 @@ public class GestionRecordatorioTest {
 	
 	@Test
 	public void armarEventoConRegexExpresion4Test() {
-		Matcher m = pattern.matcher("recordame un evento test el 21/12/2018 a las 12:12");
+		Matcher m = pattern.matcher("@testBot recordame un evento test el 21/12/2018 a las 12:12");
 		Evento resultado = gestRecordatorio.armarEventoConRegex(m);
 		resultado.setId(1);
 		Assert.assertEquals(evento, resultado);
@@ -62,7 +62,7 @@ public class GestionRecordatorioTest {
 	
 	@Test
 	public void armarEventoConRegexExpresion5Test() {
-		Matcher m = pattern.matcher("anotame un evento test el 21/12/2018 a las 12:12");
+		Matcher m = pattern.matcher("@testBot anotame un evento test el 21/12/2018 a las 12:12");
 		Evento resultado = gestRecordatorio.armarEventoConRegex(m);
 		resultado.setId(1);
 		Assert.assertEquals(evento, resultado);
@@ -70,7 +70,7 @@ public class GestionRecordatorioTest {
 	
 	@Test
 	public void armarEventoConRegexExpresion6Test() {
-		Matcher m = pattern.matcher("agendame un evento test el 21/12/2018 a las 12:12");
+		Matcher m = pattern.matcher("@testBot agendame un evento test el 21/12/2018 a las 12:12");
 		Evento resultado = gestRecordatorio.armarEventoConRegex(m);
 		resultado.setId(1);
 		Assert.assertEquals(evento, resultado);
@@ -78,7 +78,7 @@ public class GestionRecordatorioTest {
 	
 	@Test
 	public void armarEventoConRegexExpresion7Test() {
-		Matcher m = pattern.matcher("recordame un evento test el 1 de diciembre de 2018 a las 12:12");
+		Matcher m = pattern.matcher("@testBot recordame un evento test el 1 de diciembre de 2018 a las 12:12");
 		Evento resultado = gestRecordatorio.armarEventoConRegex(m);
 		resultado.setId(1);
 		Assert.assertEquals(evento2, resultado);
@@ -86,7 +86,7 @@ public class GestionRecordatorioTest {
 	
 	@Test
 	public void armarEventoConRegexExpresion8Test() {
-		Matcher m = pattern.matcher("anotame un evento test el 1 de diciembre de 2018 a las 12:12");
+		Matcher m = pattern.matcher("@testBot anotame un evento test el 1 de diciembre de 2018 a las 12:12");
 		Evento resultado = gestRecordatorio.armarEventoConRegex(m);
 		resultado.setId(1);
 		Assert.assertEquals(evento2, resultado);
@@ -94,7 +94,7 @@ public class GestionRecordatorioTest {
 	
 	@Test
 	public void armarEventoConRegexExpresion9Test() {
-		Matcher m = pattern.matcher("agendame un evento test el 1 de diciembre de 2018 a las 12:12");
+		Matcher m = pattern.matcher("@testBot agendame un evento test el 1 de diciembre de 2018 a las 12:12");
 		Evento resultado = gestRecordatorio.armarEventoConRegex(m);
 		resultado.setId(1);
 		Assert.assertEquals(evento2, resultado);
@@ -102,7 +102,7 @@ public class GestionRecordatorioTest {
 	
 	@Test
 	public void armarEventoConRegexExpresion10Test() {
-		Matcher m = pattern.matcher("recordame un evento test el 01 de diciembre de 2018 a las 12:12");
+		Matcher m = pattern.matcher("@testBot recordame un evento test el 01 de diciembre de 2018 a las 12:12");
 		Evento resultado = gestRecordatorio.armarEventoConRegex(m);
 		resultado.setId(1);
 		Assert.assertEquals(evento2, resultado);
@@ -110,7 +110,7 @@ public class GestionRecordatorioTest {
 	
 	@Test
 	public void armarEventoConRegexExpresion11Test() {
-		Matcher m = pattern.matcher("anotame un evento test el 01 de diciembre de 2018 a las 12:12");
+		Matcher m = pattern.matcher("@testBot anotame un evento test el 01 de diciembre de 2018 a las 12:12");
 		Evento resultado = gestRecordatorio.armarEventoConRegex(m);
 		resultado.setId(1);
 		Assert.assertEquals(evento2, resultado);
@@ -118,7 +118,7 @@ public class GestionRecordatorioTest {
 	
 	@Test
 	public void armarEventoConRegexExpresion12Test() {
-		Matcher m = pattern.matcher("agendame un evento test el 01 de diciembre de 2018 a las 12:12");
+		Matcher m = pattern.matcher("@testBot agendame un evento test el 01 de diciembre de 2018 a las 12:12");
 		Evento resultado = gestRecordatorio.armarEventoConRegex(m);
 		resultado.setId(1);
 		Assert.assertEquals(evento2, resultado);
@@ -126,7 +126,7 @@ public class GestionRecordatorioTest {
 	
 	@Test
 	public void armarEventoConRegexExpresion13Test() {
-		Matcher m = pattern.matcher("recordame un evento test el 21 de diciembre de 2018 a las 1:12");
+		Matcher m = pattern.matcher("@testBot recordame un evento test el 21 de diciembre de 2018 a las 1:12");
 		Evento resultado = gestRecordatorio.armarEventoConRegex(m);
 		resultado.setId(1);
 		Assert.assertEquals(evento3, resultado);
@@ -134,7 +134,7 @@ public class GestionRecordatorioTest {
 	
 	@Test
 	public void armarEventoConRegexExpresion14Test() {
-		Matcher m = pattern.matcher("anotame un evento test el 21 de diciembre de 2018 a las 1:12");
+		Matcher m = pattern.matcher("@testBot anotame un evento test el 21 de diciembre de 2018 a las 1:12");
 		Evento resultado = gestRecordatorio.armarEventoConRegex(m);
 		resultado.setId(1);
 		Assert.assertEquals(evento3, resultado);
@@ -142,7 +142,7 @@ public class GestionRecordatorioTest {
 	
 	@Test
 	public void armarEventoConRegexExpresion15Test() {
-		Matcher m = pattern.matcher("agendame un evento test el 21 de diciembre de 2018 a las 1:12");
+		Matcher m = pattern.matcher("@testBot agendame un evento test el 21 de diciembre de 2018 a las 1:12");
 		Evento resultado = gestRecordatorio.armarEventoConRegex(m);
 		resultado.setId(1);
 		Assert.assertEquals(evento3, resultado);

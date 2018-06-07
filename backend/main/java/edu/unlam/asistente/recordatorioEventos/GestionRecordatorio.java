@@ -19,8 +19,8 @@ import edu.unlam.asistente.database.pojo.Usuario;
 public class GestionRecordatorio implements IDecision{
 	
 	private IDecision siguienteDecision;
-	private final static String REGEX = "(?:agendame|recordame|anotame) \\w* evento (\\w+) \\w* (?:(?:(\\d{1,2}) \\bde\\b (\\w*) "
-			+ "\\bde\\b (\\d{4}))|((\\d{1,2})\\/(\\d{2})\\/(\\d{4}))) .* (\\d{1,2})\\:(\\d{2})";
+	private final static String REGEX = "@(?:\\w*) (?:agendame|recordame|anotame) \\w* \\bevento\\b (\\w+) \\w* (?:(?:(\\d{1,2}) \\bde\\b (\\w*) \\bde\\b"
+			+ " (\\d{4}))|((\\d{1,2})\\/(\\d{2})\\/(\\d{4}))) .* (\\d{1,2})\\:(\\d{2})";
 	
 	public static String getRegex() {
 		return REGEX;
@@ -172,7 +172,7 @@ public class GestionRecordatorio implements IDecision{
 			
 			if (user == null) {
 				respuesta.append(": Ocurrió un error al intentar guardar tu recordatorio");
-				System.err.println("---ERROR en GestionRecordateorio/mostrarProximoEvento : El usuario " + usuario +
+				System.err.println("---ERROR en GestionRecordatorio/mostrarProximoEvento : El usuario " + usuario +
 						" no existe---");
 				return respuesta.toString();
 			}
@@ -213,7 +213,7 @@ public class GestionRecordatorio implements IDecision{
 			
 			if (user == null) {
 				respuesta.append(": Ocurrió un error al intentar guardar tu recordatorio");
-				System.err.println("---ERROR en GestionRecordateorio/mostrarDiasProximoEvento : El usuario " + usuario +
+				System.err.println("---ERROR en GestionRecordatorio/mostrarDiasProximoEvento : El usuario " + usuario +
 						" no existe---");
 				return respuesta.toString();
 			}
@@ -252,7 +252,7 @@ public class GestionRecordatorio implements IDecision{
 			
 			if (user == null) {
 				respuesta.append(": Ocurrio un error al intentar guardar tu recordatorio");
-				System.err.println("---ERROR en GestionRecordateorio/guardarRecordatorioYNotificarResultado : El usuario "
+				System.err.println("---ERROR en GestionRecordatorio/guardarRecordatorioYNotificarResultado : El usuario "
 						+ usuario + " no existe---");
 				return respuesta.toString();
 			}
@@ -262,6 +262,8 @@ public class GestionRecordatorio implements IDecision{
 			eventoDao = new EventoDao();
 			eventoDao.crearEvento(evento);
 			respuesta.append(" tu alarma fue guardada existosamente!");
+			System.out.println("--INFO: GestionRecordatorio/guardarRecordatorioYNotificarResultado : "
+					+ "finalizó correctamente dando de alta el evento"+ evento +" para el usuario "+ usuario +"--");
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
