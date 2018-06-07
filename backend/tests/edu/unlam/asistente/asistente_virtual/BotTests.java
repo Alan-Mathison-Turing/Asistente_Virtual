@@ -14,6 +14,9 @@ import org.junit.Test;
 public class BotTests {
 	
 	public final static String USUARIO = "delucas";
+	//usuario de test para integracion con DB
+	public final static String TEST_USER = "testUser";
+	
 	public final static Date FECHA_HORA = new GregorianCalendar(2018, 3, 1, 15, 15, 0).getTime();
 	Bot jenkins;
 	
@@ -414,5 +417,21 @@ public class BotTests {
 			);
 		
 	}
+	
+	//Test gestion de eventos
+	@Test
+	public void consultarFechaProximoEventoTest() {
+		Assert.assertEquals(
+				"@testUser tu próximo evento será el domingo 30 de diciembre de 2018 a las 05:00",
+				jenkins.leerMensaje("@jenkins cuando será mi próximo evento?", TEST_USER));
+	}
+	
+	@Test
+	public void consultarDiasProximoEventoTest() {
+		Assert.assertEquals(
+				"@testUser tu próximo evento será dentro de 206 días",
+				jenkins.leerMensaje("@jenkins cuánto falta para mi próximo evento?", TEST_USER));
+	}
+	
 	
 }
