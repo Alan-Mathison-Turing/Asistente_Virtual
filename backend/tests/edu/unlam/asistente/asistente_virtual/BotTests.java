@@ -419,7 +419,7 @@ public class BotTests {
 		
 	}
 	
-<<<<<<< HEAD
+	
 	@Test
 	public void leyesRobotica() {
 		String[] mensajes = {
@@ -458,7 +458,7 @@ public class BotTests {
 		Assert.assertNotEquals(chuckNorris6, chuckNorris7);
 		Assert.assertNotEquals(chuckNorris7, chuckNorris8);
 		Assert.assertNotEquals(chuckNorris8, chuckNorris9);
-=======
+	}
 	//Test gestion de eventos
 	@Test
 	public void consultarFechaProximoEventoTest() {
@@ -580,7 +580,6 @@ public class BotTests {
 	public void armarEventoConRegexFailMesInvalidoTest() {
 		Assert.assertEquals("@testUser necesito más información para guardar este evento o algún dato es incorrecto, por favor intentalo de nuevo.",
 				jenkins.leerMensaje("@jenkins agendame un evento test el 21/21/2018 a las 1:12", TEST_USER));
->>>>>>> 1df43e97db4711485583ee5e7b4dc7f8fe6184e9
 	}
 	
 }
