@@ -38,7 +38,7 @@ public class GestionRecordatorio implements IDecision{
 		if (mensaje.matches(REGEX)) {
 			Evento evento = armarEventoConRegex(matcher);
 			if (evento == null) {
-				respuesta = "@" + usuario + " necesito más información para guardar este evento, por favor intentalo de nuevo.";
+				respuesta = "@" + usuario + " necesito más información para guardar este evento o algún dato es incorrecto, por favor intentalo de nuevo.";
 			}
 			else {
 				respuesta = guardarRecordatorioYNotificarResultado(evento, usuario);
@@ -109,12 +109,26 @@ public class GestionRecordatorio implements IDecision{
 		
 		//armo string de fecha
 		StringBuilder fechaBuilder = new StringBuilder();
+		
+		int añoNum = Integer.parseInt(año);
+		if (añoNum < 1900 || añoNum > 9999) {
+			return null;
+		}
 		fechaBuilder.append(año + "-");
+		
+		int mesNro;
 		if (mes.matches("[0-9]+")) {
+			mesNro = Integer.parseInt(mes);
+			if (mesNro < 1 || mesNro > 12) {
+				return null;
+			}
 			fechaBuilder.append(mes + "-");
 		} else {
 			try {
-				int mesNro = Calendario.getNumeroDeNombreMes(mes);
+				mesNro = Calendario.getNumeroDeNombreMes(mes);
+				if (mesNro < 1 || mesNro > 12) {
+					return null;
+				}
 				if (mesNro < 10) {
 					fechaBuilder.append("0" + mesNro + "-");
 				} else {
@@ -127,11 +141,15 @@ public class GestionRecordatorio implements IDecision{
 		}
 		
 		int diaNum = Integer.parseInt(dia);
-		if (diaNum < 10) {
-			fechaBuilder.append("0" + diaNum + " ");
-		} else {
-			fechaBuilder.append(diaNum + " ");
-		}
+		if (diaNum < 32 && diaNum > 0) {
+			if (diaNum < 10) {
+				fechaBuilder.append("0" + diaNum + " ");
+			} else {
+				fechaBuilder.append(diaNum + " ");
+			}
+		} else
+			return null;
+		
 		
 		int horaNum = Integer.parseInt(horas);
 		if (horaNum < 10) {

@@ -439,4 +439,107 @@ public class BotTests {
 		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
 				jenkins.leerMensaje("@jenkins recordame un evento test el 21 de diciembre de 2018 a las 12:12", TEST_USER));
 	}
+	
+	@Test
+	public void armarEventoConRegexExpresion2Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins anotame un evento test el 21 de diciembre de 2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion3Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins agendame un evento test el 21 de diciembre de 2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion4Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins recordame un evento test el 21/12/2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion5Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins anotame un evento test el 21/12/2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion6Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins agendame un evento test el 21/12/2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion7Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins recordame un evento test el 1 de diciembre de 2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion8Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins anotame un evento test el 1 de diciembre de 2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion9Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins agendame un evento test el 1 de diciembre de 2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion10Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins recordame un evento test el 01 de diciembre de 2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion11Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins anotame un evento test el 01 de diciembre de 2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion12Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins agendame un evento test el 01 de diciembre de 2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion13Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins recordame un evento test el 21 de diciembre de 2018 a las 1:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion14Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins anotame un evento test el 21 de diciembre de 2018 a las 1:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion15Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins agendame un evento test el 21 de diciembre de 2018 a las 1:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexFailDiaInvalidoTest() {
+		Assert.assertEquals("@testUser necesito más información para guardar este evento o algún dato es incorrecto, por favor intentalo de nuevo.",
+				jenkins.leerMensaje("@jenkins agendame un evento test el 33 de diciembre de 2018 a las 1:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexFailMesPalabraInvalidaTest() {
+		Assert.assertEquals("@testUser necesito más información para guardar este evento o algún dato es incorrecto, por favor intentalo de nuevo.",
+				jenkins.leerMensaje("@jenkins agendame un evento test el 21 de diZiembre de 2018 a las 1:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexFailMesInvalidoTest() {
+		Assert.assertEquals("@testUser necesito más información para guardar este evento o algún dato es incorrecto, por favor intentalo de nuevo.",
+				jenkins.leerMensaje("@jenkins agendame un evento test el 21/21/2018 a las 1:12", TEST_USER));
+	}
+	
 }
