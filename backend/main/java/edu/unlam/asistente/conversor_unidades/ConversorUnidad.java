@@ -2,7 +2,9 @@ package edu.unlam.asistente.conversor_unidades;
 
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.HashMap;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import edu.unlam.asistente.asistente_virtual.Bot;
@@ -11,24 +13,24 @@ import edu.unlam.asistente.asistente_virtual.IDecision;
 public class ConversorUnidad implements IDecision {
 	
 	private IDecision siguienteDecision;
-	
+	private final static String REGEX = "@\\w* (?:cuantas|cuantos) (\\w*\\.*) (?:son|hay en) (\\d*\\.*\\d) (\\w*\\.*)(?:\\s* \\?|\\.*\\s*\\?)?"; 
 	
 	@Override
 	public String leerMensaje(String mensaje, String usuario) {
-		if(mensaje.matches("@(\\w*) (?:cuantas|cuantos) (\\w*\\.*) (?:son|hay en) (\\d*\\.*\\d) (\\w+)(?:\\s* \\?|\\.*\\s*\\?)?")) {
-			mensaje = mensaje.replace("?", "");
-			String respuesta = "";
-			String[] palabras = mensaje.split(" ");
-			String hasta = palabras[2];
-			String desde = palabras[palabras.length - 1];
-	
-			Pattern formato_numero = Pattern.compile("(\\s+\\d*\\.*\\d)");
-			DecimalFormat df = new DecimalFormat("#0.00");
-			double numero = Bot.obtenerNumero(mensaje, formato_numero);
-			
-			ConversorUnidad cu = new ConversorUnidad();
+		Pattern patron =  Pattern.compile(REGEX);
+		Matcher matcher = patron.matcher(mensaje);
 
-			double resultado = cu.convertirUnidad(numero, diccionario(desde), diccionario(hasta));
+		if(mensaje.matches(REGEX)) {
+			String respuesta = "";
+			
+			DecimalFormatSymbols simbolo = new DecimalFormatSymbols();
+			simbolo.setDecimalSeparator(',');
+			DecimalFormat df = new DecimalFormat("#0.00", simbolo);
+			matcher.find();
+			String hasta = matcher.group(1);
+			double numero = Double.parseDouble(matcher.group(2));
+			String desde = matcher.group(3);
+			double resultado = convertirUnidad(numero, diccionario(desde), diccionario(hasta));
 			
 			if(resultado == -1) return Bot.MSG_NO_ENTIENDO;
 			if(resultado == -2) return "@" + usuario + " las magnitudes no pueden ser negativas.";
