@@ -1,44 +1,45 @@
 package edu.unlam.asistente.database.dao;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import edu.unlam.asistente.database.pojo.Usuario;
+import edu.unlam.asistente.database.dao.BaseDao;
 
-public class UsuarioDao extends BaseDao{
-	
+public class UsuarioDao extends BaseDao {
+
 	public UsuarioDao() throws SQLException {
 		super();
 	}
-	
+
 	public Usuario obtenerUsuarioPorLogin(String login) {
-		
-		Usuario user = new Usuario();
-		Statement stmt = null;
+
+		Usuario user = null;
+		Session session = null;
 		try {
-			 stmt = super.db.getConnection().createStatement();
-			String query = "SELECT ID, USUARIO FROM USUARIOS WHERE USUARIO = '" + login + "';";
+			session = factory.openSession();
+
+			Query query = session.createQuery("from Usuario where usuario =:login")
+					.setParameter("login", login);
+			user = (Usuario)query.getSingleResult();
 			
-			ResultSet rs = stmt.executeQuery(query);
-			
-			if (rs != null && rs.next()) {
-				user.setId(rs.getInt("id"));
-				user.setLogin(rs.getString("usuario"));
-			}
-			
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
-			if (stmt != null) {
+		} finally {
+			if (session != null) {
 				try {
-					stmt.close();
-				} catch (SQLException e) {
+					session.close();
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 			return user;
 		}
+		
+		
+
 	}
 
 }

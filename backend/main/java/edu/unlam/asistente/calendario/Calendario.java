@@ -2,14 +2,21 @@ package edu.unlam.asistente.calendario;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import edu.unlam.asistente.asistente_virtual.Bot;
 import edu.unlam.asistente.asistente_virtual.IDecision;
+import edu.unlam.asistente.database.pojo.Evento;
 
 public class Calendario implements IDecision{
 
@@ -27,11 +34,91 @@ public class Calendario implements IDecision{
 	
 	private Calendar calendarAhora;
 	
-	public static Date getDateFromString(String fecha) throws ParseException {
+	public static String getStringDeFecha(Date fecha) {
+		return  new SimpleDateFormat("EEEE d 'de' MMMM 'de' yyyy 'a las' HH:mm", new Locale("es", "ES")).format(fecha);
+	}
+	
+	/**
+	 * Metodo que evalua si la fecha ingresada por parametro es mayor a "ahora"
+	 * @param fecha
+	 */
+	public static boolean esFechaProxima(Date fecha) {
+		Date ahora = Calendar.getInstance().getTime();
+		int resultadoComp = ahora.compareTo(fecha);
+		return resultadoComp == 0 || resultadoComp > 0 ? false:true;
+	}
+	
+	/**
+	 * Metodo que devuelve el numero del mes correspondiente al string ingresado por
+	 * parametro
+	 * 
+	 * @param monthName
+	 * @return
+	 * @throws ParseException
+	 */
+	public static int getNumeroDeNombreMes(String monthName) throws ParseException {
+			Date date = sdfMes.parse(monthName);
+			Calendar aux = Calendar.getInstance();
+			aux.setTime(date);
+			return aux.get(Calendar.MONTH) + 1;
+	}
+	
+	/**
+	 * Metodo que genera un Date a partir de un String obtenido de sqlite
+	 * 
+	 * @param fecha
+	 * @return
+	 * @throws ParseException
+	 */
+	public static Date getFechaParaSqliteDeString(String fecha) throws ParseException {
 		
 		return SQLITE_FORMATTER.parse(fecha);
 	}
 	
+	/**
+	 * Metodo que obtiene la lista de fechas a partir de una de eventos
+	 * @param set
+	 * @return
+	 * @throws ParseException
+	 */
+	public static List<Date> getDateListFromEventList(Set<Evento> set) throws ParseException{
+		
+		List<Date> resultado = new ArrayList<>();
+		for (Evento evento : set) {
+			resultado.add(getFechaParaSqliteDeString(evento.getFecha()));
+		}
+		
+		return resultado;
+	}
+	
+	/**
+	 * Metodo que obtiene la fecha mas cercana a "ahora" a partir de una lista
+	 * 
+	 * @param listaFechas
+	 * @return
+	 */
+	public static Date getFechaMasCercanaDeListaFechas(List<Date> listaFechas) {
+		
+		if (listaFechas == null) {
+			return null;
+		}
+		final long ahora = System.currentTimeMillis();
+		List<Date> aux = new ArrayList<Date>(listaFechas);
+		ListIterator<Date> itr = aux.listIterator();
+		while(itr.hasNext()) {
+			if (ahora - itr.next().getTime() > 0 ) {
+				itr.remove();
+			}			
+		}
+		
+		return Collections.min(aux, new Comparator<Date>() {
+		    public int compare(Date d1, Date d2) {
+			        long dif1 = Math.abs(d1.getTime() - ahora);
+			        long dif2 = Math.abs(d2.getTime() - ahora);
+			        return Long.compare(dif1, dif2);
+		    }
+		});
+	}
 
 	@Override
 	public String leerMensaje(String mensaje, String usuario) {
@@ -209,7 +296,7 @@ public class Calendario implements IDecision{
 	}
 	
 
-	private int diferenciaEnDias(Calendar fechaDesde, Calendar fechaHasta) {
+	public static int diferenciaEnDias(Calendar fechaDesde, Calendar fechaHasta) {
         int dias = (int) ((fechaHasta.getTimeInMillis() - fechaDesde.getTimeInMillis()) / 86400000);
         return dias;
 	}

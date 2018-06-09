@@ -3,6 +3,7 @@ package edu.unlam.asistente.asistente_virtual;
 import static org.junit.Assert.assertEquals;
 
 import edu.unlam.asistente.asistente_virtual.Bot;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -14,6 +15,9 @@ import org.junit.Test;
 public class BotTests {
 	
 	public final static String USUARIO = "delucas";
+	//usuario de test para integracion con DB
+	public final static String TEST_USER = "testUser";
+	
 	public final static Date FECHA_HORA = new GregorianCalendar(2018, 3, 1, 15, 15, 0).getTime();
 	Bot jenkins;
 	
@@ -415,6 +419,7 @@ public class BotTests {
 		
 	}
 	
+<<<<<<< HEAD
 	@Test
 	public void leyesRobotica() {
 		String[] mensajes = {
@@ -453,6 +458,129 @@ public class BotTests {
 		Assert.assertNotEquals(chuckNorris6, chuckNorris7);
 		Assert.assertNotEquals(chuckNorris7, chuckNorris8);
 		Assert.assertNotEquals(chuckNorris8, chuckNorris9);
+=======
+	//Test gestion de eventos
+	@Test
+	public void consultarFechaProximoEventoTest() {
+		Assert.assertEquals(
+				"@testUser tu próximo evento será el domingo 30 de diciembre de 2018 a las 05:00",
+				jenkins.leerMensaje("@jenkins cuando será mi próximo evento?", TEST_USER));
+	}
+	
+	@Test
+	public void consultarDiasProximoEventoTest() {
+		Assert.assertEquals(
+				"@testUser tu próximo evento será dentro de 206 días",
+				jenkins.leerMensaje("@jenkins cuánto falta para mi próximo evento?", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion1Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins recordame un evento test el 21 de diciembre de 2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion2Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins anotame un evento test el 21 de diciembre de 2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion3Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins agendame un evento test el 21 de diciembre de 2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion4Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins recordame un evento test el 21/12/2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion5Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins anotame un evento test el 21/12/2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion6Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins agendame un evento test el 21/12/2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion7Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins recordame un evento test el 1 de diciembre de 2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion8Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins anotame un evento test el 1 de diciembre de 2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion9Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins agendame un evento test el 1 de diciembre de 2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion10Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins recordame un evento test el 01 de diciembre de 2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion11Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins anotame un evento test el 01 de diciembre de 2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion12Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins agendame un evento test el 01 de diciembre de 2018 a las 12:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion13Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins recordame un evento test el 21 de diciembre de 2018 a las 1:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion14Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins anotame un evento test el 21 de diciembre de 2018 a las 1:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexExpresion15Test() {
+		Assert.assertEquals("@testUser tu alarma fue guardada existosamente!",
+				jenkins.leerMensaje("@jenkins agendame un evento test el 21 de diciembre de 2018 a las 1:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexFailDiaInvalidoTest() {
+		Assert.assertEquals("@testUser necesito más información para guardar este evento o algún dato es incorrecto, por favor intentalo de nuevo.",
+				jenkins.leerMensaje("@jenkins agendame un evento test el 33 de diciembre de 2018 a las 1:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexFailMesPalabraInvalidaTest() {
+		Assert.assertEquals("@testUser necesito más información para guardar este evento o algún dato es incorrecto, por favor intentalo de nuevo.",
+				jenkins.leerMensaje("@jenkins agendame un evento test el 21 de diZiembre de 2018 a las 1:12", TEST_USER));
+	}
+	
+	@Test
+	public void armarEventoConRegexFailMesInvalidoTest() {
+		Assert.assertEquals("@testUser necesito más información para guardar este evento o algún dato es incorrecto, por favor intentalo de nuevo.",
+				jenkins.leerMensaje("@jenkins agendame un evento test el 21/21/2018 a las 1:12", TEST_USER));
+>>>>>>> 1df43e97db4711485583ee5e7b4dc7f8fe6184e9
 	}
 	
 }
