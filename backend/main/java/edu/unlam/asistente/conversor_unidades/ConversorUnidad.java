@@ -13,7 +13,7 @@ import edu.unlam.asistente.asistente_virtual.IDecision;
 public class ConversorUnidad implements IDecision {
 	
 	private IDecision siguienteDecision;
-	private final static String REGEX = "@\\w* (?:cuantas|cuantos) (\\w*\\.*) (?:son|hay en) (\\d*\\.*\\d) (\\w*\\.*)(?:\\s* \\?|\\.*\\s*\\?)?"; 
+	private final static String REGEX = "@\\w*\\,*\\s*(?:cuantas|cuantos) (\\w*\\.*) (?:son|hay en) (\\d*\\.*\\d) (\\w*\\.*)(?:\\s* \\?|\\.*\\s*\\?)?"; 
 	
 	@Override
 	public String leerMensaje(String mensaje, String usuario) {
