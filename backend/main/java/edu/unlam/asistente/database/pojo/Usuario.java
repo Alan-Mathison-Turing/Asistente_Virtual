@@ -1,39 +1,61 @@
 package edu.unlam.asistente.database.pojo;
 
+import java.util.HashSet;
 import java.util.Set;
 
-public class Usuario {
+import static javax.persistence.GenerationType.IDENTITY;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
+import edu.unlam.asistente.database.pojo.Evento;
+
+@Entity
+@Table(name = "usuarios")
+public class Usuario implements java.io.Serializable{
 	
-	long id;
-	String login;
-	Set eventos;
+	private static final long serialVersionUID = 3873258900375429710L;
+	
+	private Integer id;
+	private String usuario;
+	private Set<Evento> eventos = new HashSet<Evento>(0);
 	
 	public Usuario() {}
-
-	public long getId() {
+	
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "id", unique = true, nullable = false)
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
-
-	public String getLogin() {
-		return login;
+	
+	@Column(name = "usuario", nullable = false)
+	public String getUsuario() {
+		return usuario;
 	}
 
-	public void setLogin(String login) {
-		this.login = login;
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+	
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "usuarios")
+	public Set<Evento> getEventos() {
+		return eventos;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((login == null) ? 0 : login.hashCode());
-		return result;
+	public void setEventos(Set<Evento> eventos) {
+		this.eventos = eventos;
 	}
+	
 
 	@Override
 	public boolean equals(Object obj) {
@@ -44,23 +66,27 @@ public class Usuario {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		if (id != other.id)
-			return false;
-		if (login == null) {
-			if (other.login != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!login.equals(other.login))
+		} else if (!id.equals(other.id))
+			return false;
+		if (usuario == null) {
+			if (other.usuario != null)
+				return false;
+		} else if (!usuario.equals(other.usuario))
 			return false;
 		return true;
 	}
+	//TODO: REVISAR POR QUE SE ROMPE CON HASHCODE
+//	@Override
+//	public int hashCode() {
+//		final int prime = 31;
+//		int result = 1;
+//		result = prime * result + ((id == null) ? 0 : id.hashCode());
+//		result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
+//		return result;
+//	}
 
-	public Set getEventos() {
-		return eventos;
-	}
-
-	public void setEventos(Set eventos) {
-		this.eventos = eventos;
-	}
-	
 	
 }

@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="backend/main/java"/>
+	<classpathentry kind="src" path="backend/main/resources"/>
 	<classpathentry kind="src" path="backend/tests"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="backend/lib/sqlite-jdbc-3.21.0.jar"/>
+	<classpathentry kind="lib" path="backend/lib/antlr-2.7.7.jar"/>
+	<classpathentry kind="lib" path="backend/lib/classmate-1.3.0.jar"/>
+	<classpathentry kind="lib" path="backend/lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="backend/lib/hibernate-commons-annotations-5.0.1.Final.jar"/>
+	<classpathentry kind="lib" path="backend/lib/hibernate-core-5.2.11.Final.jar"/>
+	<classpathentry kind="lib" path="backend/lib/hibernate-entitymanager.jar"/>
+	<classpathentry kind="lib" path="backend/lib/hibernate-jpa-2.1-api-1.0.0.Final.jar"/>
+	<classpathentry kind="lib" path="backend/lib/hibernate4-sqlite-dialect-0.1.2.jar"/>
+	<classpathentry kind="lib" path="backend/lib/javassist-3.20.0-GA.jar"/>
+	<classpathentry kind="lib" path="backend/lib/jboss-logging-3.3.0.Final.jar"/>
+	<classpathentry kind="lib" path="backend/lib/jboss-transaction-api_1.2_spec-1.0.1.Final.jar"/>
+	<classpathentry kind="lib" path="backend/lib/jta.jar"/>
+	<classpathentry kind="lib" path="backend/lib/slf4j-api-1.7.7.jar"/>
+	<classpathentry kind="lib" path="backend/lib/slf4j-simple-1.7.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

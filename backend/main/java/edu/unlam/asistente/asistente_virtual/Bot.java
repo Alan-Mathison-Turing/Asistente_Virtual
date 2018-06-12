@@ -5,8 +5,12 @@ import java.util.regex.Pattern;
 
 import edu.unlam.asistente.calculadora.Calculadora;
 import edu.unlam.asistente.calendario.Calendario;
+import edu.unlam.asistente.chucknorris.ChuckNorrisFacts;
 import edu.unlam.asistente.conversor_unidades.ConversorUnidad;
 import edu.unlam.asistente.cordialidad.Cordialidad;
+import edu.unlam.asistente.leyes_robotica.LeyesRobotica;
+import edu.unlam.asistente.recordatorioEventos.GestionRecordatorio;
+
 
 
 public class Bot implements IDecision {
@@ -38,12 +42,18 @@ public class Bot implements IDecision {
 		
 		try {
 			Cordialidad cordialidad = new Cordialidad();
+			LeyesRobotica leyesRobotica = new LeyesRobotica();
+			ChuckNorrisFacts chuckFacts = new ChuckNorrisFacts();
 			Calculadora calculadora = new Calculadora();
 			ConversorUnidad conversorUnidad = new ConversorUnidad();
 			Calendario calendario = new Calendario();
+			GestionRecordatorio gestionRecordatorio = new GestionRecordatorio();
 			this.setSiguienteDecision(cordialidad);
-			cordialidad.setSiguienteDecision(calculadora);
-			calculadora.setSiguienteDecision(conversorUnidad);
+			cordialidad.setSiguienteDecision(leyesRobotica);
+			leyesRobotica.setSiguienteDecision(chuckFacts);
+			chuckFacts.setSiguienteDecision(calculadora);
+			calculadora.setSiguienteDecision(gestionRecordatorio);
+			gestionRecordatorio.setSiguienteDecision(conversorUnidad);
 			conversorUnidad.setSiguienteDecision(calendario);
 			return siguienteDecision.leerMensaje(mensaje, usuario);
 		}

@@ -5,20 +5,24 @@
    <session-factory>
    
       <property name = "hibernate.dialect">
-         org.hibernate.dialect.MySQLDialect
+         com.enigmabridge.hibernate.dialect.SQLiteDialect
       </property>
       
       <property name = "hibernate.connection.driver_class">
-         com.mysql.jdbc.Driver
+         org.sqlite.JDBC
       </property>
       
       <property name = "hibernate.connection.url">
-         jdbc:sqlite:database/database.sqlite
+         jdbc:sqlite:../database/database.sqlite
       </property>
       
-      <!-- List of XML mapping files -->
-      <mapping resource = "database.hibernate.cfg.Usuario-hbm.xml"/>
-      <mapping resource = "database.hibernate.cfg.Evento-hbm.xml"/>
+      <property name="hibernate.show_sql" >true</property>
+      <property name="hibernate.format_sql" >true</property>
+      <property name="hibernate.use_sql_comments">true</property>
+      
+      <!-- Lista de clases a mapear por annotation-->
+      <mapping class = "edu.unlam.asistente.database.pojo.Evento"/>
+      <mapping class = "edu.unlam.asistente.database.pojo.Usuario"/>
       
    </session-factory>
 </hibernate-configuration>
