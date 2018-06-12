@@ -1,4 +1,4 @@
-package edu.unlam.asistente.login;
+package edu.unlam.asistente.ventana;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
