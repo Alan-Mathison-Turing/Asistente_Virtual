@@ -600,45 +600,48 @@ public class BotTests {
 
 	@Test
 	public void busquedaExistente() {
-		Assert.assertEquals("https://es.wikipedia.org/wiki/Diego_Armando_Maradona\n" + 
-							"Diego Armando Maradona es un exfutbolista y director técnico "
+		Assert.assertEquals("https://es.wikipedia.org/wiki/Diego_Armando_Maradona\n" 
+							+"<p><b>Diego Armando Maradona</b> es un exfutbolista y director técnico "
 							+ "argentino. Actualmente se desempeña como presidente y "
-							+ "director deportivo del FC Dinamo Brest de la Liga Premier de Bielorrusia.", 
+							+ "director deportivo del FC Dinamo Brest de la Liga Premier de Bielorrusia.</p>", 
 							jenkins.leerMensaje("@jenkins quien es Diego Maradona ?", USUARIO));
 	}
 	
 	@Test
 	public void busquedaVariosResultados() {
 		Assert.assertEquals("https://es.wikipedia.org/wiki/Pablo\n" + 
-							"El nombre de Pablo puede referirse a: Pablo (nombre).\n" + 
-							" Pablo de Tarso, apóstol, teólogo y escritor cristiano del siglo I.\n" + 
-							" Pablo de Tebas, eremita egipcio (228-342).\n" + 
-							" Pablo I, papa de 757 a 767.\n" + 
-							" Pablo II, papa de 1464 a 1471.\n" + 
-							" Pablo III, papa de 1534 a 1549.\n" + 
-							" Pablo IV, papa de 1555 a 1559.\n" + 
-							" Pablo V, papa de 1605 a 1621.\n" + 
-							" Pablo VI, papa de 1963 a 1978.\n" + 
-							" Pablo el Diácono, monje benedictino del siglo VIII.\n" + 
-							" Pablo Picasso, pintor y escultor español, creador del cubismo.\n" + 
-							" Pablo Neruda, poeta chileno, premio Nobel de Literatura 1971.\n" + 
-							" Pablo Escobar, narcotraficante colombiano.", 
+							"<p>El nombre de <b>Pablo</b> puede referirse a:</p>" + 
+							"<ul><li> Pablo (nombre).</li>\n" + 
+							"<li> Pablo de Tarso, apóstol, teólogo y escritor cristiano del siglo I.</li>\n" + 
+							"<li> Pablo de Tebas, eremita egipcio (228-342).</li>\n" + 
+							"<li> Pablo I, papa de 757 a 767.</li>\n" + 
+							"<li> Pablo II, papa de 1464 a 1471.</li>\n" + 
+							"<li> Pablo III, papa de 1534 a 1549.</li>\n" + 
+							"<li> Pablo IV, papa de 1555 a 1559.</li>\n" + 
+							"<li> Pablo V, papa de 1605 a 1621.</li>\n" + 
+							"<li> Pablo VI, papa de 1963 a 1978.</li>\n" + 
+							"<li> Pablo el Diácono, monje benedictino del siglo VIII.</li>\n" + 
+							"<li> Pablo Picasso, pintor y escultor español, creador del cubismo.</li>\n" + 
+							"<li> Pablo Neruda, poeta chileno, premio Nobel de Literatura 1971.</li>\n" + 
+							"<li> Pablo Escobar, narcotraficante colombiano.</li></ul>", 
 							jenkins.leerMensaje("@jenkins, investiga sobre Pablo", USUARIO));
 	}
 	
 	@Test
 	public void busquedaRara() {
-		Assert.assertEquals("http://minifigbox.com/X9X357102", jenkins.leerMensaje("@jenkins, qué es wasuwasa?", USUARIO));
+		Assert.assertEquals("http://www.wordreference.com/es/translation.asp?tranword=term\n"
+							+ "<b>term</b> - Translation to Spanish, pronunciation, and forum discussions.", 
+							jenkins.leerMensaje("@jenkins, qué es term?", USUARIO));
 	}
 	
 	@Test
 	public void busquedaVacia() {
-		Assert.assertEquals("https://www.google.com/doodles", jenkins.leerMensaje("@jenkins, cuál es", USUARIO));
+		Assert.assertEquals("Disculpa... no entiendo el pedido, @delucas ¿podrás repetirlo?", jenkins.leerMensaje("@jenkins, cuál es", USUARIO));
 	}
 	
 	@Test
 	public void busquedaEspacio() {
-		Assert.assertEquals("https://www.google.com/doodles", jenkins.leerMensaje("@jenkins, cuál es     ", USUARIO));
+		Assert.assertEquals("Disculpa... no entiendo el pedido, @delucas ¿podrás repetirlo?", jenkins.leerMensaje("@jenkins, cuál es     ", USUARIO));
 	}
 	
 }

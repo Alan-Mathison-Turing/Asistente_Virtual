@@ -11,9 +11,7 @@ public class BusquedaWeb implements IDecision {
 	
 	private IDecision siguienteDecision;
 	private final static String REGEX = "@\\w*\\,*\\s*(?:quien|quienes|busca|buscame|investiga|investigame|que|cual|cuales) \\w*\\s*(\\w*\\s*\\w*)\\s*\\?*";
-	public static final String GOOGLE_SEARCH_URL = "https://www.google.com/search";
-	public static final String WIKIPEDIA_SEARCH_URL = "https://es.wikipedia.org/wiki/";
-	
+
 	@Override
 	public String leerMensaje(String mensaje, String usuario) {
 		Pattern patron =  Pattern.compile(REGEX);
@@ -22,6 +20,7 @@ public class BusquedaWeb implements IDecision {
 		if(mensaje.matches(REGEX)) {
 			matcher.find();
 			String terminoBusqueda = capitalizarPrimerLetra(matcher.group(1));
+			if(terminoBusqueda.equals("")) return siguienteDecision.leerMensaje(mensaje, usuario);
 			return busquedaWeb(terminoBusqueda);
 		}
 
@@ -53,8 +52,8 @@ public class BusquedaWeb implements IDecision {
 		return google.busqueda(terminoBusqueda);
 	}
 	
-	public String capitalizarPrimerLetra(final String words) {
-	    return Stream.of(words.trim().split("\\s"))
+	private String capitalizarPrimerLetra(final String palabras) {
+	    return Stream.of(palabras.trim().split("\\s"))
 	    .filter(word -> word.length() > 0)
 	    .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1))
 	    .collect(Collectors.joining(" "));
