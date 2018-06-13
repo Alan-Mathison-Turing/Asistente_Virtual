@@ -1,26 +1,22 @@
 package edu.unlam.asistente.ventana;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JTextField;
-import java.awt.GridLayout;
 import java.awt.Color;
-import javax.swing.SwingConstants;
-import javax.swing.JLabel;
-import java.awt.FlowLayout;
-import javax.swing.JPasswordField;
-import java.awt.Dimension;
-import javax.swing.JButton;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.EventQueue;
 import java.awt.Font;
 
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
+
 public class Principal extends JFrame {
+
+	private static final long serialVersionUID = -7589924510729861612L;
 	private JTextField textField;
 	private JPasswordField pwdSecreto;
 	private JTextField txtUsuario_1;
@@ -63,6 +59,12 @@ public class Principal extends JFrame {
 		
 		JButton btnIniciarSesin = new JButton("Iniciar Sesión");
 		btnIniciarSesin.setFont(new Font("Tahoma", Font.BOLD, 12));
+		
+		//TODO: CHECKEAR LA LINEA SIGUIENTE, ESTABA AL FINAL DE LA CLASE,
+		//ESTABA JUSTO ANTES DE ESTA LINEA: getContentPane().setLayout(groupLayout);
+		//LA MOVI PARA QUE COMPILE
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
@@ -123,7 +125,6 @@ public class Principal extends JFrame {
 		lblseOlvidoSu.setForeground(new Color(0, 0, 255));
 		lblseOlvidoSu.setBounds(139, 212, 137, 14);
 		getContentPane().add(lblseOlvidoSu);
-		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(groupLayout);
 	}
 }
