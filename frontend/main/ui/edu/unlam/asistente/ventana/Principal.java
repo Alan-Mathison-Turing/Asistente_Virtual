@@ -17,7 +17,6 @@ import javax.swing.SwingConstants;
 public class Principal extends JFrame {
 
 	private static final long serialVersionUID = -7589924510729861612L;
-	private JTextField textField;
 	private JPasswordField pwdSecreto;
 	private JTextField txtUsuario_1;
 
@@ -44,52 +43,17 @@ public class Principal extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
-		JLabel txtUsuario = new JLabel();
-		txtUsuario.setFont(new Font("Tahoma", Font.BOLD, 14));
-		txtUsuario.setLabelFor(this);
-		txtUsuario.setVerticalAlignment(SwingConstants.BOTTOM);
-		txtUsuario.setToolTipText("");
-		txtUsuario.setHorizontalAlignment(SwingConstants.LEFT);
-		txtUsuario.setBackground(new Color(255, 255, 255));
-		txtUsuario.setText("Usuario");
-		
-		textField = new JTextField();
-		textField.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField.setColumns(14);
-		
-		JButton btnIniciarSesin = new JButton("Iniciar Sesión");
-		btnIniciarSesin.setFont(new Font("Tahoma", Font.BOLD, 12));
-		
 		//TODO: CHECKEAR LA LINEA SIGUIENTE, ESTABA AL FINAL DE LA CLASE,
 		//ESTABA JUSTO ANTES DE ESTA LINEA: getContentPane().setLayout(groupLayout);
 		//LA MOVI PARA QUE COMPILE
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
-		
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(98)
-					.addComponent(txtUsuario)
-					.addGap(40)
-					.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnIniciarSesin)
-					.addContainerGap(169, Short.MAX_VALUE))
+				.addGap(0, 434, Short.MAX_VALUE)
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(120)
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(123)
-							.addComponent(txtUsuario))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(119)
-							.addComponent(btnIniciarSesin)))
-					.addContainerGap(121, Short.MAX_VALUE))
+				.addGap(0, 261, Short.MAX_VALUE)
 		);
 		getContentPane().setLayout(null);
 		
