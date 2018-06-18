@@ -1,7 +1,5 @@
 package edu.unlam.asistente.ventana;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,36 +18,57 @@ import java.awt.event.KeyEvent;
 
 public class Chat extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2400628064788229910L;
 	private JPanel contentPane;
 	private JTextField textFieldEnviar;
 	private JTextArea textAreaChat;
+	private final Cliente cliente;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Chat frame = new Chat();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					Chat frame = new Chat();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+		
+//		SwingUtilities.invokeLater(new Runnable() {
+//			
+//			@Override
+//			public void run() {
+//				while(true) {
+//					Mensaje msj = Cliente.colaMensajes.poll();
+//					if (textAreaChat != null && msj != null) {
+//						textAreaChat.append("\n > BOT: " + msj.getMensaje());
+//					}
+//				}
+//				
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
 	 */
-	public Chat() {
+	public Chat(final Cliente cliente) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		this.cliente = cliente; 
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 11, 397, 176);
@@ -84,13 +103,15 @@ public class Chat extends JFrame {
 	}
 	
 	public void enviarMensaje() {
-		StringBuilder sb = new StringBuilder(textAreaChat.getText());
 		String textoEnviar = textFieldEnviar.getText();
 		if (!textoEnviar.isEmpty() && textoEnviar != null) {
-			sb.append("\n YO: > " + textoEnviar);
 			textFieldEnviar.setText(null);
-			textAreaChat.setText(sb.toString());
-			Cliente.enviarMensaje(textoEnviar);
+			textAreaChat.append("\n > YO: " + textoEnviar);
+			cliente.enviarMensaje(textoEnviar);
 		}
+	}
+	
+	public void actualizarChat(String mensaje) {
+		textAreaChat.append("\n > testBot: " + mensaje);
 	}
 }
