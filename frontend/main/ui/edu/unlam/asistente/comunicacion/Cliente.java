@@ -35,7 +35,6 @@ public class Cliente {
 			Mensaje m = new Mensaje(mensaje, nombreUsuario);
 			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
 			salida.writeObject(m);
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

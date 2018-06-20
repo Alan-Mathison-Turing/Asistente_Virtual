@@ -53,7 +53,7 @@ public class Wikipedia {
 	            if(JsonToken.FIELD_NAME.equals(jsonToken)){
 	                String fieldName = parser.getCurrentName();
 	                jsonToken = parser.nextToken();
-	                if("extract".equals(fieldName)){
+	                if("extract_html".equals(fieldName)){
 	                    contenidoArticulo = parser.getValueAsString();
 	                }
 	                if("canonical".equals(fieldName)) {
@@ -75,7 +75,7 @@ public class Wikipedia {
 	
 	@Override
 	public String toString() {
-		return urlWikipedia + "\n" + contenidoArticulo;
+		return "<a href=\"" + urlWikipedia + "\">" + urlWikipedia + "</a>" + "\n" + contenidoArticulo;
 	}
 	
 }

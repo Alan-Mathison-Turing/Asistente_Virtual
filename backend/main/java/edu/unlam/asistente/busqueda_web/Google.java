@@ -45,7 +45,7 @@ public class Google {
 	            if(JsonToken.FIELD_NAME.equals(jsonToken)){
 	                String fieldName = parser.getCurrentName();
 	                jsonToken = parser.nextToken();
-	                if("snippet".equals(fieldName)){
+	                if("htmlSnippet".equals(fieldName)){
 	                    contenidoArticulo = parser.getValueAsString();
 	                }
 	                if("link".equals(fieldName)) {
@@ -66,7 +66,7 @@ public class Google {
 
 	@Override
 	public String toString() {
-		return urlPrimerResultado + "\n" + contenidoArticulo;
+		return "<a href=\"" + urlPrimerResultado + "\">" + urlPrimerResultado + "</a>" + "\n" + contenidoArticulo;
 	}
 	
 }
