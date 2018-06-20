@@ -4,10 +4,13 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -100,7 +103,9 @@ public class ChuckNorrisFacts implements Serializable {
 	 * 
 	 * @return Usuarios. <br>
 	 */
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "chuckNorrisFacts")
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "usuarioChuckFacts", joinColumns = { @JoinColumn(name = "id_fact") }, inverseJoinColumns = {
+			@JoinColumn(name = "id_usuario") })
 	public Set<Usuario> getUsuarios() {
 		return usuarios;
 	}

@@ -67,9 +67,7 @@ public class Usuario implements java.io.Serializable {
 	 * 
 	 * @return Chuck Norris facts. <br>
 	 */
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "usuarioChuckFacts", joinColumns = { @JoinColumn(name = "id_usuario") }, inverseJoinColumns = {
-			@JoinColumn(name = "id_fact") })
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "usuarios")
 	public Set<ChuckNorrisFacts> getChuckNorrisFacts() {
 		return chuckNorrisFacts;
 	}
@@ -108,4 +106,14 @@ public class Usuario implements java.io.Serializable {
 	// result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
 	// return result;
 	// }
+
+	/**
+	 * Agrega un fact al usuario. <br>
+	 * 
+	 * @param chuckNorrisFacts
+	 *            Fact de Chuck Norris. <br>
+	 */
+	public void agregarFact(ChuckNorrisFacts chuckNorrisFacts) {
+		this.chuckNorrisFacts.add(chuckNorrisFacts);
+	}
 }
