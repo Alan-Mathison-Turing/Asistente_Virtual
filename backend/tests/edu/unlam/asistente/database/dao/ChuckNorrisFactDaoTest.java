@@ -1,5 +1,7 @@
 package edu.unlam.asistente.database.dao;
 
+import static org.junit.Assert.fail;
+
 import java.sql.SQLException;
 
 import org.junit.Before;

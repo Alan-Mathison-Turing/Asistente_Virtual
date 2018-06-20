@@ -14,12 +14,16 @@ import edu.unlam.asistente.database.pojo.Usuario;
  * <br>
  */
 public class ChuckNorrisFactDao extends BaseDao {
-
 	/**
 	 * Query para obtener un fact de Chuck Norris a un usuario que este no haya
 	 * visto. <br>
 	 */
 	private static final String QUERY_CHUCK_FACT_USUARIO = "SELECT CNF FROM ChuckNorrisFacts CNF WHERE NOT EXISTS (SELECT CN FROM ChuckNorrisFacts CN JOIN CN.usuarios U WHERE U.id = :Id_Usuario AND CNF = CN ) ORDER BY RANDOM()";
+
+	/**
+	 * Query con todos los facts de Chuck Norris. <br>
+	 */
+	private static final String QUERY_CHUCK_FACTS = "SELECT CNF FROM ChuckNorrisFacts CNF";
 
 	/**
 	 * Crea una instancia de facts de Chuck Norris. <br>
@@ -53,10 +57,19 @@ public class ChuckNorrisFactDao extends BaseDao {
 					usuario.getId());
 			// Si no hay nada es porque se mostraron todos los facts que podían
 			// existir.
-			if (!fact.list().iterator().hasNext()) {
-				// Le quitamos todos los facts que haya visto.
+			if (fact.list().isEmpty()) {
+				// Le quitamos todos los facts que haya visto al usuario y los
+				// facts que fueron asignados a ese usuario.
+				int tam = 0;
 				usuario.getChuckNorrisFacts().clear();
 				session.update(usuario);
+				Query<ChuckNorrisFacts> allFacts = session.createQuery(QUERY_CHUCK_FACTS);
+				while (tam < allFacts.list().size()) {
+					ChuckNorrisFacts acutalFact = allFacts.getResultList().get(tam);
+					acutalFact.getUsuarios().remove(usuario);
+					session.update(acutalFact);
+					tam++;
+				}
 				// Volvemos a obtener un fact.
 				fact = session.createQuery(QUERY_CHUCK_FACT_USUARIO).setParameter("Id_Usuario", usuario.getId());
 			}
