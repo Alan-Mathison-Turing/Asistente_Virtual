@@ -32,13 +32,13 @@ public class BotTests {
 	@Test
 	public void mensajeInentendible() {
 		String rta = jenkins.leerMensaje("audwhkawud", USUARIO);
-		assertEquals(Bot.MSG_NO_ENTIENDO, rta);
+		assertEquals(String.format(Bot.MSG_NO_ENTIENDO, USUARIO), rta);
 	}
 	
 	@Test
 	public void mensajeVacio() {
 		String rta = jenkins.leerMensaje("", USUARIO);
-		assertEquals(Bot.MSG_NO_ENTIENDO, rta);
+		assertEquals(String.format(Bot.MSG_NO_ENTIENDO, USUARIO), rta);
 	}
 	
 	@Test
@@ -83,7 +83,7 @@ public class BotTests {
 		};
 		for (String mensaje : mensajes) {
 			Assert.assertEquals(
-					"No es nada, @" + Bot.USUARIO,
+					"No es nada, @" + USUARIO,
 					jenkins.leerMensaje(mensaje, USUARIO)
 			);
 		}
@@ -98,7 +98,7 @@ public class BotTests {
 		};
 		for (String mensaje : mensajes) {
 			Assert.assertEquals(
-					"Hasta luego @" + Bot.USUARIO + "!",
+					"Hasta luego @" + USUARIO + "!",
 					jenkins.leerMensaje(mensaje, USUARIO)
 			);
 		}
@@ -254,7 +254,7 @@ public class BotTests {
 	@Test
 	public void magnitudInvalida() {
 		Assert.assertEquals(
-				Bot.MSG_NO_ENTIENDO,
+				String.format(Bot.MSG_NO_ENTIENDO, USUARIO),
 				jenkins.leerMensaje("@jenkins cuántos gramos son 1 rama", USUARIO)
 			);
 	}

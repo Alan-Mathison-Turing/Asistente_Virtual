@@ -32,7 +32,7 @@ public class ConversorUnidad implements IDecision {
 			String desde = matcher.group(3);
 			double resultado = convertirUnidad(numero, diccionario(desde), diccionario(hasta));
 			
-			if(resultado == -1) return Bot.MSG_NO_ENTIENDO;
+			if(resultado == -1) return String.format(Bot.MSG_NO_ENTIENDO, usuario);
 			if(resultado == -2) return "@" + usuario + " las magnitudes no pueden ser negativas.";
 			return respuesta = "@" + usuario + " " + df.format(numero) + " " + desde + 
 						" equivale a " + df.format(resultado) + " " + hasta;				

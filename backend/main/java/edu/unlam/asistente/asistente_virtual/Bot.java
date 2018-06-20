@@ -20,8 +20,7 @@ public class Bot implements IDecision {
 	private String nombre;
 	private IDecision siguienteDecision;
 	
-	public final static String USUARIO = "delucas";	
-	public final static String MSG_NO_ENTIENDO = "Disculpa... no entiendo el pedido, @" + USUARIO + " ¿podrás repetirlo?";
+	public final static String MSG_NO_ENTIENDO = "Disculpa... no entiendo el pedido, @%s ¿podrás repetirlo?";
 	
 	public Bot(String nombre) {
 		this.nombre = nombre;
@@ -61,7 +60,7 @@ public class Bot implements IDecision {
 			return siguienteDecision.leerMensaje(mensaje, usuario);
 		}
 		catch(Exception e) {
-			return MSG_NO_ENTIENDO;
+			return String.format(MSG_NO_ENTIENDO, usuario);
 		}
 
 	}

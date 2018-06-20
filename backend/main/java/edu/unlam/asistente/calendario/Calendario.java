@@ -185,7 +185,7 @@ public class Calendario implements IDecision{
 				return respuesta = "@" + usuario + " entre el " + fecha + " y el " + parseCalendarToString(now) + " pasaron " + dias + " días";
 			} catch (ParseException e) {
 				e.printStackTrace();
-				return respuesta == "" ? Bot.MSG_NO_ENTIENDO : respuesta;
+				return respuesta == "" ? String.format(Bot.MSG_NO_ENTIENDO, usuario) : respuesta;
 			}
 			
 		}
@@ -203,7 +203,7 @@ public class Calendario implements IDecision{
 				return respuesta = "@" + usuario + " faltan " + dias + " días";
 			} catch (ParseException e) {
 				e.printStackTrace();
-				return respuesta == "" ? Bot.MSG_NO_ENTIENDO : respuesta;
+				return respuesta == "" ? String.format(Bot.MSG_NO_ENTIENDO, usuario) : respuesta;
 			}
 			
 		}
