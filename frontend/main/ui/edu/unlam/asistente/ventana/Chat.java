@@ -15,7 +15,6 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
@@ -79,6 +78,7 @@ public class Chat extends JFrame {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 11, 397, 176);
+		
 		contentPane.add(scrollPane);
 		
 		htmlEditorKit = new HTMLEditorKit();
@@ -131,7 +131,7 @@ public class Chat extends JFrame {
 	public void actualizarChat(String mensaje) {
 		try {
 			htmlEditorKit.insertHTML(document, document.getLength(), " > testBot: " + mensaje, 0, 0, null);
-			
+			textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
 		} catch (BadLocationException | IOException e) {
 			e.printStackTrace();
 		}
