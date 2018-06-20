@@ -23,6 +23,7 @@
       <!-- Lista de clases a mapear por annotation-->
       <mapping class = "edu.unlam.asistente.database.pojo.Evento"/>
       <mapping class = "edu.unlam.asistente.database.pojo.Usuario"/>
+      <mapping class = "edu.unlam.asistente.database.pojo.ChuckNorrisFacts"/>
       
    </session-factory>
 </hibernate-configuration>
