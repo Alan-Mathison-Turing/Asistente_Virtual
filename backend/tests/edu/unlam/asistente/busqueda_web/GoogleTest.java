@@ -16,7 +16,7 @@ public class GoogleTest {
 	@Test
 	public void busquedaExistente() {
 		Assert.assertEquals("http://www.wordreference.com/es/translation.asp?tranword=term\n"
-							+ "<b>term</b> - Translation to Spanish, pronunciation, and forum discussions.", 
+							+ "term - Translation to Spanish, pronunciation, and forum discussions.", 
 							google.busqueda("term"));
 	}
 	

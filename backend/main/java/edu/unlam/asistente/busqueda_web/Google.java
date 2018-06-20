@@ -45,7 +45,7 @@ public class Google {
 	            if(JsonToken.FIELD_NAME.equals(jsonToken)){
 	                String fieldName = parser.getCurrentName();
 	                jsonToken = parser.nextToken();
-	                if("htmlSnippet".equals(fieldName)){
+	                if("snippet".equals(fieldName)){
 	                    contenidoArticulo = parser.getValueAsString();
 	                }
 	                if("link".equals(fieldName)) {
