@@ -75,7 +75,7 @@ public class Wikipedia {
 	
 	@Override
 	public String toString() {
-		return "<a href=\"" + urlWikipedia + "\">" + urlWikipedia + "</a>" + "\n" + contenidoArticulo;
+		return "<a href=\"" + urlWikipedia + "\"><u>" + urlWikipedia + "</u></a><br/>" + contenidoArticulo;
 	}
 	
 }

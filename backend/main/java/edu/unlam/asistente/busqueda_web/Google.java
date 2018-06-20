@@ -55,18 +55,23 @@ public class Google {
 	        }
 	        
 	        connection.disconnect();
-	        return this.toString();
+	        
+	        if(urlPrimerResultado == null) {
+	        	return "No encontré lo que buscabas, ¿podrías ser más específico?";
+	        } else {
+	        	return this.toString();
+	        }	        
+	        
 		} catch (IOException e) {
-			System.out.println("excepcion?");
 			e.printStackTrace();
-			return "";
+        	return "No encontré lo que buscabas, ¿podrías ser más específico?";
 		}
 		
 	}
 
 	@Override
 	public String toString() {
-		return "<a href=\"" + urlPrimerResultado + "\">" + urlPrimerResultado + "</a>" + "\n" + contenidoArticulo;
+		return "<a href=\"" + urlPrimerResultado + "\"><u>" + urlPrimerResultado + "</u></a><br/>" + contenidoArticulo;
 	}
 	
 }

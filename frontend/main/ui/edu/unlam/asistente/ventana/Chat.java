@@ -5,9 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 import javax.swing.JButton;
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -15,6 +15,8 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.html.HTML;
+import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
 import edu.unlam.asistente.comunicacion.Cliente;
@@ -29,6 +31,8 @@ public class Chat extends JFrame {
 	private JTextField textFieldEnviar;
 	private final Cliente cliente;
 	private JTextPane textAreaChat;
+	HTMLEditorKit htmlEditorKit;
+	HTMLDocument document;
 
 	/**
 	 * Launch the application.
@@ -77,13 +81,14 @@ public class Chat extends JFrame {
 		scrollPane.setBounds(10, 11, 397, 176);
 		contentPane.add(scrollPane);
 		
-		
+		htmlEditorKit = new HTMLEditorKit();
+		document = new HTMLDocument();
 		textAreaChat = new JTextPane();
 		textAreaChat.setEditable(false);
-		textAreaChat.setEditorKit(new HTMLEditorKit());
-		
+		textAreaChat.setEditorKit(htmlEditorKit);
+		textAreaChat.setDocument(document);
+
 		scrollPane.setViewportView(textAreaChat);
-		
 		
 		textFieldEnviar = new JTextField();
 		textFieldEnviar.setBounds(10, 208, 312, 42);
@@ -111,36 +116,23 @@ public class Chat extends JFrame {
 	public void enviarMensaje() {
 		String textoEnviar = textFieldEnviar.getText();
 		textFieldEnviar.setText(null);
-		/*textAreaChat.getText().concat("\n > testBot: " + textoEnviar + "\n");
-		cliente.enviarMensaje(textoEnviar);*/
-		
-		
-		
+
 		if (!textoEnviar.isEmpty() && textoEnviar != null) {
 			textFieldEnviar.setText(null);
 			try {
-				textAreaChat.getDocument().insertString(textAreaChat.getDocument().getLength(), " > Yo: " + textoEnviar, null);
-				textAreaChat.getEditorKit();
-				//textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
-				
-			} catch (BadLocationException e) {
+				htmlEditorKit.insertHTML(document, document.getLength(), " > Yo: " + textoEnviar, 0, 0, null);
+				cliente.enviarMensaje(textoEnviar);
+			} catch (BadLocationException | IOException e) {
 				e.printStackTrace();
 			}
-			//textAreaChat.setText("\n > Yo: " + textoEnviar);
-			cliente.enviarMensaje(textoEnviar);
 		}
 	}
 	
 	public void actualizarChat(String mensaje) {
-		
-		//textAreaChat.setText(textAreaChat.getText().toString() + "\n > testBot: " + mensaje + "\n");
-		//textAreaChat.getText().concat("\n > testBot: " + mensaje + "\n");
 		try {
-			textAreaChat.getDocument().insertString(textAreaChat.getDocument().getLength(), "\n > testBot: " + mensaje + "\n", null);
-			textAreaChat.getEditorKit();
-			textAreaChat.setText("\n > testBot: " + mensaje + "\n");
+			htmlEditorKit.insertHTML(document, document.getLength(), " > testBot: " + mensaje, 0, 0, null);
 			
-		} catch (BadLocationException e) {
+		} catch (BadLocationException | IOException e) {
 			e.printStackTrace();
 		}
 	}
