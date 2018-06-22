@@ -5,6 +5,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import edu.unlam.asistente.ventana.Chat;
+import edu.unlam.asistente.ventana.Home;
 
 public class Cliente {
 	
@@ -19,10 +20,12 @@ public class Cliente {
 		this.nombreUsuario = "testUser";
 		try {
 
+			Home home = new Home(this);
 			Chat chat = new Chat(this);
 			
 			socket = new Socket(ip, puerto);
-			new ThreadEscucha(socket, nombreUsuario, chat).run();
+//			new ThreadEscucha(socket, nombreUsuario, chat).run();
+			new ThreadEscucha(socket, nombreUsuario, home).run();
 			
 			
 		} catch (IOException e) {
@@ -39,6 +42,11 @@ public class Cliente {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean abrirChatCon(String usuarioDestino) {
+		//TODO: SOLICITAR CONEXION CON "USUARIO DESTINO" PARA CHATEAR
+		return false;
 	}
 	
 	public static void main(String[] args) {

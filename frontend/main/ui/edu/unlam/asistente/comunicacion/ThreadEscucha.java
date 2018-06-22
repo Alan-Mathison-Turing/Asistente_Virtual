@@ -5,17 +5,26 @@ import java.io.ObjectInputStream;
 import java.net.Socket;
 
 import edu.unlam.asistente.ventana.Chat;
+import edu.unlam.asistente.ventana.Home;
 
 public class ThreadEscucha extends Thread{
 	private Socket socket;
 	private String nombre;
 	private Chat chat;
+	private Home home;
 
 	public ThreadEscucha(Socket socket, String nombre, Chat chat) {
 		this.socket = socket;
 		this.nombre = nombre;
 		this.chat = chat;
 		chat.setVisible(true);
+	}
+	
+	public ThreadEscucha(Socket socket, String nombre, Home home) {
+		this.socket = socket;
+		this.nombre = nombre;
+		this.home = home;
+		home.setVisible(true);
 	}
 
 	@Override
