@@ -5,6 +5,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import edu.unlam.asistente.ventana.Chat;
+import edu.unlam.asistente.ventana.Principal;
 
 public class Cliente {
 	
@@ -18,7 +19,7 @@ public class Cliente {
 		this.puerto = puerto;
 		this.nombreUsuario = "testUser";
 		try {
-
+			
 			Chat chat = new Chat(this);
 			
 			socket = new Socket(ip, puerto);
