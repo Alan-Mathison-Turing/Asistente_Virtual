@@ -22,7 +22,7 @@ public class Cliente {
 		try {
 			
 			Chat chat = new Chat(this);
-			Login login = new Login();
+			Login login = new Login(this);
 			socket = new Socket(ip, puerto);
 			new ThreadEscucha(socket, nombreUsuario, chat, login).run();
 			

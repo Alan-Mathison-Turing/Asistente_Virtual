@@ -6,18 +6,18 @@ import java.net.Socket;
 import edu.unlam.asistente.ventana.Chat;
 import edu.unlam.asistente.ventana.Login;
 
-public class ThreadEscucha extends Thread{
+public class ThreadEscucha extends Thread {
 	private Socket socket;
 	private String nombre;
 	private Chat chat;
 	private Login login;
 
-	public ThreadEscucha(Socket socket, String nombre, Chat chat,Login login) {
+	public ThreadEscucha(Socket socket, String nombre, Chat chat, Login login) {
 		this.socket = socket;
 		this.nombre = nombre;
 		this.chat = chat;
-		this.login=login;
-		login.setVisible(false);
+		this.login = login;
+		login.setVisible(true);
 	}
 
 	@Override
@@ -28,10 +28,14 @@ public class ThreadEscucha extends Thread{
 				ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
 				Mensaje msj = (Mensaje) entrada.readObject();
 				if (msj != null) {
+					//meter tipo de mensaje... si tipo de mensaje es para CHAT
 					System.out.println("ThreadEscucha INFO: mensaje recibido " + msj);
 					chat.actualizarChat(msj.getMensaje());
+					
+					//si el tipo de mensaje es LOGIN
+					//TODO: escribir codigo que cierra ventana de login y abre chat
 				}
-				
+
 			}
 
 		} catch (IOException | ClassNotFoundException e) {
