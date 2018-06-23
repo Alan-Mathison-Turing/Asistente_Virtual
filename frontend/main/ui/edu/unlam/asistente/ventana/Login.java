@@ -16,8 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 
-import com.socket.Message;
-import com.socket.SocketClient;
+
 
 import edu.unlam.asistente.comunicacion.Cliente;
 import edu.unlam.asistente.comunicacion.Mensaje;
@@ -39,6 +38,9 @@ public class Login extends JFrame {
 	private JLabel lblErrorLogin;
 	private JTextField tfServidor;
 	private JTextField tfPuertoServidor;
+	private String ip;
+	private int port=0;
+	//private final Cliente cliente;
 	
 	/**
 	 * Launch the application.
@@ -60,6 +62,7 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -86,25 +89,32 @@ public class Login extends JFrame {
 		
 		JButton btnIniciarSesion = new JButton("Iniciar Sesion");
 		btnIniciarSesion.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent arg0) {
-			  String serverAddr = tfServidor.getText(); int port = Integer.parseInt(tfPuertoServidor.getText());
+			
+			 ip= tfServidor.getText();
+			  port = Integer.parseInt(tfPuertoServidor.getText());
+			  Cliente cliente=new Cliente(ip,port); // lo necesito para la ventana chat
+				
 			  char clave[]=pwdSecreto.getPassword();
 				String clavedef=new String (clave);
-				String cliente=txtUsuario_1.getText();  
-				Cliente usuario=new Cliente(serverAddr,port);
-		        if(!serverAddr.isEmpty() && !tfPuertoServidor.getText().isEmpty() && !txtUsuario_1.getText().isEmpty() && clavedef.equals("1234")){
-		            try{
+				String usuario=txtUsuario_1.getText();  
+				
+				Login login = new Login();
+				//if(!serverAddr.isEmpty() && !tfPuertoServidor.getText().isEmpty() &&
+		        if( !txtUsuario_1.getText().isEmpty() && clavedef.equals("1234")){
+		        	
+		               
 		               client = new Socket();
-		               Chat chat= new Chat(usuario);
-		               clientThread = new ThreadEscucha(client,cliente,chat);
+		              
+		               Chat chat= new Chat(cliente);
+		               clientThread = new ThreadEscucha(client,usuario,chat,login);
 		               clientThread.start();
+		               
 		               JOptionPane.showMessageDialog(null, "Bienvenido\n has ingresado" + "satisfactoriamente al MegaChat", "Mensaje de Bienvenida", JOptionPane.INFORMATION_MESSAGE);
 		               chat.setVisible(true);
 		               
-		            }
-		            catch(Exception ex){
-		                
-		            }
+		            
 		        }else {
 		        	JOptionPane.showMessageDialog(null, "Acceso Denegado\n" + " Por favor ingrese un usuario o contraseña correctos","Mensaje de Error", JOptionPane.INFORMATION_MESSAGE);
 		        	lblErrorLogin.setVisible(true);

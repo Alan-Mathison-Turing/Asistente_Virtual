@@ -5,7 +5,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import edu.unlam.asistente.ventana.Chat;
-import edu.unlam.asistente.ventana.Principal;
+import edu.unlam.asistente.ventana.Login;
+
 
 public class Cliente {
 	
@@ -21,9 +22,9 @@ public class Cliente {
 		try {
 			
 			Chat chat = new Chat(this);
-			
+			Login login = new Login();
 			socket = new Socket(ip, puerto);
-			new ThreadEscucha(socket, nombreUsuario, chat).run();
+			new ThreadEscucha(socket, nombreUsuario, chat, login).run();
 			
 			
 		} catch (IOException e) {
@@ -44,5 +45,6 @@ public class Cliente {
 	
 	public static void main(String[] args) {
 		new Cliente("localhost", 8080);
+		
 	}
 }

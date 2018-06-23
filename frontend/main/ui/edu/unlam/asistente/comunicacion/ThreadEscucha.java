@@ -3,19 +3,21 @@ package edu.unlam.asistente.comunicacion;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
-
 import edu.unlam.asistente.ventana.Chat;
+import edu.unlam.asistente.ventana.Login;
 
 public class ThreadEscucha extends Thread{
 	private Socket socket;
 	private String nombre;
 	private Chat chat;
+	private Login login;
 
-	public ThreadEscucha(Socket socket, String nombre, Chat chat) {
+	public ThreadEscucha(Socket socket, String nombre, Chat chat,Login login) {
 		this.socket = socket;
 		this.nombre = nombre;
 		this.chat = chat;
-		chat.setVisible(true);
+		this.login=login;
+		login.setVisible(false);
 	}
 
 	@Override
