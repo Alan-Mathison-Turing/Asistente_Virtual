@@ -22,13 +22,13 @@
 	<classpathentry kind="lib" path="backend/lib/slf4j-api-1.7.7.jar"/>
 	<classpathentry kind="lib" path="backend/lib/slf4j-simple-1.7.7.jar"/>
 	<classpathentry kind="lib" path="backend/lib/jackson-core-2.2.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Octi/workspace/Giphy4J/LIB/gson-2.6.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Octi/workspace/Giphy4J/LIB/gson-2.6.2-javadoc.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Octi/workspace/Giphy4J/LIB/gson-2.6.2-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Octi/workspace/Giphy4J/LIB/commons-io-2.6/commons-io-2.6.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Octi/workspace/Giphy4J/LIB/commons-io-2.6/commons-io-2.6-javadoc.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Octi/workspace/Giphy4J/LIB/commons-io-2.6/commons-io-2.6-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Octi/workspace/Giphy4J/LIB/commons-io-2.6/commons-io-2.6-tests.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Octi/workspace/Giphy4J/LIB/commons-io-2.6/commons-io-2.6-test-sources.jar"/>
+	<classpathentry kind="lib" path="F:/eclipse-workspace/Asistente_Virtual/backend/lib/commons-io-2.6.jar"/>
+	<classpathentry kind="lib" path="F:/eclipse-workspace/Asistente_Virtual/backend/lib/commons-io-2.6-javadoc.jar"/>
+	<classpathentry kind="lib" path="F:/eclipse-workspace/Asistente_Virtual/backend/lib/commons-io-2.6-sources.jar"/>
+	<classpathentry kind="lib" path="F:/eclipse-workspace/Asistente_Virtual/backend/lib/commons-io-2.6-tests.jar"/>
+	<classpathentry kind="lib" path="F:/eclipse-workspace/Asistente_Virtual/backend/lib/commons-io-2.6-test-sources.jar"/>
+	<classpathentry kind="lib" path="F:/eclipse-workspace/Asistente_Virtual/backend/lib/gson-2.6.2.jar"/>
+	<classpathentry kind="lib" path="F:/eclipse-workspace/Asistente_Virtual/backend/lib/gson-2.6.2-javadoc.jar"/>
+	<classpathentry kind="lib" path="F:/eclipse-workspace/Asistente_Virtual/backend/lib/gson-2.6.2-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
