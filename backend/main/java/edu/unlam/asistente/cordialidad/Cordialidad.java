@@ -15,14 +15,14 @@ public class Cordialidad implements IDecision{
 	public String leerMensaje(String mensaje, String usuario) {
 		String respuesta = "";
 		if(mensaje.contains("hey") || mensaje.contains("hola") || mensaje.contains("buen")) {
-			return respuesta = saludar(mensaje);
+			return respuesta = saludar(mensaje, usuario);
 		}
 		if(mensaje.contains("chau") || mensaje.contains("adios") || mensaje.contains("hasta luego")){
-			return respuesta = despedirse();
+			return respuesta = despedirse(usuario);
 		}
 		
 		if(mensaje.contains("gracias")) {
-			return respuesta = agradecer();
+			return respuesta = agradecer(usuario);
 		}
 		
 		return  siguienteDecision.leerMensaje(mensaje, usuario);
@@ -38,27 +38,27 @@ public class Cordialidad implements IDecision{
 		siguienteDecision = decision;
 	}
 	
-	private String saludar(String saludo) {
+	private String saludar(String saludo, String usuario) {
 		Calendar calendario = new GregorianCalendar();
 		 if(calendario.get(Calendar.HOUR_OF_DAY)>= 13 && calendario.get(Calendar.HOUR_OF_DAY) <= 19 
 				 || calendario.get(Calendar.HOUR) > 01 && calendario.get(Calendar.HOUR) <= 07) {
-			 return "Buenas tardes @" + Bot.USUARIO + "!";
+			 return "Buenas tardes @" + usuario + "!";
 		 }
 		 else {
 			 if(calendario.get(Calendar.HOUR_OF_DAY) < 13) {
-				 return "Buenos días @" + Bot.USUARIO + "!";
+				 return "Buenos días @" + usuario + "!";
 				 }
 			 else
-				 return "Buenas noches @" + Bot.USUARIO + "!";
+				 return "Buenas noches @" + usuario + "!";
 		 }
 	}
 	 
-	private String agradecer() {
-		 return "No es nada, @" + Bot.USUARIO;
+	private String agradecer(String usuario) {
+		 return "No es nada, @" + usuario;
 	 }
 	
-	private String despedirse() {
-		 return "Hasta luego @" + Bot.USUARIO + "!";
+	private String despedirse(String usuario) {
+		 return "Hasta luego @" + usuario + "!";
 	}
 	
 }

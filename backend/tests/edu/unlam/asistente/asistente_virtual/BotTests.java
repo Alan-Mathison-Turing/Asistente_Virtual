@@ -19,6 +19,9 @@ public class BotTests {
 	public final static String TEST_USER = "testUser";
 	
 	public final static Date FECHA_HORA = new GregorianCalendar(2018, 3, 1, 15, 15, 0).getTime();
+	public final static String diaSemana[] = {"lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"};
+	public final static String meses[] = {"enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"};
+	
 	Bot jenkins;
 	
 	@Before
@@ -29,13 +32,13 @@ public class BotTests {
 	@Test
 	public void mensajeInentendible() {
 		String rta = jenkins.leerMensaje("audwhkawud", USUARIO);
-		assertEquals(Bot.MSG_NO_ENTIENDO, rta);
+		assertEquals(String.format(Bot.MSG_NO_ENTIENDO, USUARIO), rta);
 	}
 	
 	@Test
 	public void mensajeVacio() {
 		String rta = jenkins.leerMensaje("", USUARIO);
-		assertEquals(Bot.MSG_NO_ENTIENDO, rta);
+		assertEquals(String.format(Bot.MSG_NO_ENTIENDO, USUARIO), rta);
 	}
 	
 	@Test
@@ -80,7 +83,7 @@ public class BotTests {
 		};
 		for (String mensaje : mensajes) {
 			Assert.assertEquals(
-					"No es nada, @" + Bot.USUARIO,
+					"No es nada, @" + USUARIO,
 					jenkins.leerMensaje(mensaje, USUARIO)
 			);
 		}
@@ -95,7 +98,7 @@ public class BotTests {
 		};
 		for (String mensaje : mensajes) {
 			Assert.assertEquals(
-					"Hasta luego @" + Bot.USUARIO + "!",
+					"Hasta luego @" + USUARIO + "!",
 					jenkins.leerMensaje(mensaje, USUARIO)
 			);
 		}
@@ -118,6 +121,7 @@ public class BotTests {
 	
 	@Test
 	public void fecha() {
+		Calendar calendario = Calendar.getInstance();
 		String[] mensajes = {
 				"¿qué día es, @jenkins?",
 				"@bot, la fecha por favor",
@@ -125,7 +129,9 @@ public class BotTests {
 		};
 		for (String mensaje : mensajes) {
 			Assert.assertEquals(
-					"@delucas hoy es 5 de mayo de 2018",
+					"@delucas hoy es " + calendario.get(Calendar.DAY_OF_MONTH) + " de " + 
+							meses[calendario.get(Calendar.MONTH)] + " de " + 
+							calendario.get(Calendar.YEAR),
 					jenkins.leerMensaje(mensaje, USUARIO)
 			);
 		}
@@ -138,7 +144,7 @@ public class BotTests {
 		};
 		for (String mensaje : mensajes) {
 			Assert.assertEquals(
-					"@delucas hoy es sábado",
+					"@delucas hoy es " + diaSemana[Calendar.DAY_OF_WEEK - 1],
 					jenkins.leerMensaje(mensaje, USUARIO)
 			);
 		}
@@ -248,7 +254,7 @@ public class BotTests {
 	@Test
 	public void magnitudInvalida() {
 		Assert.assertEquals(
-				Bot.MSG_NO_ENTIENDO,
+				String.format(Bot.MSG_NO_ENTIENDO, USUARIO),
 				jenkins.leerMensaje("@jenkins cuántos gramos son 1 rama", USUARIO)
 			);
 	}
@@ -268,6 +274,16 @@ public class BotTests {
 				jenkins.leerMensaje("@jenkins cuántos gramos son 1 kilo?", USUARIO)
 			);
 		
+		Assert.assertEquals(
+				"@delucas 1,00 kilo equivale a 1000,00 gramos",
+				jenkins.leerMensaje("@jenkins, cuántos gramos son 1 kilo?", USUARIO)
+			);
+		
+		Assert.assertEquals(
+				"@delucas 1,00 kilo equivale a 1000,00 gramos",
+				jenkins.leerMensaje("@jenkins,cuántos gramos son 1 kilo?", USUARIO)
+			);
+				
 		Assert.assertEquals(
 				"@delucas 1,00 kilo equivale a 1000,00 gramos",
 				jenkins.leerMensaje("@jenkins cuántos gramos hay en 1 kilo?", USUARIO)
@@ -580,6 +596,52 @@ public class BotTests {
 	public void armarEventoConRegexFailMesInvalidoTest() {
 		Assert.assertEquals("@testUser necesito más información para guardar este evento o algún dato es incorrecto, por favor intentalo de nuevo.",
 				jenkins.leerMensaje("@jenkins agendame un evento test el 21/21/2018 a las 1:12", TEST_USER));
+	}
+
+	@Test
+	public void busquedaExistente() {
+		Assert.assertEquals("https://es.wikipedia.org/wiki/Diego_Armando_Maradona\n" 
+							+"Diego Armando Maradona es un exfutbolista y director técnico "
+							+ "argentino. Actualmente se desempeña como presidente y "
+							+ "director deportivo del FC Dinamo Brest de la Liga Premier de Bielorrusia.", 
+							jenkins.leerMensaje("@jenkins quien es Diego Maradona ?", USUARIO));
+	}
+	
+	@Test
+	public void busquedaVariosResultados() {
+		Assert.assertEquals("https://es.wikipedia.org/wiki/Pablo\n" + 
+							"El nombre de Pablo puede referirse a:" + 
+							"Pablo (nombre).\n" + 
+							"Pablo de Tarso, apóstol, teólogo y escritor cristiano del siglo I.\n" + 
+							"Pablo de Tebas, eremita egipcio (228-342).\n" + 
+							"Pablo I, papa de 757 a 767.\n" + 
+							"Pablo II, papa de 1464 a 1471.\n" + 
+							"Pablo III, papa de 1534 a 1549.\n" + 
+							"Pablo IV, papa de 1555 a 1559.\n" + 
+							"Pablo V, papa de 1605 a 1621.\n" + 
+							"Pablo VI, papa de 1963 a 1978.\n" + 
+							"Pablo el Diácono, monje benedictino del siglo VIII.\n" + 
+							"Pablo Picasso, pintor y escultor español, creador del cubismo.\n" + 
+							"Pablo Neruda, poeta chileno, premio Nobel de Literatura 1971.\n" + 
+							"Pablo Escobar, narcotraficante colombiano.", 
+							jenkins.leerMensaje("@jenkins, investiga sobre Pablo", USUARIO));
+	}
+	
+	@Test
+	public void busquedaRara() {
+		Assert.assertEquals("http://www.wordreference.com/es/translation.asp?tranword=term\n"
+							+ "term - Translation to Spanish, pronunciation, and forum discussions.", 
+							jenkins.leerMensaje("@jenkins, qué es term?", USUARIO));
+	}
+	
+	@Test
+	public void busquedaVacia() {
+		Assert.assertEquals("Disculpa... no entiendo el pedido, @delucas ¿podrás repetirlo?", jenkins.leerMensaje("@jenkins, cuál es", USUARIO));
+	}
+	
+	@Test
+	public void busquedaEspacio() {
+		Assert.assertEquals("Disculpa... no entiendo el pedido, @delucas ¿podrás repetirlo?", jenkins.leerMensaje("@jenkins, cuál es     ", USUARIO));
 	}
 	
 }
