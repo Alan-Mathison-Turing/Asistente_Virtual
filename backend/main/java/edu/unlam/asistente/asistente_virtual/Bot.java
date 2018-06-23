@@ -41,8 +41,6 @@ public class Bot implements IDecision {
 	public String leerMensaje(String mensaje, String usuario) {
 		mensaje = removerTildes(mensaje.toLowerCase());
 		
-		return "https://media0.giphy.com/media/l41m0CPz6UCnaUmxG/giphy.gif";
-		/*
 		try {
 			Cordialidad cordialidad = new Cordialidad();
 			LeyesRobotica leyesRobotica = new LeyesRobotica();
@@ -66,7 +64,7 @@ public class Bot implements IDecision {
 		}
 		catch(Exception e) {
 			return String.format(MSG_NO_ENTIENDO, usuario);
-		}*/
+		}
 
 	}
 	
