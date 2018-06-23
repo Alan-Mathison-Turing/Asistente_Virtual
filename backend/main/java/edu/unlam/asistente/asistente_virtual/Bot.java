@@ -9,6 +9,7 @@ import edu.unlam.asistente.calendario.Calendario;
 import edu.unlam.asistente.chucknorris.ChuckNorrisFacts;
 import edu.unlam.asistente.conversor_unidades.ConversorUnidad;
 import edu.unlam.asistente.cordialidad.Cordialidad;
+import edu.unlam.asistente.imagenes.gif.Gif;
 import edu.unlam.asistente.leyes_robotica.LeyesRobotica;
 import edu.unlam.asistente.recordatorioEventos.GestionRecordatorio;
 
@@ -51,6 +52,7 @@ public class Bot implements IDecision {
 			Calendario calendario = new Calendario();
 			GestionRecordatorio gestionRecordatorio = new GestionRecordatorio();
 			BusquedaWeb busquedaWeb = new BusquedaWeb();
+			Gif gif = new Gif();
 			this.setSiguienteDecision(cordialidad);
 			cordialidad.setSiguienteDecision(leyesRobotica);
 			leyesRobotica.setSiguienteDecision(chuckFacts);
@@ -59,6 +61,7 @@ public class Bot implements IDecision {
 			gestionRecordatorio.setSiguienteDecision(conversorUnidad);
 			conversorUnidad.setSiguienteDecision(busquedaWeb);
 			busquedaWeb.setSiguienteDecision(calendario);
+			calendario.setSiguienteDecision(gif);
 			return siguienteDecision.leerMensaje(mensaje, usuario);
 		}
 		catch(Exception e) {
