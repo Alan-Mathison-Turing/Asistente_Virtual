@@ -29,16 +29,22 @@ public class ThreadEscucha extends Thread {
 				Mensaje msj = (Mensaje) entrada.readObject();
 				if (msj != null) {
 					//meter tipo de mensaje... si tipo de mensaje es para CHAT
-					System.out.println("ThreadEscucha INFO: mensaje recibido " + msj);
-					chat.actualizarChat(msj.getMensaje());
+					if(msj.type.equals("Mensaje")) {
+						if(msj.getNombreUsuario().equals(this.nombre)){
+							System.out.println("ThreadEscucha INFO: mensaje recibido " + msj);
+							chat.actualizarChat(msj.getMensaje());
+	                    }
+					}else if(msj.type.equals("login")){
 					
+					         login.dispose();
+					         chat.setVisible(true);
 					//si el tipo de mensaje es LOGIN
 					//TODO: escribir codigo que cierra ventana de login y abre chat
 				}
 
 			}
 
-		} catch (IOException | ClassNotFoundException e) {
+		}} catch (IOException | ClassNotFoundException e) {
 			System.err.println("ThreadEscucha ERROR: ocurrio un error durante la lectura de mensajes");
 			e.printStackTrace();
 		}

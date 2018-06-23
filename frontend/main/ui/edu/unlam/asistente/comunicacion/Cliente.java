@@ -34,7 +34,8 @@ public class Cliente {
 	
 	public void enviarMensaje(String mensaje) {
 		try {
-			Mensaje m = new Mensaje(mensaje, nombreUsuario);
+			//Mensaje m = new Mensaje(mensaje, nombreUsuario);
+			String m = null;
 			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
 			salida.writeObject(m);
 			
