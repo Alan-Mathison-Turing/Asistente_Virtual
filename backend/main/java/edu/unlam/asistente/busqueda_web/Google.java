@@ -19,7 +19,7 @@ public class Google {
 
 	private final static String GOOGLE_KEY = "AIzaSyAgnWeCMRhohRG9Af_cQNpbognP2-XkZbU";
 	private final static String CX = "001277225422276918147:okw_xih_z8k";
-	private final static String GOOGLE_SEARCH = "https://www.googleapis.com/customsearch/v1/siterestrict?key=" + GOOGLE_KEY + "&cx=" + CX + "&gl=ar&num=1&q=";
+	private final static String GOOGLE_SEARCH = "https://www.googleapis.com/customsearch/v1/siterestrict?key=" + GOOGLE_KEY + "&cx=" + CX + "&gl=ar&num=1";
 	
 	private String urlPrimerResultado;
 	private String contenidoArticulo;
@@ -28,7 +28,7 @@ public class Google {
 		URL url;
 		
 		try {
-			url = new URL(GOOGLE_SEARCH + URLEncoder.encode(terminoBusqueda, "UTF-8"));
+			url = new URL(GOOGLE_SEARCH + "&q=" + URLEncoder.encode(terminoBusqueda, "UTF-8"));
 			
 			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 			connection.setRequestMethod("GET");

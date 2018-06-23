@@ -23,7 +23,7 @@ public class BusquedaWeb implements IDecision {
 			if(terminoBusqueda.equals("")) return siguienteDecision.leerMensaje(mensaje, usuario);
 			return busquedaWeb(terminoBusqueda);
 		}
-
+		
 		return siguienteDecision.leerMensaje(mensaje, usuario);
 	}
 

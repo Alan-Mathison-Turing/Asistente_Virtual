@@ -1,14 +1,18 @@
 package edu.unlam.asistente.ventana;
 
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -130,7 +134,14 @@ public class Chat extends JFrame {
 	
 	public void actualizarChat(String mensaje) {
 		try {
-			htmlEditorKit.insertHTML(document, document.getLength(), " > testBot: " + mensaje, 0, 0, null);
+			if(mensaje.endsWith(".gif")) {
+				Icon myImgIcon = new ImageIcon(mensaje);
+				JLabel imageLbl = new JLabel(myImgIcon);
+				add(imageLbl, BorderLayout.CENTER);
+				imageLbl.setVisible(true);
+			} else {
+				htmlEditorKit.insertHTML(document, document.getLength(), " > testBot: " + mensaje, 0, 0, null);	
+			}			
 			textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
 		} catch (BadLocationException | IOException e) {
 			e.printStackTrace();
