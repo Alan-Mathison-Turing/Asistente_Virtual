@@ -1,14 +1,18 @@
 package edu.unlam.asistente.ventana;
 
 
-import java.awt.BorderLayout;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URL;
 
-import javax.swing.Icon;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -34,8 +38,10 @@ public class Chat extends JFrame {
 	private JTextField textFieldEnviar;
 	private final Cliente cliente;
 	private JTextPane textAreaChat;
+	JLabel imageLabel = new JLabel();
 	HTMLEditorKit htmlEditorKit;
 	HTMLDocument document;
+	Graphics graphic;
 
 	/**
 	 * Launch the application.
@@ -72,7 +78,7 @@ public class Chat extends JFrame {
 	 */
 	public Chat(final Cliente cliente) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(200, 200, 450, 500);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -80,22 +86,11 @@ public class Chat extends JFrame {
 		
 		this.cliente = cliente; 
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 397, 176);
-		
-		contentPane.add(scrollPane);
-		
 		htmlEditorKit = new HTMLEditorKit();
 		document = new HTMLDocument();
-		textAreaChat = new JTextPane();
-		textAreaChat.setEditable(false);
-		textAreaChat.setEditorKit(htmlEditorKit);
-		textAreaChat.setDocument(document);
-
-		scrollPane.setViewportView(textAreaChat);
 		
 		textFieldEnviar = new JTextField();
-		textFieldEnviar.setBounds(10, 208, 312, 42);
+		textFieldEnviar.setBounds(10, 408, 312, 42);
 		textFieldEnviar.setColumns(10);
 		contentPane.add(textFieldEnviar);
 			
@@ -113,8 +108,19 @@ public class Chat extends JFrame {
 				enviarMensaje();
 			}
 		});
-		btnEnviar.setBounds(332, 218, 89, 23);
+		btnEnviar.setBounds(335, 418, 89, 23);
 		contentPane.add(btnEnviar);
+		textAreaChat = new JTextPane();
+		textAreaChat.setBounds(10, 11, 395, 386);
+		contentPane.add(textAreaChat);
+		textAreaChat.setEditable(false);
+		textAreaChat.setEditorKit(htmlEditorKit);
+		textAreaChat.setDocument(document);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 11, 397, 386);
+		
+		contentPane.add(scrollPane);
 	}
 	
 	public void enviarMensaje() {
@@ -125,6 +131,7 @@ public class Chat extends JFrame {
 			textFieldEnviar.setText(null);
 			try {
 				htmlEditorKit.insertHTML(document, document.getLength(), " > Yo: " + textoEnviar, 0, 0, null);
+				textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
 				cliente.enviarMensaje(textoEnviar);
 			} catch (BadLocationException | IOException e) {
 				e.printStackTrace();
@@ -135,10 +142,15 @@ public class Chat extends JFrame {
 	public void actualizarChat(String mensaje) {
 		try {
 			if(mensaje.endsWith(".gif")) {
-				Icon myImgIcon = new ImageIcon(mensaje);
-				JLabel imageLbl = new JLabel(myImgIcon);
-				add(imageLbl, BorderLayout.CENTER);
-				imageLbl.setVisible(true);
+				URL url = new URL(mensaje);
+				ImageIcon icon = new ImageIcon(url);
+				htmlEditorKit.insertHTML(document, document.getLength(), "<br/>", 0, 0, null);
+				textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
+				textAreaChat.insertIcon(icon);
+				
+			} else if(mensaje.endsWith(".jpg")) {
+				String text = "<img src=\"" + mensaje + "\" height=\"50\" width=\"50\"></img>"; 
+				htmlEditorKit.insertHTML(document, document.getLength(), " > testBot: " + text, 0, 0, null);
 			} else {
 				htmlEditorKit.insertHTML(document, document.getLength(), " > testBot: " + mensaje, 0, 0, null);	
 			}			

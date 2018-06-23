@@ -24,9 +24,11 @@ public class Gif implements IDecision {
 		Matcher matcher = pattern.matcher(mensaje);
 
 		if (mensaje.matches(REGEX_GIF)) {
-			String respuesta = null;
 			matcher.find();
-			return this.obtenerGifUrl(matcher.group(1));
+			String webURLParseada[] = (this.obtenerGifUrl(matcher.group(1))).split("/");
+			String urlGif = "https://i.giphy.com/" + webURLParseada[4] + ".gif";
+			
+			return urlGif;
 		}
 		return siguienteDecision.leerMensaje(mensaje, usuario);
 	}
