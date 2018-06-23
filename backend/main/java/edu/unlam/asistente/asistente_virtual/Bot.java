@@ -3,11 +3,13 @@ package edu.unlam.asistente.asistente_virtual;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import edu.unlam.asistente.busqueda_web.BusquedaWeb;
 import edu.unlam.asistente.calculadora.Calculadora;
 import edu.unlam.asistente.calendario.Calendario;
 import edu.unlam.asistente.chucknorris.ChuckNorrisFacts;
 import edu.unlam.asistente.conversor_unidades.ConversorUnidad;
 import edu.unlam.asistente.cordialidad.Cordialidad;
+import edu.unlam.asistente.imagenes.gif.Gif;
 import edu.unlam.asistente.leyes_robotica.LeyesRobotica;
 import edu.unlam.asistente.recordatorioEventos.GestionRecordatorio;
 
@@ -19,8 +21,7 @@ public class Bot implements IDecision {
 	private String nombre;
 	private IDecision siguienteDecision;
 	
-	public final static String USUARIO = "delucas";	
-	public final static String MSG_NO_ENTIENDO = "Disculpa... no entiendo el pedido, @" + USUARIO + " ¿podrás repetirlo?";
+	public final static String MSG_NO_ENTIENDO = "Disculpa... no entiendo el pedido, @%s ¿podrás repetirlo?";
 	
 	public Bot(String nombre) {
 		this.nombre = nombre;
@@ -48,17 +49,21 @@ public class Bot implements IDecision {
 			ConversorUnidad conversorUnidad = new ConversorUnidad();
 			Calendario calendario = new Calendario();
 			GestionRecordatorio gestionRecordatorio = new GestionRecordatorio();
+			BusquedaWeb busquedaWeb = new BusquedaWeb();
+			Gif gif = new Gif();
 			this.setSiguienteDecision(cordialidad);
 			cordialidad.setSiguienteDecision(leyesRobotica);
 			leyesRobotica.setSiguienteDecision(chuckFacts);
 			chuckFacts.setSiguienteDecision(calculadora);
 			calculadora.setSiguienteDecision(gestionRecordatorio);
 			gestionRecordatorio.setSiguienteDecision(conversorUnidad);
-			conversorUnidad.setSiguienteDecision(calendario);
+			conversorUnidad.setSiguienteDecision(busquedaWeb);
+			busquedaWeb.setSiguienteDecision(calendario);
+			calendario.setSiguienteDecision(gif);
 			return siguienteDecision.leerMensaje(mensaje, usuario);
 		}
 		catch(Exception e) {
-			return MSG_NO_ENTIENDO;
+			return String.format(MSG_NO_ENTIENDO, usuario);
 		}
 
 	}
