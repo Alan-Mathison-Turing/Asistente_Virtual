@@ -41,30 +41,29 @@ public class Bot implements IDecision {
 	public String leerMensaje(String mensaje, String usuario) {
 		mensaje = removerTildes(mensaje.toLowerCase());
 		
-		try {
-			Cordialidad cordialidad = new Cordialidad();
-			LeyesRobotica leyesRobotica = new LeyesRobotica();
-			ChuckNorrisFacts chuckFacts = new ChuckNorrisFacts();
-			Calculadora calculadora = new Calculadora();
-			ConversorUnidad conversorUnidad = new ConversorUnidad();
-			Calendario calendario = new Calendario();
-			GestionRecordatorio gestionRecordatorio = new GestionRecordatorio();
-			BusquedaWeb busquedaWeb = new BusquedaWeb();
-			Gif gif = new Gif();
-			this.setSiguienteDecision(cordialidad);
-			cordialidad.setSiguienteDecision(leyesRobotica);
-			leyesRobotica.setSiguienteDecision(chuckFacts);
-			chuckFacts.setSiguienteDecision(calculadora);
-			calculadora.setSiguienteDecision(gestionRecordatorio);
-			gestionRecordatorio.setSiguienteDecision(conversorUnidad);
-			conversorUnidad.setSiguienteDecision(busquedaWeb);
-			busquedaWeb.setSiguienteDecision(gif);
-			gif.setSiguienteDecision(calendario);
-			return siguienteDecision.leerMensaje(mensaje, usuario);
-		}
-		catch(Exception e) {
-			return String.format(MSG_NO_ENTIENDO, usuario);
-		}
+		Cordialidad cordialidad = new Cordialidad();
+		LeyesRobotica leyesRobotica = new LeyesRobotica();
+		ChuckNorrisFacts chuckFacts = new ChuckNorrisFacts();
+		Calculadora calculadora = new Calculadora();
+		ConversorUnidad conversorUnidad = new ConversorUnidad();
+		Calendario calendario = new Calendario();
+		GestionRecordatorio gestionRecordatorio = new GestionRecordatorio();
+		BusquedaWeb busquedaWeb = new BusquedaWeb();
+		Gif gif = new Gif();
+		Default def = new Default();
+		
+		this.setSiguienteDecision(cordialidad);
+		cordialidad.setSiguienteDecision(leyesRobotica);
+		leyesRobotica.setSiguienteDecision(chuckFacts);
+		chuckFacts.setSiguienteDecision(calculadora);
+		calculadora.setSiguienteDecision(gestionRecordatorio);
+		gestionRecordatorio.setSiguienteDecision(conversorUnidad);
+		conversorUnidad.setSiguienteDecision(busquedaWeb);
+		busquedaWeb.setSiguienteDecision(gif);
+		gif.setSiguienteDecision(calendario);
+		calendario.setSiguienteDecision(def);
+		
+		return siguienteDecision.leerMensaje(mensaje, usuario);
 
 	}
 	
