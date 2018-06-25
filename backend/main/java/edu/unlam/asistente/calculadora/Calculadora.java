@@ -12,12 +12,14 @@ import edu.unlam.asistente.asistente_virtual.IDecision;
  * y porcentajes. Administra distintos niveles de paréntesis para cálculos más
  * complejos. <br>
  */
-public class Calculadora implements IDecision{
-
+public class Calculadora implements IDecision {
+	/**
+	 * Cantidad de números y símbolos en una cuenta. <br>
+	 */
 	private int cantidad = 0;
 
 	/**
-	 * Centa en las calculadora. <br>
+	 * Cuenta en las calculadora. <br>
 	 */
 	private String cuenta;
 
@@ -46,36 +48,42 @@ public class Calculadora implements IDecision{
 	 * <p>
 	 * Permite espacios que luego van a ser ignorados. <br>
 	 */
-	private static final Pattern formato_cuenta = Pattern.compile("^[\\d\\+\\-\\/\\*\\.\\^\\%\\(\\)de ]*$");
+	private static final Pattern FORMATO_CUENTA = Pattern.compile("^[\\d\\+\\-\\/\\*\\.\\^\\%\\(\\)de ]*$");
 
 	/**
 	 * Regex para controlar que no haya símbolos al principio o al final de la
 	 * cuenta de manera ilegal. <br>
 	 */
-	private static final Pattern control_sintaxis_erronea = Pattern
+	private static final Pattern CONTROL_SINTAXIS_ERRONEA = Pattern
 			.compile("(^[\\/\\*\\^\\)\\%]|[\\+\\-\\/\\*\\^\\.\\(\\%]$)");
 
 	/**
 	 * Regex de un número real. <br>
 	 */
-	private static final Pattern numero = Pattern.compile("[\\d\\.]+");
+	private static final Pattern NUMERO = Pattern.compile("[\\d\\.]+");
 
 	/**
 	 * Regex de símbolos de una cuenta. <br>
 	 */
-	private static final Pattern simbolo = Pattern.compile("[\\+\\-\\*\\/\\^\\%\\(\\)]");
+	private static final Pattern SIMBOLO = Pattern.compile("[\\+\\-\\*\\/\\^\\%\\(\\)]");
 
 	/**
 	 * Matcheador para los regex. <br>
 	 */
 	private Matcher matcher;
 
-	
-	/*
-	 * Utilizado para indicar cual es el siguiente que debe intentar resolver la solicitud.
+	/**
+	 * Indica cuál es la siguiente decisión que debe intentar resolver la
+	 * solicitud. <br>
 	 */
 	private IDecision siguienteDecision;
-	
+
+	/**
+	 * Constructor por default. <br>
+	 */
+	public Calculadora() {
+	}
+
 	/**
 	 * Crea una cuenta a resolver usando las características de una calculadora.
 	 * <br>
@@ -86,53 +94,82 @@ public class Calculadora implements IDecision{
 	 *             El formato de la cuenta no es correcto. <br>
 	 */
 	public Calculadora(final String cuenta) throws IllegalArgumentException {
-
 		try {
 			this.validarFormato(cuenta);
+			this.cuenta = cuenta;
+			this.corregirCuenta();
+			this.iniciarVectores();
+			this.extraerNumeros();
+			this.extraerSimbolos();
 		} catch (IllegalArgumentException e) {
 			throw new IllegalArgumentException(e.getMessage());
 		}
-		this.cuenta = cuenta;
-		this.corregirCuenta();
-		this.iniciarVectores();
-		this.extraerNumeros();
-		this.extraerSimbolos();
 	}
 
-	// Constructor genérico para poder implementar Chain of Responsability.
-	public Calculadora() {
-	}
-	
-	
+	/**
+	 * Lee un mensaje pedido por el usuario.
+	 * <p>
+	 * En caso de que el mensaje pida una cuenta a resolver, esta se resuelve,
+	 * sino avanza a la siguiente posible petición. <br>
+	 */
 	@Override
 	public String leerMensaje(String mensaje, String usuario) {
-		if(mensaje.contains("cuanto es")) {
+		if (mensaje.contains("cuanto es")) {
 			int posicionInicial;
-			String respuesta = "";
-			if (mensaje.contains("el"))
+			if (mensaje.contains("el")) {
 				posicionInicial = mensaje.indexOf("el") + 2;
-			else
+			} else {
 				posicionInicial = mensaje.indexOf("es") + 2;
-			Calculadora calculadora = new Calculadora(mensaje.substring(posicionInicial, mensaje.length()));
-			int resultado = (int)calculadora.resolver();
-			return respuesta = "@" + usuario + " " + resultado;
+			}
+			try {
+				return new String("@" + usuario + " "
+						+ (int) new Calculadora(mensaje.substring(posicionInicial, mensaje.length())).resolver());
+			} catch (IllegalArgumentException e) {
+				return new String("@" + usuario + " " + e.getMessage());
+			}
 		}
-		return  siguienteDecision.leerMensaje(mensaje, usuario);
+		return this.siguienteDecision.leerMensaje(mensaje, usuario);
 	}
 
 	@Override
 	public IDecision getSiguienteDecision() {
-		return siguienteDecision;
+		return this.siguienteDecision;
 	}
 
 	@Override
 	public void setSiguienteDecision(IDecision decision) {
-		siguienteDecision = decision;
+		this.siguienteDecision = decision;
 	}
-	
-	
-	
-	
+
+	/**
+	 * Obtiene el siguiente valor de la cuenta. <br>
+	 */
+	private double obtenerSiguienteValor() {
+		double auxiliar;
+		// Compruebo si el próximo símbolo es un paréntesis. De serlo,
+		// resuelvo todo lo de adentro.
+		if (this.simbolos[this.indiceSimbolo + 1] == '(') {
+			this.indiceSimbolo += 2;
+			auxiliar = this.resolver();
+		} else {
+			auxiliar = this.numeros[this.indiceNumero];
+			this.controlarIndices(1, 1);
+		}
+		return auxiliar;
+	}
+
+	/**
+	 * Controla los índices. <br>
+	 * 
+	 * @param indiceNumero
+	 *            Cantidad de posiciones a mover el índice de números. <br>
+	 * @param indiceSimbolo
+	 *            Cantidad de posiciones a mover el índice de símbolos. <br>
+	 */
+	private void controlarIndices(final int indiceNumero, final int indiceSimbolo) {
+		this.indiceNumero += indiceNumero;
+		this.indiceSimbolo += indiceSimbolo;
+	}
 
 	/**
 	 * Resuelve la cuenta. <br>
@@ -143,118 +180,61 @@ public class Calculadora implements IDecision{
 		double resultado = 0;
 		double auxiliar = 0;
 
-		auxiliar = this.numeros[indiceNumero];
-		indiceNumero++;
+		auxiliar = this.numeros[this.indiceNumero];
+		this.indiceNumero++;
 
-		while (indiceNumero + indiceSimbolo < cantidad) {
+		while (this.indiceNumero + this.indiceSimbolo < this.cantidad) {
 			switch (this.simbolos[this.indiceSimbolo]) {
 			case '+':
 				resultado += auxiliar;
-				// Compruebo si el próximo símbolo es un paréntesis. De serlo,
-				// resuelvo todo lo de adentro y eso lo multiplico.
-				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
-					this.indiceSimbolo += 2;
-					auxiliar = this.resolver();
-				} else {
-					auxiliar = this.numeros[this.indiceNumero];
-					this.indiceNumero++;
-					this.indiceSimbolo++;
-				}
+				auxiliar = this.obtenerSiguienteValor();
 				break;
 
 			case '-':
 				resultado += auxiliar;
-				// Compruebo si el próximo símbolo es un paréntesis. De serlo,
-				// resuelvo todo lo de adentro y eso lo multiplico.
-				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
-					this.indiceSimbolo += 2;
-					auxiliar = this.resolver() * (-1);
-				} else {
-					auxiliar = this.numeros[this.indiceNumero] * (-1);
-					this.indiceNumero++;
-					this.indiceSimbolo++;
-				}
+				auxiliar = this.obtenerSiguienteValor() * (-1);
 				break;
 
 			case '*':
-				// Compruebo si el próximo símbolo es un paréntesis. De serlo,
-				// resuelvo todo lo de adentro y eso lo multiplico.
-				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
-					this.indiceSimbolo += 2;
-					auxiliar *= this.resolver();
-				} else {
-					auxiliar *= this.numeros[this.indiceNumero];
-					this.indiceNumero++;
-					this.indiceSimbolo++;
-				}
+				auxiliar *= this.obtenerSiguienteValor();
 				break;
 
 			case '/':
-				// Compruebo si el próximo símbolo es un paréntesis. De serlo,
-				// resuelvo todo lo de adentro y eso lo multiplico.
-				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
-					this.indiceSimbolo += 2;
-					auxiliar /= this.resolver();
-				} else {
-					auxiliar /= this.numeros[this.indiceNumero];
-					this.indiceNumero++;
-					this.indiceSimbolo++;
-				}
+				auxiliar /= this.obtenerSiguienteValor();
 				break;
 
 			case '(':
 				// Para que no se pase el índice. En este caso volvemos uno
 				// atrás para número.
-				this.indiceSimbolo++;
-				this.indiceNumero--;
+				this.controlarIndices(-1, 1);
 				auxiliar = this.resolver();
-
 				break;
 
 			case ')':
 				// Este caso no nos interesa el break ya que nos interesa el
 				// resultado adentro de los paréntesis.
-
 				resultado += auxiliar;
-
-				this.indiceSimbolo++;
+				this.controlarIndices(0, 1);
 				return resultado;
+
 			case '^':
-
-				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
-					this.indiceSimbolo += 2;
-					auxiliar = Math.pow(auxiliar, this.resolver());
-				} else {
-					auxiliar = Math.pow(auxiliar, this.numeros[this.indiceNumero]);
-					this.indiceNumero++;
-					this.indiceSimbolo++;
-				}
-
+				auxiliar = Math.pow(auxiliar, this.obtenerSiguienteValor());
 				break;
 
-			case '?': // este seria el caso de raiz, si el caracter fuera ?.
-						// Para probar, usar el test raizCuadrada
-
-				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
-					this.indiceSimbolo += 2;
-					auxiliar = Math.sqrt(this.resolver());
-				} else {
-					auxiliar = Math.sqrt(auxiliar);
-					this.indiceNumero++;
-					this.indiceSimbolo++;
-				}
-
-				break;
+			// case '?': // este seria el caso de raiz, si el caracter fuera ?.
+			// // Para probar, usar el test raizCuadrada
+			//
+			// if (this.simbolos[this.indiceSimbolo + 1] == '(') {
+			// this.indiceSimbolo += 2;
+			// auxiliar = Math.sqrt(this.resolver());
+			// } else {
+			// auxiliar = Math.sqrt(auxiliar);
+			// this.controlarIndices(1, 1);
+			// }
+			// break;
 
 			case '%':
-				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
-					this.indiceSimbolo += 2;
-					auxiliar = this.resolver() * auxiliar / 100;
-				} else {
-					auxiliar = this.numeros[this.indiceNumero] * auxiliar / 100;
-					this.indiceNumero++;
-					this.indiceSimbolo++;
-				}
+				auxiliar = this.obtenerSiguienteValor() * auxiliar / 100;
 				break;
 			}
 		}
@@ -273,13 +253,13 @@ public class Calculadora implements IDecision{
 		int contadorAperturaParentesis = 0, contadorCierreParentesis = 0;
 
 		// Compruebo que no haya carecteres que no sean de una cuenta.
-		this.matcher = formato_cuenta.matcher(cuenta);
+		this.matcher = FORMATO_CUENTA.matcher(cuenta);
 		if (!this.matcher.find()) {
 			throw new IllegalArgumentException("Hay caracteres que no pertenecen a la sintáxis de una cuenta.");
 		}
 
 		// Comprubo que no haya errores de sintáxis.
-		this.matcher = control_sintaxis_erronea.matcher(cuenta);
+		this.matcher = CONTROL_SINTAXIS_ERRONEA.matcher(cuenta);
 		if (this.matcher.find()) {
 			throw new IllegalArgumentException("Hay errores de sintaxis.");
 		}
@@ -302,14 +282,14 @@ public class Calculadora implements IDecision{
 	 * Corrige la cuenta para evitar problemas de procesamiento de números. <br>
 	 */
 	private void corregirCuenta() {
-		cuenta = cuenta.replace(")-", ")+0-");
-		cuenta = cuenta.replace("(-", "(0-");
-		cuenta = cuenta.replace("++", "+");
-		cuenta = cuenta.replace("+-", "-");
-		cuenta = cuenta.replace("-+", "-");
-		cuenta = cuenta.replace("--", "+");
-		if (cuenta.charAt(0) == '-') {
-			cuenta = '0' + cuenta;
+		this.cuenta = this.cuenta.replace(")-", ")+0-");
+		this.cuenta = this.cuenta.replace("(-", "(0-");
+		this.cuenta = this.cuenta.replace("++", "+");
+		this.cuenta = this.cuenta.replace("+-", "-");
+		this.cuenta = this.cuenta.replace("-+", "-");
+		this.cuenta = this.cuenta.replace("--", "+");
+		if (this.cuenta.charAt(0) == '-') {
+			this.cuenta = '0' + this.cuenta;
 		}
 	}
 
@@ -326,7 +306,7 @@ public class Calculadora implements IDecision{
 	 */
 	private void extraerNumeros() {
 		int i = 0;
-		this.matcher = numero.matcher(this.cuenta);
+		this.matcher = NUMERO.matcher(this.cuenta);
 		while (this.matcher.find()) {
 			this.numeros[i] = Double.parseDouble(this.matcher.group());
 			i++;
@@ -339,12 +319,11 @@ public class Calculadora implements IDecision{
 	 */
 	private void extraerSimbolos() {
 		int i = 0;
-		this.matcher = simbolo.matcher(this.cuenta);
+		this.matcher = SIMBOLO.matcher(this.cuenta);
 		while (this.matcher.find()) {
 			this.simbolos[i] = this.matcher.group().charAt(0);
 			i++;
 		}
 		this.cantidad += i;
 	}
-
 }
