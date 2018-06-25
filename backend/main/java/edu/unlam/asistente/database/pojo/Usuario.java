@@ -1,19 +1,21 @@
 package edu.unlam.asistente.database.pojo;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 import java.util.HashSet;
 import java.util.Set;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import edu.unlam.asistente.database.pojo.Evento;
 
 @Entity
 @Table(name = "usuarios")
@@ -24,6 +26,8 @@ public class Usuario implements java.io.Serializable{
 	private Integer id;
 	private String usuario;
 	private Set<Evento> eventos = new HashSet<Evento>(0);
+	
+	private Set<Usuario> contactos = new HashSet<Usuario>(0);
 	
 	public Usuario() {}
 	
@@ -87,6 +91,23 @@ public class Usuario implements java.io.Serializable{
 //		result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
 //		return result;
 //	}
+
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	@ManyToMany(cascade= {CascadeType.ALL}, targetEntity=Usuario.class)
+	@JoinTable(name="usuarioUsuario",
+	joinColumns=@JoinColumn(name="id_usuario"),
+	inverseJoinColumns=@JoinColumn(name="id_contacto"))
+	public Set<Usuario> getContactos() {
+		return contactos;
+	}
+
+	public void setContactos(Set<Usuario> contactos) {
+		this.contactos = contactos;
+	}
 
 	
 }

@@ -19,12 +19,7 @@
                 <column name="id_evento" not-null="true" />
             </many-to-many>
         </set> 
-        
-        <!-- REVISAR SI ES LA MANERA DE MAPEAR LOS CONTACTOS DENTRO DEL USUARIO, SINO BORRAR -->
-<!--         <set name="usuarios" table="contactos" cascade="all"> -->
-<!--             <key column="id"/> -->
-<!--             <many-to-many column="id" class="contacto" /> -->
-<!--         </set> -->
+
       
       <property name = "usuario" column = "usuario" type = "java.lang.String"/>
    </class>
