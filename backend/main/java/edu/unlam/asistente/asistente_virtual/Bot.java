@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import edu.unlam.asistente.busqueda_web.BusquedaWeb;
 import edu.unlam.asistente.calculadora.Calculadora;
 import edu.unlam.asistente.calendario.Calendario;
-import edu.unlam.asistente.chucknorris.ChuckNorrisFacts;
+import edu.unlam.asistente.chucknorris.ChuckNorrisFact;
 import edu.unlam.asistente.conversor_unidades.ConversorUnidad;
 import edu.unlam.asistente.cordialidad.Cordialidad;
 import edu.unlam.asistente.imagenes.gif.Gif;
@@ -44,7 +44,7 @@ public class Bot implements IDecision {
 		try {
 			Cordialidad cordialidad = new Cordialidad();
 			LeyesRobotica leyesRobotica = new LeyesRobotica();
-			ChuckNorrisFacts chuckFacts = new ChuckNorrisFacts();
+			ChuckNorrisFact chuckFacts = new ChuckNorrisFact();
 			Calculadora calculadora = new Calculadora();
 			ConversorUnidad conversorUnidad = new ConversorUnidad();
 			Calendario calendario = new Calendario();

@@ -214,27 +214,15 @@ public class BotTests {
 	
 	@Test
 	public void calculos() {
-		Assert.assertEquals(
-				"@delucas 3",
-				jenkins.leerMensaje("@jenkins cuánto es 1 + 2", USUARIO)
-			);
 		
-		
-		Assert.assertEquals(
-				"@delucas 1",
-				jenkins.leerMensaje("@jenkins cuánto es 5 - 2 * 2", USUARIO)
-			);
-		
-		Assert.assertEquals(
-				"@delucas 10",
-				jenkins.leerMensaje("@jenkins cuánto es el 10% de 100", USUARIO)
-			);
-		
-		Assert.assertEquals(
-				"@delucas 42",
-				jenkins.leerMensaje("@jenkins cuánto es el 17 + 5 ^ 2", USUARIO)
-			);
-		
+		Assert.assertEquals("@delucas 3", jenkins.leerMensaje("@jenkins cuánto es 1 + 2", USUARIO));
+
+		Assert.assertEquals("@delucas 1", jenkins.leerMensaje("@jenkins cuánto es 5 - 2 * 2", USUARIO));
+
+		Assert.assertEquals("@delucas 10", jenkins.leerMensaje("@jenkins cuánto es el 10% de 100", USUARIO));
+
+		Assert.assertEquals("@delucas 42", jenkins.leerMensaje("@jenkins cuánto es el 17 + 5 ^ 2", USUARIO));
+
 		// agregar otros casos
 	}
 	
@@ -454,27 +442,6 @@ public class BotTests {
 		}
 	}
 	
-	@Test
-	public void chuckNorrisFacts() {
-		String mensaje ="¿@jenkins, ¿me decis un ChuckNorrisFact?";
-		String chuckNorris1 = jenkins.leerMensaje(mensaje, USUARIO);
-		String chuckNorris2 = jenkins.leerMensaje(mensaje, USUARIO);
-		String chuckNorris3 = jenkins.leerMensaje(mensaje, USUARIO);
-		String chuckNorris4 = jenkins.leerMensaje(mensaje, USUARIO);
-		String chuckNorris5 = jenkins.leerMensaje(mensaje, USUARIO);
-		String chuckNorris6 = jenkins.leerMensaje(mensaje, USUARIO);
-		String chuckNorris7 = jenkins.leerMensaje(mensaje, USUARIO);
-		String chuckNorris8 = jenkins.leerMensaje(mensaje, USUARIO);
-		String chuckNorris9 = jenkins.leerMensaje(mensaje, USUARIO);
-		Assert.assertNotEquals(chuckNorris1, chuckNorris2);
-		Assert.assertNotEquals(chuckNorris2, chuckNorris3);
-		Assert.assertNotEquals(chuckNorris3, chuckNorris4);
-		Assert.assertNotEquals(chuckNorris4, chuckNorris5);
-		Assert.assertNotEquals(chuckNorris5, chuckNorris6);
-		Assert.assertNotEquals(chuckNorris6, chuckNorris7);
-		Assert.assertNotEquals(chuckNorris7, chuckNorris8);
-		Assert.assertNotEquals(chuckNorris8, chuckNorris9);
-	}
 	//Test gestion de eventos
 	@Test
 	public void consultarFechaProximoEventoTest() {
@@ -650,4 +617,12 @@ public class BotTests {
 		Assert.assertEquals("Disculpa... no entiendo el pedido, @delucas ¿podrás repetirlo?", jenkins.leerMensaje("@jenkins, cuál es     ", USUARIO));
 	}
 	
+	@Test
+	public void obtenerFactChuckNorris() {
+		String fact = jenkins.leerMensaje("@jenkins quiero un fact sobre Chuck Norris", TEST_USER);
+		Assert.assertNotEquals("El fact era tan groso que Chuck Norris no nos deja compartirlo. Intente más tarde.",
+				fact);
+		Assert.assertNotEquals(new String("Disculpa... no entiendo el pedido, @delucas ¿podrás repetirlo?"),
+				fact.toString());
+	}
 }
