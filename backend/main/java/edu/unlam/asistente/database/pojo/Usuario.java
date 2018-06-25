@@ -2,7 +2,9 @@ package edu.unlam.asistente.database.pojo;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -27,7 +29,7 @@ public class Usuario implements java.io.Serializable{
 	private String usuario;
 	private Set<Evento> eventos = new HashSet<Evento>(0);
 	
-	private Set<Usuario> contactos = new HashSet<Usuario>(0);
+	private List<Usuario> contactos = new ArrayList<Usuario>();
 	
 	public Usuario() {}
 	
@@ -60,7 +62,18 @@ public class Usuario implements java.io.Serializable{
 		this.eventos = eventos;
 	}
 	
-
+	@ManyToMany(fetch = FetchType.EAGER, cascade= {CascadeType.ALL}, targetEntity=Usuario.class)
+	@JoinTable(name="usuarioUsuario",
+	joinColumns=@JoinColumn(name="id_usuario"),
+	inverseJoinColumns=@JoinColumn(name="id_contacto"))
+	public List<Usuario> getContactos() {
+		return contactos;
+	}
+	
+	public void setContactos(List<Usuario> contactos) {
+		this.contactos = contactos;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -96,18 +109,5 @@ public class Usuario implements java.io.Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
-	@ManyToMany(cascade= {CascadeType.ALL}, targetEntity=Usuario.class)
-	@JoinTable(name="usuarioUsuario",
-	joinColumns=@JoinColumn(name="id_usuario"),
-	inverseJoinColumns=@JoinColumn(name="id_contacto"))
-	public Set<Usuario> getContactos() {
-		return contactos;
-	}
-
-	public void setContactos(Set<Usuario> contactos) {
-		this.contactos = contactos;
-	}
-
 	
 }
