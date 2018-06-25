@@ -52,4 +52,8 @@ public class Cliente {
 	public static void main(String[] args) {
 		new Cliente("localhost", 8080);
 	}
+
+	public String getNombreUsuario() {
+		return nombreUsuario;
+	}
 }

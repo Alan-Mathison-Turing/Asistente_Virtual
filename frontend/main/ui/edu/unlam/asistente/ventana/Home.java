@@ -1,7 +1,10 @@
 package edu.unlam.asistente.ventana;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -14,7 +17,10 @@ import edu.unlam.asistente.database.pojo.Usuario;
 
 public class Home extends JFrame {
 
+	private static final long serialVersionUID = 9042233624583298311L;
+	
 	private JPanel contentPane;
+	private JList contactosList;
 	private final Cliente cliente;
 
 	/**
@@ -48,35 +54,49 @@ public class Home extends JFrame {
 
 		String[] contactos = obtenerContactos(this.cliente);
 		
-		JList contactosList = new JList(contactos);
-		contactosList.setBounds(308, 77, 116, 173);
+		contactosList = new JList<String>(contactos);
+		contactosList.setBounds(10, 47, 116, 173);
 		contentPane.add(contactosList);
 		
 		JLabel lblContactos = new JLabel("Contactos");
-		lblContactos.setBounds(308, 44, 116, 22);
+		lblContactos.setBounds(10, 14, 116, 22);
 		contentPane.add(lblContactos);
 		
+		JButton btnAbrirChat = new JButton("Abrir chat");
+		btnAbrirChat.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//TODO: refactorizar el metodo obtener contactos para que devuelva un listModel
+//				ListModel<Contacto> listModel = (ListModel<Contacto>) new ArrayList<Contacto>();
+//				Contacto contactoSeleccionado = (Contacto) contactosList.getSelectedValue();
+				String chatearCon = (String) contactosList.getSelectedValue();
+				if(chatearCon == null || !abrirChatCon(chatearCon)){
+					//ACCION A TOMAR SI FALLA LA APERTURA DEL CHAT
+				}
+			}
+		});
+		btnAbrirChat.setBounds(136, 82, 116, 22);
+		contentPane.add(btnAbrirChat);
 		
-		
+		JLabel lblAbrirChat = new JLabel("Seleccione un contacto para abrir chat");
+		lblAbrirChat.setBounds(136, 48, 198, 23);
+		contentPane.add(lblAbrirChat);
 	}
 
-	private String[] obtenerContactos(Cliente cliente2) {
+	protected boolean abrirChatCon(String chatearCon) {
+		return this.cliente.abrirChatCon(chatearCon);
+	}
+
+	private String[] obtenerContactos(Cliente cliente) {
 		
-		String[] listaContactos = new String[2];
-		listaContactos[0] = "Contacto pepe";
-		listaContactos[1] = "Contacto jose";
+		String[] listaContactos = null;
 		
 		try {
-			//TODO: cargar nombre de usuario en "user"
-			String user = "testUser";
-			Usuario usuario = new UsuarioDao().obtenerUsuarioPorLogin(user);
-			usuario.getContactos();
-			usuario.getEventos();
-//			listaContactos = new String[usuario.getContactos().size()-1];
+			Usuario usuario = new UsuarioDao().obtenerUsuarioPorLogin(this.cliente.getNombreUsuario());
+			listaContactos = new String[usuario.getContactos().size()];
 			
-//			for (int i = 0 ; i < usuario.getContactos().size() ; i++) {
-//				listaContactos[i] = usuario.getContactos().get(i).getUsuario();
-//			}
+			for (int i = 0 ; i < usuario.getContactos().size() ; i++) {
+				listaContactos[i] = usuario.getContactos().get(i).getUsuario();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
