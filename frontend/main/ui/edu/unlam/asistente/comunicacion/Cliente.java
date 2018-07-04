@@ -5,7 +5,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import edu.unlam.asistente.ventana.Chat;
+import edu.unlam.asistente.ventana.Login;
 import edu.unlam.asistente.ventana.Home;
+
 
 public class Cliente {
 	
@@ -22,10 +24,11 @@ public class Cliente {
 
 			Home home = new Home(this);
 			Chat chat = new Chat(this);
-			
+			Login login = new Login(this);
 			socket = new Socket(ip, puerto);
 //			new ThreadEscucha(socket, nombreUsuario, chat).run();
 			new ThreadEscucha(socket, nombreUsuario, home).run();
+			new ThreadEscucha(socket, nombreUsuario, chat, login).run();
 			
 			
 		} catch (IOException e) {
@@ -35,7 +38,8 @@ public class Cliente {
 	
 	public void enviarMensaje(String mensaje) {
 		try {
-			Mensaje m = new Mensaje(mensaje, nombreUsuario);
+			//Mensaje m = new Mensaje(mensaje, nombreUsuario);
+			String m = null;
 			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
 			salida.writeObject(m);
 			
@@ -51,6 +55,7 @@ public class Cliente {
 	
 	public static void main(String[] args) {
 		new Cliente("localhost", 8080);
+		
 	}
 
 	public String getNombreUsuario() {
