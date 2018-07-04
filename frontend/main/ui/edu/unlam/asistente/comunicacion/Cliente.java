@@ -27,7 +27,7 @@ public class Cliente {
 			Login login = new Login(this);
 			socket = new Socket(ip, puerto);
 //			new ThreadEscucha(socket, nombreUsuario, chat).run();
-			new ThreadEscucha(socket, nombreUsuario, home).run();
+//			new ThreadEscucha(socket, nombreUsuario, home).run();
 			new ThreadEscucha(socket, nombreUsuario, chat, login).run();
 			
 			
@@ -54,7 +54,7 @@ public class Cliente {
 	}
 	
 	public static void main(String[] args) {
-		new Cliente("localhost", 8080);
+		new Cliente("localhost", 8090);
 		
 	}
 
