@@ -26,7 +26,6 @@ public class Cliente {
 			Chat chat = new Chat(this);
 			Login login = new Login(this);
 			socket = new Socket(ip, puerto);
-//			new ThreadEscucha(socket, nombreUsuario, chat).run();
 //			new ThreadEscucha(socket, nombreUsuario, home).run();
 			new ThreadEscucha(socket, nombreUsuario, chat, login).run();
 			
