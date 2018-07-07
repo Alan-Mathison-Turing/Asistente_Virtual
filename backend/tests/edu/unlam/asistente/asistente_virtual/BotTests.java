@@ -240,10 +240,18 @@ public class BotTests {
 	
 	// Desde acá tests de ConversorUnidad (REQ #11).
 	@Test
-	public void magnitudInvalida() {
+	public void magnitudDesdeInvalida() {
 		Assert.assertEquals(
-				String.format(Bot.MSG_NO_ENTIENDO, USUARIO),
+				"@" + USUARIO + ", la magnitud desde la cual desea convertir no es válida.",
 				jenkins.leerMensaje("@jenkins cuántos gramos son 1 rama", USUARIO)
+			);
+	}
+
+	@Test
+	public void magnitudHastaInvalida() {
+		Assert.assertEquals(
+				"@" + USUARIO + ", la magnitud a la cual desea convertir no es válida.",
+				jenkins.leerMensaje("@jenkins cuántas gaseosas son 1 metro", USUARIO)
 			);
 	}
 	
