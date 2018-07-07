@@ -35,13 +35,12 @@ public class Gif implements IDecision {
 
 	@Override
 	public IDecision getSiguienteDecision() {
-		// TODO Auto-generated method stub
-		return null;
+		return siguienteDecision;
 	}
 
 	@Override
 	public void setSiguienteDecision(IDecision decision) {
-		// TODO Auto-generated method stub
+		siguienteDecision = decision;
 
 	}
 

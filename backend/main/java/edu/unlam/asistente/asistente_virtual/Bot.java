@@ -58,8 +58,8 @@ public class Bot implements IDecision {
 			calculadora.setSiguienteDecision(gestionRecordatorio);
 			gestionRecordatorio.setSiguienteDecision(conversorUnidad);
 			conversorUnidad.setSiguienteDecision(busquedaWeb);
-			busquedaWeb.setSiguienteDecision(calendario);
-			calendario.setSiguienteDecision(gif);
+			busquedaWeb.setSiguienteDecision(gif);
+			gif.setSiguienteDecision(calendario);
 			return siguienteDecision.leerMensaje(mensaje, usuario);
 		}
 		catch(Exception e) {

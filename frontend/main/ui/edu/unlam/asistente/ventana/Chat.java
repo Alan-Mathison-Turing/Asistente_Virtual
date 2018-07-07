@@ -1,22 +1,18 @@
 package edu.unlam.asistente.ventana;
 
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -38,10 +34,10 @@ public class Chat extends JFrame {
 	private JTextField textFieldEnviar;
 	private final Cliente cliente;
 	private JTextPane textAreaChat;
-	JLabel imageLabel = new JLabel();
-	HTMLEditorKit htmlEditorKit;
-	HTMLDocument document;
-	Graphics graphic;
+	private HTMLEditorKit htmlEditorKit;
+	private HTMLDocument document;
+	
+	public final static String REGEX_MEME = "\\((\\w*)\\)";
 
 	/**
 	 * Launch the application.
@@ -116,11 +112,11 @@ public class Chat extends JFrame {
 		textAreaChat.setEditable(false);
 		textAreaChat.setEditorKit(htmlEditorKit);
 		textAreaChat.setDocument(document);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 11, 397, 386);
-		
 		contentPane.add(scrollPane);
+		scrollPane.setViewportView(textAreaChat);
 	}
 	
 	public void enviarMensaje() {
@@ -130,11 +126,22 @@ public class Chat extends JFrame {
 		if (!textoEnviar.isEmpty() && textoEnviar != null) {
 			textFieldEnviar.setText(null);
 			try {
-				htmlEditorKit.insertHTML(document, document.getLength(), " > Yo: " + textoEnviar, 0, 0, null);
-				textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
-				cliente.enviarMensaje(textoEnviar);
+				Pattern pattern = Pattern.compile(REGEX_MEME);
+				Matcher matcher = pattern.matcher(textoEnviar);
+				if(textoEnviar.matches(REGEX_MEME)) {
+					matcher.find();
+					ImageIcon icon = new ImageIcon("./frontend/img/" + matcher.group(1) + ".jpg");
+					
+					htmlEditorKit.insertHTML(document, document.getLength(), " > Yo: <br/>", 0, 0, null);
+					textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
+					textAreaChat.insertIcon(icon);
+				} else {
+					htmlEditorKit.insertHTML(document, document.getLength(), " > Yo: " + textoEnviar, 0, 0, null);
+					textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
+					cliente.enviarMensaje(textoEnviar);	
+				}
 			} catch (BadLocationException | IOException e) {
-				e.printStackTrace();
+				System.out.println("INFO: No se pudo interpretar el mensaje enviado por el usuario.");
 			}
 		}
 	}
@@ -149,14 +156,20 @@ public class Chat extends JFrame {
 				textAreaChat.insertIcon(icon);
 				
 			} else if(mensaje.endsWith(".jpg")) {
-				String text = "<img src=\"" + mensaje + "\" height=\"50\" width=\"50\"></img>"; 
-				htmlEditorKit.insertHTML(document, document.getLength(), " > testBot: " + text, 0, 0, null);
+				ImageIcon icon = new ImageIcon(mensaje);
+				int ancho = (int) (icon.getIconWidth() * 0.5);
+				int largo = (int) (icon.getIconWidth() * 0.5);
+				ImageIcon newIcon = new ImageIcon(icon.getImage().getScaledInstance(ancho, largo,  java.awt.Image.SCALE_SMOOTH));
+				
+				htmlEditorKit.insertHTML(document, document.getLength(), "<br/>", 0, 0, null);
+				textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
+				textAreaChat.insertIcon(newIcon);
 			} else {
 				htmlEditorKit.insertHTML(document, document.getLength(), " > testBot: " + mensaje, 0, 0, null);	
 			}			
 			textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
 		} catch (BadLocationException | IOException e) {
-			e.printStackTrace();
+			System.out.println("INFO: No se pudo interpretar el mensaje de respuesta.");
 		}
 	}
 }
