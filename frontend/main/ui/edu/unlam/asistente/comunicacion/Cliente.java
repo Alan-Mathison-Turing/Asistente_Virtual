@@ -41,7 +41,6 @@ public class Cliente {
 			String m = null;
 			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
 			salida.writeObject(m);
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -21,5 +21,15 @@
 	<classpathentry kind="lib" path="backend/lib/jta.jar"/>
 	<classpathentry kind="lib" path="backend/lib/slf4j-api-1.7.7.jar"/>
 	<classpathentry kind="lib" path="backend/lib/slf4j-simple-1.7.7.jar"/>
+	<classpathentry kind="lib" path="backend/lib/jackson-core-2.2.3.jar"/>
+	<classpathentry kind="lib" path="backend/lib/commons-io/commons-io-2.6-javadoc.jar"/>
+	<classpathentry kind="lib" path="backend/lib/commons-io/commons-io-2.6-sources.jar"/>
+	<classpathentry kind="lib" path="backend/lib/commons-io/commons-io-2.6-test-sources.jar"/>
+	<classpathentry kind="lib" path="backend/lib/commons-io/commons-io-2.6-tests.jar"/>
+	<classpathentry kind="lib" path="backend/lib/commons-io/commons-io-2.6.jar"/>
+	<classpathentry kind="lib" path="backend/lib/gson/gson-2.6.2-javadoc.jar"/>
+	<classpathentry kind="lib" path="backend/lib/gson/gson-2.6.2-sources.jar"/>
+	<classpathentry kind="lib" path="backend/lib/gson/gson-2.6.2.jar"/>
+	<classpathentry kind="lib" path="backend/lib/mockito-core-1.8.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
