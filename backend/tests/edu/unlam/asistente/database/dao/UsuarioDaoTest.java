@@ -43,12 +43,12 @@ public class UsuarioDaoTest {
 		Usuario user = userDao.obtenerUsuarioPorLogin("testUser");
 		Assert.assertTrue(!user.getContactos().isEmpty());
 		Assert.assertEquals("usuario2", user.getContactos().get(0).getUsuario());
-		Assert.assertEquals("nomUsuario", user.getContactos().get(1).getUsuario());
+		Assert.assertEquals("admin", user.getContactos().get(1).getUsuario());
 	}
 	
 	@Test
 	public void obtenerUsuarioPorLoginSinContactosTest() {
-		Usuario user = userDao.obtenerUsuarioPorLogin("usuario2");
+		Usuario user = userDao.obtenerUsuarioPorLogin("nomUsuario");
 		Assert.assertTrue(user.getContactos().isEmpty());
 	}
 }
