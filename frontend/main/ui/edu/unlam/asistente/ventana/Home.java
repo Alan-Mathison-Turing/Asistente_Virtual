@@ -35,25 +35,10 @@ public class Home extends JFrame {
 	private final Cliente cliente;
 
 	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					Home frame = new Home();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
-
-	/**
 	 * Create the frame.
 	 */
 	public Home(final Cliente cliente) {
+		setResizable(false);
 		this.cliente = cliente;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -99,10 +84,10 @@ public class Home extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				String chatearCon = contactosList.getSelectedValue();
 				lblSeleccionarContacto.setVisible(false);
-				if(chatearCon == null){
+				if(chatearCon.isEmpty() || chatearCon == null){
 					lblSeleccionarContacto.setVisible(true);
-				}else if (!abrirChatCon(chatearCon)) {
-					//FALLO LA APERTURA DEL CHAT
+				}else {
+					abrirChatCon(chatearCon);
 				}
 			}
 		});
@@ -237,8 +222,8 @@ public class Home extends JFrame {
 		return listaSalas;
 	}
 
-	protected boolean abrirChatCon(String chatearCon) {
-		return this.cliente.abrirChatCon(chatearCon);
+	protected void abrirChatCon(String chatearCon) {
+		cliente.abrirChatCon(chatearCon);
 	}
 
 	private DefaultListModel<String> obtenerContactos(Cliente cliente) {
