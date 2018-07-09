@@ -21,21 +21,24 @@ public class ConversorUnidad implements IDecision {
 		Matcher matcher = patron.matcher(mensaje);
 
 		if(mensaje.matches(REGEX)) {
-			String respuesta = "";
 			
 			DecimalFormatSymbols simbolo = new DecimalFormatSymbols();
 			simbolo.setDecimalSeparator(',');
 			DecimalFormat df = new DecimalFormat("#0.00", simbolo);
 			matcher.find();
-			String hasta = matcher.group(1);
+			String hasta = diccionario(matcher.group(1));
 			double numero = Double.parseDouble(matcher.group(2));
-			String desde = matcher.group(3);
-			double resultado = convertirUnidad(numero, diccionario(desde), diccionario(hasta));
+			String desde = diccionario(matcher.group(3));
+			
+			if(desde == null) return "@" + usuario + ", la magnitud desde la cual desea convertir no es válida.";
+			if(hasta == null) return "@" + usuario + ", la magnitud a la cual desea convertir no es válida.";
+			
+			double resultado = convertirUnidad(numero, desde, hasta);
 			
 			if(resultado == -1) return String.format(Bot.MSG_NO_ENTIENDO, usuario);
 			if(resultado == -2) return "@" + usuario + " las magnitudes no pueden ser negativas.";
-			return respuesta = "@" + usuario + " " + df.format(numero) + " " + desde + 
-						" equivale a " + df.format(resultado) + " " + hasta;				
+			return 	"@" + usuario + " " + df.format(numero) + " " + matcher.group(3) + 
+						" equivale a " + df.format(resultado) + " " + matcher.group(1);				
 		}
 		return  siguienteDecision.leerMensaje(mensaje, usuario);
 	}
@@ -97,10 +100,9 @@ public class ConversorUnidad implements IDecision {
     }
 
 	
-	/**
-	 * @param palara: palabra a evaluar.
-	 * @return string: retorna palabra asociada en el HashMap si existe.
-	 */
+	
+   /** @param palara: palabra a evaluar.
+	 * @return string: retorna palabra asociada en el HashMap si existe.*/
 	private String diccionario(String palabra) {
 	    String singular;
 	    HashMap<String,String> diccionario = new HashMap<>();
@@ -188,8 +190,10 @@ public class ConversorUnidad implements IDecision {
 	    diccionario.put("horas","Hora");
 	    diccionario.put("dia","Dia");
 	    diccionario.put("dias","Dia");
+	    
 	    singular = diccionario.get(palabra);
-	    return singular != null ? singular : palabra;
+	    
+	    return singular;
 	}
 	
 }
