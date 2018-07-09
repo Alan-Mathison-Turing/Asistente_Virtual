@@ -231,6 +231,7 @@ public class Home extends JFrame {
 		DefaultListModel<String> listaContactos = new DefaultListModel<>();
 		
 		try {
+			//TODO: CAMBIAR POR LLAMADO VIA SOCKET
 			Usuario usuario = new UsuarioDao().obtenerUsuarioPorLogin(this.cliente.getNombreUsuario());
 			
 			for (int i = 0 ; i < usuario.getContactos().size() ; i++) {
