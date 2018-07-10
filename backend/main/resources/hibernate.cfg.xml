@@ -13,7 +13,7 @@
       </property>
       
       <property name = "hibernate.connection.url">
-         jdbc:sqlite:../database/database.sqlite
+         jdbc:sqlite:database/database.sqlite
       </property>
       
       <property name="hibernate.show_sql" >true</property>
@@ -23,6 +23,7 @@
       <!-- Lista de clases a mapear por annotation-->
       <mapping class = "edu.unlam.asistente.database.pojo.Evento"/>
       <mapping class = "edu.unlam.asistente.database.pojo.Usuario"/>
+      <mapping class = "edu.unlam.asistente.database.pojo.ChuckNorrisFacts"/>
       
    </session-factory>
 </hibernate-configuration>
