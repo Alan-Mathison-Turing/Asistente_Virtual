@@ -87,4 +87,9 @@ public class BusquedaWebTest {
 		Assert.assertEquals("No encontré lo que buscabas, ¿podrías ser más específico?", busquedaWeb.busquedaWeb(" "));
 	}
 	
+	@Test
+	public void busquedaVideo() {
+		Assert.assertEquals("https://www.youtube.com/watch?v=Rv3v7ZfYp-g", busquedaWeb.busquedaVideo("maradona"));
+	}
+	
 }

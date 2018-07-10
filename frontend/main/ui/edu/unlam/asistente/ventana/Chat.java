@@ -1,6 +1,6 @@
 package edu.unlam.asistente.ventana;
 
-
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,11 +18,15 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
+import chrriis.common.UIUtils;
+import chrriis.dj.nativeswing.swtimpl.NativeInterface;
+import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import edu.unlam.asistente.comunicacion.Cliente;
 
 public class Chat extends JFrame {
@@ -36,7 +41,7 @@ public class Chat extends JFrame {
 	private JTextPane textAreaChat;
 	private HTMLEditorKit htmlEditorKit;
 	private HTMLDocument document;
-	
+
 	public final static String REGEX_MEME = "\\((\\w*)\\)";
 
 	/**
@@ -79,8 +84,8 @@ public class Chat extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
 		this.cliente = cliente; 
+		
 		
 		htmlEditorKit = new HTMLEditorKit();
 		document = new HTMLDocument();
@@ -161,13 +166,48 @@ public class Chat extends JFrame {
 				int largo = (int) (icon.getIconWidth() * 0.5);
 				ImageIcon newIcon = new ImageIcon(icon.getImage().getScaledInstance(ancho, largo,  java.awt.Image.SCALE_SMOOTH));
 				
-				htmlEditorKit.insertHTML(document, document.getLength(), "<br/>", 0, 0, null);
+				htmlEditorKit.insertHTML(document, document.getLength(), "\n\n", 0, 0, null);
 				textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
 				textAreaChat.insertIcon(newIcon);
+				
+			} else if(mensaje.contains("youtube")) {
+				// https://www.youtube.com/watch?v=M7lc1UVf-VE
+				htmlEditorKit.insertHTML(document, document.getLength(), " > testBot: <br>", 0, 0, null);	
+            	textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
+            	
+				NativeInterface.open();
+				UIUtils.setPreferredLookAndFeel();
+			    SwingUtilities.invokeLater(new Runnable() {
+			        public void run() {
+					    JWebBrowser webBrowser = new JWebBrowser(JWebBrowser.destroyOnFinalization());
+					    webBrowser.setVisible(true);
+					    webBrowser.setBarsVisible(false);
+					    webBrowser.setSize(800,600);
+					    webBrowser.navigate(mensaje);
+					    
+					    JPanel webBrowserPanel = new JPanel();	
+					    webBrowserPanel.setLayout(new BorderLayout());
+					    webBrowserPanel.setBorder(BorderFactory.createTitledBorder("Native Web Browser component"));
+					    webBrowserPanel.setSize(800,600);
+					    webBrowserPanel.add(webBrowser);
+					    webBrowserPanel.setVisible(true);
+					    
+					    textAreaChat.insertComponent(webBrowserPanel);
+			        }
+			    });
+			    NativeInterface.runEventPump();
+
+			    Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+			        @Override
+			        public void run() {
+			            NativeInterface.close();
+			        }
+			    }));
 			} else {
 				htmlEditorKit.insertHTML(document, document.getLength(), " > testBot: " + mensaje, 0, 0, null);	
-			}			
+			}
 			textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
+			
 		} catch (BadLocationException | IOException e) {
 			System.out.println("INFO: No se pudo interpretar el mensaje de respuesta.");
 		}
