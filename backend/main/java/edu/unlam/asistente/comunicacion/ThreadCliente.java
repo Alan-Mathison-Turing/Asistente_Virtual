@@ -44,10 +44,9 @@ public class ThreadCliente extends Thread{
 				ObjectOutputStream mensajeEnviar = new ObjectOutputStream(this.cliente.getOutputStream());
 				Mensaje respuesta;
 				
-				if (mensajeRecibido.getType().equals("LOGIN")) { //mock para login
+				if (mensajeRecibido.getType().equals("LOGIN")) {
 					String nombreUsuario = mensajeRecibido.getNombreUsuario();
 					String contrasena = mensajeRecibido.getMensaje();
-					//TODO: Cambiar para identificar realmente
 					if(userDao.checkLogin(nombreUsuario, contrasena)) {
 						this.usuario = userDao.obtenerUsuarioPorLogin(nombreUsuario);
 						//Devuelve el id del usuario si es que se logueo correctamente
