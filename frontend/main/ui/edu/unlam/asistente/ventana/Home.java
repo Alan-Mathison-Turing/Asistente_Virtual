@@ -17,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 import javax.swing.border.EmptyBorder;
 
+import edu.unlam.asistente.cliente.Main;
 import edu.unlam.asistente.comunicacion.Cliente;
 import edu.unlam.asistente.database.dao.UsuarioDao;
 import edu.unlam.asistente.database.pojo.Usuario;
@@ -29,14 +30,22 @@ public class Home extends JFrame {
 	private JList<String> contactosList;
 	private JList<String> salasList;
 	private JList<String> salasPublicasList;
-	private final Cliente cliente;
+	
+	private DefaultListModel<String> contactosUsuario;
+	private DefaultListModel<String> salasPrivadas;
+	private DefaultListModel<String> salasPublicas;
+	
 
 	/**
 	 * Create the frame.
 	 */
-	public Home(final Cliente cliente) {
+	public Home() {
+		
+		this.contactosUsuario = Main.usuario.getContactos();
+		this.salasPrivadas = Main.usuario.getSalasPrivadas();
+		this.salasPublicas = Main.usuario.getSalasPublicas();
+		
 		setResizable(false);
-		this.cliente = cliente;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 500);
@@ -61,12 +70,13 @@ public class Home extends JFrame {
 		JLabel lblBienvenida = new JLabel("");
 		lblBienvenida.setFont(new Font("Segoe Print", Font.BOLD, 20));
 		lblBienvenida.setBounds(24, 15, 346, 32);
-		lblBienvenida.setText("BIENVENIDO: " + cliente.getNombreUsuario());
+		lblBienvenida.setText("BIENVENIDO: " + Main.usuario.getNombreUsuario());
 		contentPane.add(lblBienvenida);
 				
 		
 		//SECTOR IZQUIERDA - CONTACTOS
-		contactosList = new JList<String>(obtenerContactos(this.cliente));
+		contactosList = new JList<String>();
+		contactosList.setModel(this.contactosUsuario);
 		contactosList.setBounds(163, 14, 47, 115);
 		contentPane.add(contactosList);
 		
@@ -162,7 +172,7 @@ public class Home extends JFrame {
 		listaSalas.setBounds(239, 167, 131, 203);
 		contentPane.add(listaSalas);
 		
-		salasList = new JList<String>(obtenerSalasPrivadas(this.cliente));
+		salasList = new JList<String>(this.salasPrivadas);
 		listaSalas.setViewportView(salasList);
 		
 		
@@ -170,7 +180,7 @@ public class Home extends JFrame {
 		btnNuevaSalaPrivada.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		btnNuevaSalaPrivada.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showConfirmDialog(crearNuevaSalaComponent, "Inggrese los datos de la sala nueva", "Creacion de nueva sala", JOptionPane.OK_CANCEL_OPTION);
+				//JOptionPane.showConfirmDialog(crearNuevaSalaComponent, "Inggrese los datos de la sala nueva", "Creacion de nueva sala", JOptionPane.OK_CANCEL_OPTION);
 				crearSala();
 			}
 		});
@@ -205,7 +215,7 @@ public class Home extends JFrame {
 		scrollPaneSalasPublicas.setBounds(436, 167, 131, 203);
 		contentPane.add(scrollPaneSalasPublicas);
 		
-		salasPublicasList = new JList<String>(obtenerSalasPublicas(this.cliente));;
+		salasPublicasList = new JList<String>(this.salasPublicas);
 		scrollPaneSalasPublicas.setViewportView(salasPublicasList);
 		
 		JList list = new JList();
@@ -268,25 +278,9 @@ public class Home extends JFrame {
 	}
 
 	protected void abrirChatCon(String chatearCon) {
-		cliente.abrirChatCon(chatearCon);
+		Main.cliente.abrirChatCon(chatearCon);
 	}
 
-	private DefaultListModel<String> obtenerContactos(Cliente cliente) {
-		
-		DefaultListModel<String> listaContactos = new DefaultListModel<>();
-		
-		try {
-			//TODO: CAMBIAR POR LLAMADO VIA SOCKET
-			Usuario usuario = new UsuarioDao().obtenerUsuarioPorLogin(this.cliente.getNombreUsuario());
-			
-			for (int i = 0 ; i < usuario.getContactos().size() ; i++) {
-				listaContactos.addElement(usuario.getContactos().get(i).getUsuario());
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return listaContactos;
-	}
 	
 	private boolean cerrarSesion() {
 		//TODO: desarrollar metodo

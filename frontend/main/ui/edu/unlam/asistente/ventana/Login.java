@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 import edu.unlam.asistente.comunicacion.Cliente;
 
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 
 public class Login extends JFrame {
@@ -29,12 +30,13 @@ public class Login extends JFrame {
 	private JTextField txtUsuario_1;
 	private JTextField tfServidor;
 	private JTextField tfPuertoServidor;
-	private final Cliente cliente;
+	public static Cliente cliente;
 
 	/**
 	 * Create the frame.
 	 */
-	public Login(Cliente cliente) {
+	public Login() {
+		
 		setResizable(false);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,37 +62,51 @@ public class Login extends JFrame {
 		contentPane.add(txtUsuario_1);
 		txtUsuario_1.setColumns(10);
 
-		this.cliente = cliente;
-
 		JButton btnIniciarSesion = new JButton("Iniciar Sesion");
 		btnIniciarSesion.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
 
 				String ip = tfServidor.getText();
-				String puerto = tfPuertoServidor.getText();
+				int puerto = Integer.parseInt(tfPuertoServidor.getText());
 				String usuario = txtUsuario_1.getText();
 				char[] passwd = pwdSecreto.getPassword();
+				String clave = new String(passwd);
 				
+				if(ip.length() > 0) {
+					
+					try {
+						
+						Login.cliente.createSocket(ip, puerto);
+						
+						if(usuario.length() > 0 && clave.length() > 0) {
+							
+							Login.cliente.solicitarAutenticacion(usuario, clave);
+							
+						} else {
 
-//				if(!ip.isEmpty() && !puerto.isEmpty()) {
-					
-					
-					
-					if (!usuario.isEmpty() && passwd.length > 0) {
-						String clave = new String(passwd);
-						autenticarUsuario(usuario, clave);
-	
-					} else {
+							JOptionPane.showMessageDialog(null,
+									"Datos incompletos\n" + " Ingrese su usuario y contraseña",
+									"Mensaje de Error", JOptionPane.INFORMATION_MESSAGE);
+
+							
+						}
+						
+					} catch (IOException e) {
+						
 						JOptionPane.showMessageDialog(null,
-								"Acceso Denegado\n" + " Usuario y/o contraseña ingresado/s inválido/s",
+								"Acceso Denegado\n" + " Puerto o IP elegidos incorrectos",
 								"Mensaje de Error", JOptionPane.INFORMATION_MESSAGE);
+						
+						e.printStackTrace();
 					}
-//				} else {
-//					JOptionPane.showMessageDialog(null,
-//							"Acceso Denegado\n" + " Servidor y/o el puerto ingresado/s inválidos",
-//							"Mensaje de Error", JOptionPane.INFORMATION_MESSAGE);
-//				}
+					
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"Datos incompletos\n" + " Por favor ingrese una direccion IP",
+							"Mensaje de Error", JOptionPane.INFORMATION_MESSAGE);
+				}
+				
 
 			}
 		});
@@ -192,7 +208,10 @@ public class Login extends JFrame {
 		contentPane.setLayout(gl_contentPane);
 	}
 
-	private void autenticarUsuario(String usuario, String contraseña) {
-		cliente.solicitarAutenticacion(usuario, contraseña);
+	public void loginIncorrecto() {
+		JOptionPane.showMessageDialog(null,
+				"Acceso Denegado\n" + " Usuario o contraseña ingresados no son correctos",
+				"Mensaje de Error", JOptionPane.INFORMATION_MESSAGE);
 	}
+	
 }

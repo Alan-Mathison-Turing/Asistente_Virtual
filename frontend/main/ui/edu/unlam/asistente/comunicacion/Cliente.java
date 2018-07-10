@@ -16,19 +16,15 @@ public class Cliente {
 	private String nombreUsuario;
 	private Socket socket;
 	
-	public Cliente(String ip, int puerto) {
-		this.ip = ip;
-		this.puerto = puerto;
-		this.nombreUsuario = "testUser";
-		try {
-
-			
-			socket = new Socket(ip, puerto);
+	public Cliente() {
+	}
+	
+	public void createSocket(String ip, int puerto) throws IOException {
+		if(this.socket == null) {
+			this.ip = ip;
+			this.puerto = puerto;
+			this.socket = new Socket(this.ip, this.puerto);
 			new ThreadEscucha(socket, this).start();
-			
-			
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 	
@@ -81,13 +77,19 @@ public class Cliente {
 			e.printStackTrace();
 		}
 	}
+	
+	public void obtenerContactosUsuario(int idUsuario) {
+		try {
+			Mensaje m = new Mensaje("" + idUsuario, nombreUsuario, "CONTACTOS");
+			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
+			salida.writeObject(m);
+		} catch (IOException e) {
+			System.err.println("-- Cliente/ObtenerContactos ERROR: ocurrio un error intentando Obtener contactos del usuario" + idUsuario);
+e.printStackTrace();
+		}
+	}
 
 	public String getNombreUsuario() {
 		return nombreUsuario;
-	}
-	
-	public static void main(String[] args) {
-		new Cliente("localhost", 12346);
-		
 	}
 }
