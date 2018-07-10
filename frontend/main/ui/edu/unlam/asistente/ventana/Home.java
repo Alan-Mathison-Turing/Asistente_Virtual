@@ -66,7 +66,13 @@ public class Home extends JFrame {
 				
 		
 		//SECTOR IZQUIERDA - CONTACTOS
-		contactosList = new JList<String>(obtenerContactos(this.cliente));
+		//contactosList = new JList<String>(obtenerContactos(this.cliente));
+		DefaultListModel<String> lista = new DefaultListModel<>();
+		lista.addElement("pepe");
+		lista.addElement("carlos");
+		lista.addElement("julia");
+		contactosList = new JList<String>(lista);
+		
 		contactosList.setBounds(163, 14, 47, 115);
 		contentPane.add(contactosList);
 		
@@ -170,7 +176,7 @@ public class Home extends JFrame {
 		btnNuevaSalaPrivada.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		btnNuevaSalaPrivada.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showConfirmDialog(crearNuevaSalaComponent, "Inggrese los datos de la sala nueva", "Creacion de nueva sala", JOptionPane.OK_CANCEL_OPTION);
+//				JOptionPane.showConfirmDialog(crearNuevaSalaComponent, "Inggrese los datos de la sala nueva", "Creacion de nueva sala", JOptionPane.OK_CANCEL_OPTION);
 				crearSala();
 			}
 		});

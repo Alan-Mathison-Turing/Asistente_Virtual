@@ -1,6 +1,5 @@
 package edu.unlam.asistente.database.dao;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -13,7 +12,7 @@ import edu.unlam.asistente.database.dao.BaseDao;
 
 public class EventoDao extends BaseDao {
 
-	public EventoDao() throws SQLException {
+	public EventoDao() {
 		super();
 	}
 
