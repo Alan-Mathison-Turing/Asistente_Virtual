@@ -27,6 +27,6 @@ public class Servidor {
 	
 	
 	public static void main(String[] args) {
-		new Servidor(8080);
+		new Servidor(12346);
 	}
 }

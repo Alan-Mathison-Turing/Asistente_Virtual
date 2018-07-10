@@ -45,10 +45,22 @@ public class ThreadCliente extends Thread{
 //					if(this.cliente.equals(clienteAEnviar)) {
 //						continue;
 //					}
+					
 					ObjectOutputStream mensajeEnviar = new ObjectOutputStream(clienteAEnviar.getOutputStream());
-					Mensaje respuesta = new Mensaje(bot.leerMensaje(mensajeRecibido.getMensaje(), mensajeRecibido.getNombreUsuario()),
-							mensajeRecibido.getNombreUsuario());
-					mensajeEnviar.writeObject(respuesta);
+					Mensaje respuesta;
+					
+					if (mensajeRecibido.getType().equals("LOGIN")) { //mock para login
+						respuesta = new Mensaje("true", mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
+						mensajeEnviar.writeObject(respuesta);
+					} else if (mensajeRecibido.getType().equals("CHAT_CON")) { //mock para abrir chat
+						respuesta = new Mensaje("true", mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
+						mensajeEnviar.writeObject(respuesta);
+					} else if (mensajeRecibido.getType().equals("CHAT")) { //para mensajes de chat linea directa con bot
+						respuesta = new Mensaje(bot.leerMensaje(mensajeRecibido.getMensaje(), mensajeRecibido.getNombreUsuario()),
+								mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
+						mensajeEnviar.writeObject(respuesta);
+					}
+					
 				}
 			}
 		} catch (IOException | ClassNotFoundException e) {

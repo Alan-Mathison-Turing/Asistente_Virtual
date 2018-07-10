@@ -40,40 +40,10 @@ public class Chat extends JFrame {
 	public final static String REGEX_MEME = "\\((\\w*)\\)";
 
 	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					Chat frame = new Chat();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-		
-//		SwingUtilities.invokeLater(new Runnable() {
-//			
-//			@Override
-//			public void run() {
-//				while(true) {
-//					Mensaje msj = Cliente.colaMensajes.poll();
-//					if (textAreaChat != null && msj != null) {
-//						textAreaChat.append("\n > BOT: " + msj.getMensaje());
-//					}
-//				}
-//				
-//			}
-//		});
-//	}
-
-	/**
 	 * Create the frame.
 	 */
 	public Chat(final Cliente cliente) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(200, 200, 450, 500);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -108,7 +78,7 @@ public class Chat extends JFrame {
 		contentPane.add(btnEnviar);
 		textAreaChat = new JTextPane();
 		textAreaChat.setBounds(10, 11, 395, 386);
-		contentPane.add(textAreaChat);
+//		contentPane.add(textAreaChat);
 		textAreaChat.setEditable(false);
 		textAreaChat.setEditorKit(htmlEditorKit);
 		textAreaChat.setDocument(document);
