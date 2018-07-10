@@ -3,6 +3,7 @@ package edu.unlam.asistente.comunicacion;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ThreadAceptacion extends Thread{
@@ -28,7 +29,7 @@ public class ThreadAceptacion extends Thread{
 				new ThreadCliente(cliente, sockets).start();
 			}
 			
-		} catch (IOException e) {
+		} catch (IOException | SQLException e) {
 			e.printStackTrace();
 		}
 		
