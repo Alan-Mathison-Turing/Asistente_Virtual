@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
+import javax.swing.DefaultListModel;
+
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
 import edu.unlam.asistente.cliente.Main;
 import edu.unlam.asistente.entidades.Usuario;
 import edu.unlam.asistente.ventana.Chat;
@@ -37,7 +41,8 @@ public class ThreadEscucha extends Thread {
 						if(msj.getMensaje().equals("false")) {
 							Main.login.loginIncorrecto();
 						} else {
-							Main.usuario = new Usuario(msj.getMensaje());
+							Main.usuario = new Usuario(msj.getNombreUsuario(),  Integer.valueOf(msj.getMensaje()));
+							Main.usuario.obtenerContactos();
 							Main.login.dispose();
 							Main.home = new Home();
 							Main.home.setVisible(true);
@@ -52,7 +57,12 @@ public class ThreadEscucha extends Thread {
 						if(msj.getMensaje().equals("false")) {
 							
 						} else {
-							
+							String[] contactostxts = msj.getMensaje().split(",",-1); 
+							DefaultListModel<String> contactos = new DefaultListModel<String>();
+							for(int i = 0; i < contactostxts.length; i++) {
+								contactos.addElement(contactostxts[i]);
+							}
+							Main.usuario.setContactos(contactos);
 						}
 					}
 

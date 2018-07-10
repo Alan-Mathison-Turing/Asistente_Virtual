@@ -75,7 +75,8 @@ public class Home extends JFrame {
 				
 		
 		//SECTOR IZQUIERDA - CONTACTOS
-		contactosList = new JList<String>(this.contactosUsuario);
+		contactosList = new JList<String>();
+		contactosList.setModel(this.contactosUsuario);
 		contactosList.setBounds(163, 14, 47, 115);
 		contentPane.add(contactosList);
 		
@@ -214,7 +215,7 @@ public class Home extends JFrame {
 		scrollPaneSalasPublicas.setBounds(436, 167, 131, 203);
 		contentPane.add(scrollPaneSalasPublicas);
 		
-		salasPublicasList = new JList<String>(this.salasPublicas);;
+		salasPublicasList = new JList<String>(this.salasPublicas);
 		scrollPaneSalasPublicas.setViewportView(salasPublicasList);
 		
 		JList list = new JList();

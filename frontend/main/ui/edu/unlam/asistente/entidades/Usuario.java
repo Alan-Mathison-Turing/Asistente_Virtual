@@ -14,11 +14,19 @@ public class Usuario {
 	
 	public Usuario(String nombreUsuario) {
 		this.nombreUsuario = nombreUsuario;
+		init();
 	}
 	
 	public Usuario(String nombreUsuario, int ID) {
 		this.nombreUsuario = nombreUsuario;
 		this.ID = ID;
+		init();
+	}
+	
+	private void init() {
+		this.contactos = new DefaultListModel<String>();
+		this.salasPrivadas = new DefaultListModel<String>();
+		this.salasPublicas = new DefaultListModel<String>();
 	}
 	
 	public void obtenerContactos() {
@@ -51,6 +59,13 @@ public class Usuario {
 
 	public void setID(int iD) {
 		ID = iD;
+	}
+	
+	public void setContactos(DefaultListModel<String> contactos) {
+		this.contactos.removeAllElements();
+		for(int i = 0; i < contactos.size(); i++) {
+			this.contactos.addElement(contactos.get(i));
+		}
 	}
 	
 }

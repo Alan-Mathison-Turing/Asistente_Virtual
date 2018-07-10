@@ -53,7 +53,8 @@ public class UsuarioDao extends BaseDao {
 					.setParameter("username", username)
 					.setParameter("password", password);
 			
-			return query.getFetchSize() > 0;
+			return query.getResultList().size() > 0;
+			//return query.getFetchSize() > 0;
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -65,8 +66,9 @@ public class UsuarioDao extends BaseDao {
 					e.printStackTrace();
 				}
 			}
-			return false;
+			//return false;
 		}
+		return false;
 		
 		
 
