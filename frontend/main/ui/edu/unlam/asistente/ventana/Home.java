@@ -1,6 +1,5 @@
 package edu.unlam.asistente.ventana;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -12,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
@@ -29,9 +29,6 @@ public class Home extends JFrame {
 	private JList<String> contactosList;
 	private JList<String> salasList;
 	private JList<String> salasPublicasList;
-	private JLabel lblSeleccionarContacto;
-	private JLabel lblSeleccionarSala;
-	private JLabel lblSeleccioneUnaSala;
 	private final Cliente cliente;
 
 	/**
@@ -83,9 +80,10 @@ public class Home extends JFrame {
 		btnAbrirChat.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String chatearCon = contactosList.getSelectedValue();
-				lblSeleccionarContacto.setVisible(false);
-				if(chatearCon.isEmpty() || chatearCon == null){
-					lblSeleccionarContacto.setVisible(true);
+				if(chatearCon == null || chatearCon.isEmpty()){
+					JOptionPane.showMessageDialog(null,
+							"Operacion incorrecta\n" + "Seleccione un usuario para abrir el chat",
+							"Mensaje de informacion", JOptionPane.INFORMATION_MESSAGE);
 				}else {
 					abrirChatCon(chatearCon);
 				}
@@ -94,16 +92,47 @@ public class Home extends JFrame {
 		btnAbrirChat.setBounds(24, 114, 131, 22);
 		contentPane.add(btnAbrirChat);
 		
-		lblSeleccionarContacto = new JLabel("Seleccione un contacto");
-		lblSeleccionarContacto.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		lblSeleccionarContacto.setForeground(Color.RED);
-		lblSeleccionarContacto.setBounds(24, 134, 116, 22);
-		lblSeleccionarContacto.setVisible(false);
-		contentPane.add(lblSeleccionarContacto);
-		
 		JScrollPane scrollPaneContactos = new JScrollPane(contactosList);
 		scrollPaneContactos.setBounds(24, 167, 131, 203);
 		contentPane.add(scrollPaneContactos);
+		
+		JButton btnEliminarContacto = new JButton("-");
+		btnEliminarContacto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String contactoSeleccionado = contactosList.getSelectedValue();
+				if(contactoSeleccionado == null){
+					JOptionPane.showMessageDialog(null,
+							"Operacion incorrecta\n" + "Seleccione un contacto para eliminar",
+							"Mensaje de informacion", JOptionPane.INFORMATION_MESSAGE);
+				}else {
+					if(0 == JOptionPane.showConfirmDialog(null, "Seguro que desea eliminar al contacto: " + contactoSeleccionado,
+							"Mensaje de confirmacion", JOptionPane.OK_CANCEL_OPTION)) {
+						eliminarContacto(contactoSeleccionado);
+					}
+				}
+			}
+		});
+		btnEliminarContacto.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		btnEliminarContacto.setBounds(165, 240, 47, 32);
+		contentPane.add(btnEliminarContacto);
+
+		JButton btnAgregarContacto = new JButton("+");
+		btnAgregarContacto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String contactoAgregar = JOptionPane.showInputDialog("Ingrese el nombre del contacto a agregar:");
+				if(contactoAgregar != null) {
+					if(agregarContacto(contactoAgregar)) {
+						JOptionPane.showMessageDialog(null, "Se agrego correctamente el usuario: " + contactoAgregar + " a la lista de contactos", 
+								"Confirmacion exitosa", JOptionPane.INFORMATION_MESSAGE);
+					}else {
+						JOptionPane.showMessageDialog(null, "Hubo un error al agregar el contacto", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		btnAgregarContacto.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		btnAgregarContacto.setBounds(165, 169, 47, 32);
+		contentPane.add(btnAgregarContacto);
 		
 		
 		//SECTOR CENTRAL - SALAS PRIVADAS
@@ -113,10 +142,11 @@ public class Home extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String nombreSala = salasList.getSelectedValue();
 				if(nombreSala != null) {
-					lblSeleccionarSala.setVisible(false);
 					ingresarSalaPrivada(nombreSala);
 				}else {
-					lblSeleccionarSala.setVisible(true);
+					JOptionPane.showMessageDialog(null,
+							"Operacion incorrecta\n" + "Seleccione una sala para ingresar",
+							"Mensaje de informacion", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});
@@ -135,23 +165,17 @@ public class Home extends JFrame {
 		salasList = new JList<String>(obtenerSalasPrivadas(this.cliente));
 		listaSalas.setViewportView(salasList);
 		
-		lblSeleccionarSala = new JLabel("Seleccione una sala");
-		lblSeleccionarSala.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		lblSeleccionarSala.setForeground(Color.RED);
-		lblSeleccionarSala.setVisible(false);
-		lblSeleccionarSala.setBounds(239, 134, 116, 22);
-		contentPane.add(lblSeleccionarSala);
 		
-		
-		JButton button = new JButton("+");
-		button.setFont(new Font("Tahoma", Font.PLAIN, 8));
-		button.addActionListener(new ActionListener() {
+		JButton btnNuevaSalaPrivada = new JButton("+");
+		btnNuevaSalaPrivada.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		btnNuevaSalaPrivada.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showConfirmDialog(crearNuevaSalaComponent, "Inggrese los datos de la sala nueva", "Creacion de nueva sala", JOptionPane.OK_CANCEL_OPTION);
 				crearSala();
 			}
 		});
-		button.setBounds(323, 114, 47, 22);
-		contentPane.add(button);
+		btnNuevaSalaPrivada.setBounds(323, 114, 47, 22);
+		contentPane.add(btnNuevaSalaPrivada);
 		
 		
 		//SECTOR DERECHO - SALAS PUBLICAS
@@ -164,17 +188,18 @@ public class Home extends JFrame {
 		btnEntrarSalaPublica.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 11));
 		btnEntrarSalaPublica.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				String salaPublica = salasPublicasList.getSelectedValue();
+				if(salaPublica == null) {
+					JOptionPane.showMessageDialog(null,
+							"Operacion incorrecta\n" + "Seleccione una sala para ingresar",
+							"Mensaje de informacion", JOptionPane.INFORMATION_MESSAGE);
+				}else {
+					ingresarSalaPublica(salaPublica);
+				}
 			}
 		});
 		btnEntrarSalaPublica.setBounds(436, 114, 131, 22);
 		contentPane.add(btnEntrarSalaPublica);
-		
-		lblSeleccioneUnaSala = new JLabel("Seleccione una sala");
-		lblSeleccioneUnaSala.setForeground(Color.RED);
-		lblSeleccioneUnaSala.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		lblSeleccioneUnaSala.setBounds(436, 138, 116, 22);
-		lblSeleccioneUnaSala.setVisible(false);
-		contentPane.add(lblSeleccioneUnaSala);
 		
 		JScrollPane scrollPaneSalasPublicas = new JScrollPane((Component) null);
 		scrollPaneSalasPublicas.setBounds(436, 167, 131, 203);
@@ -183,10 +208,30 @@ public class Home extends JFrame {
 		salasPublicasList = new JList<String>(obtenerSalasPublicas(this.cliente));;
 		scrollPaneSalasPublicas.setViewportView(salasPublicasList);
 		
+		JList list = new JList();
+		list.setBounds(117, 403, 121, 40);
+		contentPane.add(list);
+		
+	}
+
+	protected boolean agregarContacto(String contactoAgregar) {
+		boolean bolean = false;
+		// TODO desarrollar metodo que vaya a back
+		return bolean;
+	}
+
+	protected void eliminarContacto(String contactoSeleccionado) {
+		// TODO desarrollar metodo que vaya a back
+		
+	}
+
+	protected void ingresarSalaPublica(String salaPublica) {
+		// TODO: hacer metodo
+		
 	}
 
 	protected void ingresarSalaPrivada(String nombreSala) {
-		
+		// TODO: hacer metodo
 	}
 
 	private ListModel<String> obtenerSalasPublicas(Cliente cliente2) {
@@ -208,7 +253,7 @@ public class Home extends JFrame {
 	}
 
 	private void crearSala() {
-		
+		// TODO: hacer metodo
 	}
 
 	private ListModel<String> obtenerSalasPrivadas(Cliente cliente2) {
@@ -244,8 +289,7 @@ public class Home extends JFrame {
 	}
 	
 	private boolean cerrarSesion() {
-		if(true) {
-		}
+		//TODO: desarrollar metodo
 		return true;
 	}
 }
