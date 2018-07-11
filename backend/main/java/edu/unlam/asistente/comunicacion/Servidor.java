@@ -8,7 +8,8 @@ import java.util.ArrayList;
 public class Servidor {
 	
 	int puerto;
-	ArrayList<Socket> sockets = new ArrayList<Socket>(); 
+	ArrayList<Socket> sockets = new ArrayList<Socket>();
+	ArrayList<Integer> ids_usuarios = new ArrayList<Integer>();
 	
 	public Servidor(int puerto) {
 		this.puerto = puerto;
@@ -17,7 +18,7 @@ public class Servidor {
 			ServerSocket server = new ServerSocket(puerto);
 			System.out.println("INFO: Server creado en puerto " + puerto);
 			
-			new ThreadAceptacion(server, sockets).start();
+			new ThreadAceptacion(server, sockets, ids_usuarios).start();
 			
 		} catch (IOException e) {
 			e.printStackTrace();

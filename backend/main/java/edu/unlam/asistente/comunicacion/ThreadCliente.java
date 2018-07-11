@@ -16,14 +16,16 @@ import edu.unlam.asistente.database.pojo.Usuario;
 public class ThreadCliente extends Thread{
 	
 	ArrayList<Socket> clientes;
+	ArrayList<Integer> idsUsuarios;
 	Socket cliente;
 	Bot bot;
 	private Usuario usuario;
 	private UsuarioDao userDao;
 	
-	public ThreadCliente(Socket socket,ArrayList<Socket> clientes) throws IOException, SQLException {
+	public ThreadCliente(Socket socket,ArrayList<Socket> clientes, ArrayList<Integer> idsUsuarios) throws IOException, SQLException {
 		this.cliente = socket;
 		this.clientes = clientes;
+		this.idsUsuarios = idsUsuarios;
 		bot = new Bot("testBot");
 		System.out.println("INFO: Socket de cliente creado");
 		this.userDao = new UsuarioDao();
@@ -75,6 +77,12 @@ public class ThreadCliente extends Thread{
 						mensajeTexto = mensajeTexto.substring(0, mensajeTexto.length() - 1);
 						respuesta = new Mensaje(mensajeTexto,usuario.getUsuario(), mensajeRecibido.getType());
 					}
+					mensajeEnviar.writeObject(respuesta);
+				} else if(mensajeRecibido.getType().equals("CHATS")) {
+					//TODO: Obtener las salas y devolver los ids de la sala concatenado
+					
+					//Ejemplo:
+					respuesta = new Mensaje("1,2,3", usuario.getUsuario(), mensajeRecibido.getType());
 					mensajeEnviar.writeObject(respuesta);
 				}
 				

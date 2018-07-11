@@ -1,5 +1,7 @@
 package edu.unlam.asistente.entidades;
 
+import java.util.ArrayList;
+
 import javax.swing.DefaultListModel;
 
 import edu.unlam.asistente.cliente.Main;
@@ -11,6 +13,7 @@ public class Usuario {
 	private DefaultListModel<String> contactos;
 	private DefaultListModel<String> salasPrivadas;
 	private DefaultListModel<String> salasPublicas;
+	private ArrayList<Chat> chats;
 	
 	public Usuario(String nombreUsuario) {
 		this.nombreUsuario = nombreUsuario;
@@ -27,10 +30,15 @@ public class Usuario {
 		this.contactos = new DefaultListModel<String>();
 		this.salasPrivadas = new DefaultListModel<String>();
 		this.salasPublicas = new DefaultListModel<String>();
+		this.chats = new ArrayList<Chat>();
 	}
 	
 	public void obtenerContactos() {
 		Main.cliente.obtenerContactosUsuario(this.ID);
+	}
+	
+	public void obtenerChats() {
+		Main.cliente.obtenerChatsUsuario(this.ID);
 	}
 	
 	public DefaultListModel<String> getContactos(){
@@ -66,6 +74,10 @@ public class Usuario {
 		for(int i = 0; i < contactos.size(); i++) {
 			this.contactos.addElement(contactos.get(i));
 		}
+	}
+	
+	public void addChat(Chat chat) {
+		this.chats.add(chat);
 	}
 	
 }
