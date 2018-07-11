@@ -1,8 +1,6 @@
 package edu.unlam.asistente.busqueda_web;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.regex.Matcher;
@@ -13,7 +11,6 @@ import java.util.stream.Stream;
 import javax.net.ssl.HttpsURLConnection;
 
 import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 
@@ -23,7 +20,7 @@ public class BusquedaWeb implements IDecision {
 	
 	private IDecision siguienteDecision;
 	private final static String REGEX_WIKIPEDIA = "@\\w*\\,*\\s*(?:quien|quienes|busca|buscame|investiga|investigame|que|cual|cuales) \\w*\\s*(\\w*\\s*\\w*)\\s*\\?*";
-	private final static String REGEX_YOUTUBE = "@\\w*\\,*\\s*(?:quiero|mostra|mostrame) \\w* (?:video) \\w*\\s*(\\w*\\s*\\w*)\\s*\\?*";
+	private final static String REGEX_YOUTUBE = "@\\w*\\,*\\s*(?:quiero|mostra|mostrame) \\w*\\s*(?:video) \\w*\\s*(\\w*\\s*\\w*)\\s*\\?*";
 
 	private final static String WIKIPEDIA_URL = "https://es.wikipedia.org/wiki/";
 	private final static String WIKIPEDIA_API_URL = "https://es.wikipedia.org/api/rest_v1/page/summary/";
@@ -34,8 +31,6 @@ public class BusquedaWeb implements IDecision {
 	private final static String YOUTUBE_KEY = "AIzaSyAgnWeCMRhohRG9Af_cQNpbognP2-XkZbU";
 	private final static String YOUTUBE_SEARCH = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&type=video&videoDefinition=high&key=" + YOUTUBE_KEY + "&q=";
 	private final static String YOUTUBE_EMBED_URL = "https://www.youtube.com/embed/";
-	
-	private HttpsURLConnection connection;
 	
 	@Override
 	public String leerMensaje(String mensaje, String usuario) {
@@ -77,34 +72,24 @@ public class BusquedaWeb implements IDecision {
 		return respuesta != "" ? respuesta : voyATenerSuerte(terminoBusqueda);
 	}
 	
+	public String busquedaVideo(String terminoBusqueda) {
+		return busquedaYoutube(terminoBusqueda);
+	}
+	
 	private String busquedaWikipedia(String terminoBusqueda) {
-		String urlWikipedia = "";
-		String contenidoArticuloWikipedia = "";
+		String[] fields = {"extract_html", "canonical"};
+		String[] searchResult = new String[fields.length];
 		URL url;
 		
 		try {
 			url = new URL(WIKIPEDIA_API_URL + URLEncoder.encode(terminoBusqueda, "UTF-8"));
-	        JsonParser parser = generarConexion(url);
-	        
-	        if(parser == null) {
-	        	return "";
-	        }
-	        
-	        while(!parser.isClosed()){
-	            JsonToken jsonToken = parser.nextToken();
-	            if(JsonToken.FIELD_NAME.equals(jsonToken)){
-	                String fieldName = parser.getCurrentName();
-	                jsonToken = parser.nextToken();
-	                if("extract_html".equals(fieldName)){
-	                	contenidoArticuloWikipedia = parser.getValueAsString();
-	                }
-	                if("canonical".equals(fieldName)) {
-	                	urlWikipedia = WIKIPEDIA_URL + parser.getValueAsString();
-	                }
-	            }
-	        }
-	        connection.disconnect();
-	        return "<a href=\"" + urlWikipedia + "\"><u>" + urlWikipedia + "</u></a><br/>" + contenidoArticuloWikipedia;
+			searchResult = resultadoBusqueda(url, fields);
+			
+			if(searchResult[0].equals("")) {
+				return "";
+			} else {
+				return "<a href=\"" + WIKIPEDIA_URL + searchResult[1] + "\"><u>" + WIKIPEDIA_URL + searchResult[1] + "</u></a><br/>" + searchResult[0];	
+			}
 	        
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -115,95 +100,55 @@ public class BusquedaWeb implements IDecision {
 	}
 	
 	private String voyATenerSuerte(String terminoBusqueda) {
-		String urlPrimerResultado = null;
-		String contenidoArticuloGoogle = null;
+		String[] fields = {"htmlSnippet", "link", "totalResults"};
+		String[] searchResult = new String[fields.length];
 		URL url;
 		
 		try {
 			url = new URL(GOOGLE_SEARCH + "&q=" + URLEncoder.encode(terminoBusqueda, "UTF-8"));
-	        JsonParser parser = generarConexion(url);
+			searchResult = resultadoBusqueda(url, fields);
 	        
-	        if(parser == null) {
-	        	return "No encontré lo que buscabas, ¿podrías ser más específico?";
-	        }
-	        
-	        while(!parser.isClosed()){
-	            JsonToken jsonToken = parser.nextToken();
-	            if(JsonToken.FIELD_NAME.equals(jsonToken)){
-	                String fieldName = parser.getCurrentName();
-	                jsonToken = parser.nextToken();
-	                if("htmlSnippet".equals(fieldName)){
-	                    contenidoArticuloGoogle = parser.getValueAsString();
-	                }
-	                if("link".equals(fieldName)) {
-	                	urlPrimerResultado = parser.getValueAsString();
-	                }
-	                if("totalResults".equals(fieldName)) {
-	                	if(parser.getValueAsString().equals("0"))
-	                		connection.disconnect();
-	                		return "No encontré lo que buscabas, ¿podrías ser más específico?";
-	                }
-	            }
-	        }
-	        
-	        connection.disconnect();
-	        
-	        if(urlPrimerResultado == null) {
-	        	return "No encontré lo que buscabas, ¿podrías ser más específico?";
-	        } else {
-	        	return "<a href=\"" + urlPrimerResultado + "\"><u>" + urlPrimerResultado + "</u></a><br/>" + contenidoArticuloGoogle;
-	        }	        
+	  		if(searchResult[0].equals("")) {
+				return "No encontré lo que buscabas, ¿podrías ser más específico?";
+			} else {
+				return "<a href=\"" + searchResult[1] + "\"><u>" + searchResult[1] + "</u></a><br/>" + searchResult[0];	
+			}
 	        
 		} catch (IOException e) {
 			e.printStackTrace();
-        	return "No encontré lo que buscabas, ¿podrías ser más específico?";
 		}
-	}
-	
-	public String busquedaVideo(String terminoBusqueda) {
-		return busquedaYoutube(terminoBusqueda);
+		
+		return "No encontré lo que buscabas, ¿podrías ser más específico?";
 	}
 	
 	private String busquedaYoutube(String terminoBusqueda) {
+		String[] fields = {"videoId"};
+		String[] searchResult = new String[fields.length];
 		URL url;
-		String videoId = null;
 		
 		try {
 			url = new URL(YOUTUBE_SEARCH + URLEncoder.encode(terminoBusqueda, "UTF-8"));
 
-			JsonParser parser = generarConexion(url);
+			searchResult = resultadoBusqueda(url, fields);
 	        
-	        if(parser == null) {
-	        	return "No encontré el video que buscabas, ¿podrías ser más específico?";
-	        }
-			
-	        while(!parser.isClosed()){
-	        	JsonToken jsonToken = parser.nextToken();
-	            if(JsonToken.FIELD_NAME.equals(jsonToken)){
-	                String fieldName = parser.getCurrentName();
-	                jsonToken = parser.nextToken();
-	                if("videoId".equals(fieldName)) {
-	                	videoId = parser.getValueAsString();
-	                	break;
-	                }
-	            }
-	        }
-
-	        if(videoId == null) {
+	        if(searchResult[0].equals("")) {
 	        	return "No encontré el video que buscabas, ¿podrías ser más específico?";
 	        } else {
-	        	return YOUTUBE_EMBED_URL + videoId + "?autoplay=1";
+	        	return YOUTUBE_EMBED_URL + searchResult[0] + "?autoplay=1";
 	        }	        
 	        
 		} catch (IOException e) {
 			e.printStackTrace();
-        	return "No encontré el video que buscabas, ¿podrías ser más específico?";
 		}
+		
+		return "No encontré el video que buscabas, ¿podrías ser más específico?";
 	}
 	
-	private JsonParser generarConexion(URL url) {
+	private String[] resultadoBusqueda(URL url, String[] fields) {
+		String[] searchResult = new String[fields.length];
+		
 		try {
-			connection = (HttpsURLConnection) url.openConnection();
+			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 			connection.setRequestMethod("GET");
 	        connection.setRequestProperty("Accept", "application/json");
 	        connection.setRequestProperty("charset", "UTF-8");
@@ -212,19 +157,47 @@ public class BusquedaWeb implements IDecision {
 	        
 	        if(connection.getResponseCode() != 200) {
 	        	connection.disconnect();
-	        	return null;
+	        	searchResult[0] = "";
+	        	return searchResult;
 	        }
 	        
 	        JsonFactory factory = new JsonFactory();
 	        JsonParser parser = factory.createParser(connection.getInputStream());
 
-	        return parser;
+	        if(parser == null) {
+	        	searchResult[0] = "";
+	        	return searchResult;
+	        }
+	        
+        
+	        while(!parser.isClosed()){
+	            JsonToken jsonToken = parser.nextToken();
+	            if(JsonToken.FIELD_NAME.equals(jsonToken)){
+	            	String fieldName = parser.getCurrentName();
+	                jsonToken = parser.nextToken();
+	            	for(int i = 0; i < fields.length; i++) {
+		                if(fields[i].equals(fieldName)){
+		                	searchResult[i] = new String(parser.getValueAsString());
+		                }
+		                if("totalResults".equals(fieldName)) {
+		                	if(parser.getValueAsString().equals("0")) {
+		                		connection.disconnect();
+		                		searchResult[0] = "";
+		                		return searchResult;		                		
+		                	}
+		                }
+	            	}
+	            }
+	        }
+	        
+	        connection.disconnect();
 	        
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;        
+		
+		return searchResult;
 	}
 	
 	private String capitalizarPrimerLetra(final String palabras) {
@@ -236,4 +209,3 @@ public class BusquedaWeb implements IDecision {
 	
 	
 }
-
