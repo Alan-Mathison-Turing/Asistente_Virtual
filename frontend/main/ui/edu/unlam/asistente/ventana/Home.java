@@ -4,23 +4,24 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 
+import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
 import edu.unlam.asistente.cliente.Main;
 import edu.unlam.asistente.comunicacion.Cliente;
-import edu.unlam.asistente.database.dao.UsuarioDao;
-import edu.unlam.asistente.database.pojo.Usuario;
 
 public class Home extends JFrame {
 
@@ -176,16 +177,87 @@ public class Home extends JFrame {
 		listaSalas.setViewportView(salasList);
 		
 		
+		//CREACION DE NUEVA SALA
+		JPanel panelCrearSala = new JPanel();
+		panelCrearSala.setBounds(100, 200, 600, 500);
+		
+		JLabel lblNombreSala = new JLabel("Nombre Sala: ");
+		lblNombreSala.setBounds(10, 61, 114, 14);
+		panelCrearSala.add(lblNombreSala);
+		
+		JLabel lblTopicoDeLa = new JLabel("Topico de la sala");
+		lblTopicoDeLa.setBounds(100, 101, 114, 14);
+//		panelCrearSala.add(lblTopicoDeLa);
+		
+		JTextField txtNombreSala = new JTextField();
+		txtNombreSala.setColumns(10);
+		txtNombreSala.setBounds(290, 61, 132, 21);
+		panelCrearSala.add(txtNombreSala);
+		
+		JTextField txtTopicoSala = new JTextField();
+		txtTopicoSala.setColumns(10);
+		txtTopicoSala.setBounds(350, 101, 132, 21);
+//		panelCrearSala.add(txtTopicoSala);
+		
+		//CONTACTOS IZQ SALA
+		JList<String> contactosTotales = new JList<String>();
+		contactosTotales.setModel(this.contactosUsuario);
+		contactosTotales.setBounds(58, 148, 104, 152);
+//		panelCrearSala.add(contactosTotales);
+		
+		//CONTACTOS DER SALA
+		JList<String> contactosAgregados = new JList<String>();
+		contactosAgregados.setModel(new DefaultListModel<String>());
+		contactosAgregados.setBounds(266, 148, 104, 152);
+//		panelCrearSala.add(contactosAgregados);
+		
+		//BOTON PARA AGREGAR CONTACTOS A LA LISTA
+		JButton btnSeleccionar = new JButton(">");
+		btnSeleccionar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ListSelectionModel seleccionado = contactosTotales.getSelectionModel();
+				if(seleccionado != null) {
+					//TODO: eliminar de lista izquierda, agregar en lista derecha
+//					contactosAgregados.add(seleccionado.)
+//					contactosTotales.remove(arg0);(contactosTotales.getSelectedIndex());
+				};
+			}
+		});
+		btnSeleccionar.setBounds(189, 148, 55, 47);
+//		panelCrearSala.add(btnSeleccionar);
+		
+		JButton btnSacar = new JButton("<");
+		btnSeleccionar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ListSelectionModel seleccionado = contactosAgregados.getSelectionModel();
+				if(seleccionado != null) {
+					//TODO: eliminar de lista derecha, agregar en lista izquierda
+//					contactosAgregados.add(seleccionado.)
+//					contactosTotales.remove(arg0);(contactosTotales.getSelectedIndex());
+				};
+			}
+		});
+		btnSacar.setBounds(189, 217, 55, 47);
+//		panelCrearSala.add(btnSacar);
+		
+		
+		//BOTON PARA CREAR NUEVA SALA
 		JButton btnNuevaSalaPrivada = new JButton("+");
 		btnNuevaSalaPrivada.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		btnNuevaSalaPrivada.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//JOptionPane.showConfirmDialog(crearNuevaSalaComponent, "Inggrese los datos de la sala nueva", "Creacion de nueva sala", JOptionPane.OK_CANCEL_OPTION);
-				crearSala();
+				txtNombreSala.setText("");
+				txtTopicoSala.setText("");
+				int opcionElegida = JOptionPane.showConfirmDialog(null, panelCrearSala, "Creacion de nueva sala", JOptionPane.OK_CANCEL_OPTION);
+				if (opcionElegida == JOptionPane.OK_OPTION && txtNombreSala != null) {
+					crearSala(txtNombreSala.getText(), txtTopicoSala.getText());
+				}
+				
 			}
 		});
 		btnNuevaSalaPrivada.setBounds(323, 114, 47, 22);
 		contentPane.add(btnNuevaSalaPrivada);
+		
 		
 		
 		//SECTOR DERECHO - SALAS PUBLICAS
@@ -218,10 +290,16 @@ public class Home extends JFrame {
 		salasPublicasList = new JList<String>(this.salasPublicas);
 		scrollPaneSalasPublicas.setViewportView(salasPublicasList);
 		
-		JList list = new JList();
-		list.setBounds(117, 403, 121, 40);
-		contentPane.add(list);
+	}
+
+	protected ListModel<JCheckBox> obtenerContactosCheckbox() {
+		JList<JCheckBox> checkBoxList = new JList<>();
+		for (int i = 0 ; i < this.contactosUsuario.size() ; i++) {
+			JCheckBox checkbox = new JCheckBox(this.contactosUsuario.get(i));
+			checkBoxList.add(checkbox);
+		}
 		
+		return null;
 	}
 
 	protected boolean agregarContacto(String contactoAgregar) {
@@ -231,7 +309,7 @@ public class Home extends JFrame {
 	}
 
 	protected void eliminarContacto(String contactoSeleccionado) {
-		// TODO desarrollar metodo que vaya a back
+		// TODO llamar a cliente para solicitar eliminar contacto
 		
 	}
 
@@ -262,8 +340,9 @@ public class Home extends JFrame {
 		return listaSalasPublicas;
 	}
 
-	private void crearSala() {
-		// TODO: hacer metodo
+	private void crearSala(String nombreSala, String topicoSala) {
+		// TODO: llamar a cliente para solicitar creacion de sala
+		String prueba = nombreSala + " " + topicoSala;
 	}
 
 	private ListModel<String> obtenerSalasPrivadas(Cliente cliente2) {
@@ -286,4 +365,5 @@ public class Home extends JFrame {
 		//TODO: desarrollar metodo
 		return true;
 	}
+	
 }
