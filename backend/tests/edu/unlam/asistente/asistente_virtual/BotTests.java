@@ -577,7 +577,7 @@ public class BotTests {
 	public void busquedaExistente() {
 		Assert.assertEquals("<a href=\"https://es.wikipedia.org/wiki/Diego_Armando_Maradona\">"
 						+ "<u>https://es.wikipedia.org/wiki/Diego_Armando_Maradona</u></a><br/>"
-						+ "<p><b>Diego Armando Maradona</b> es un exfutbolista y director técnico argentino. "
+						+ "<p><b>Diego Armando Maradona Franco</b> es un exfutbolista y director técnico argentino. "
 						+ "Actualmente se desempeña como presidente y director deportivo del FC Dinamo Brest de la "
 						+ "Liga Premier de Bielorrusia.</p>", 
 							jenkins.leerMensaje("@jenkins quien es Diego Maradona ?", USUARIO));
