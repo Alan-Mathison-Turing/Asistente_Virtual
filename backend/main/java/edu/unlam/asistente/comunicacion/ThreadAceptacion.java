@@ -10,10 +10,12 @@ public class ThreadAceptacion extends Thread{
 	
 	ServerSocket server;
 	ArrayList<Socket> sockets;
+	ArrayList<Integer> idsUsuario;
 	
-	public ThreadAceptacion(ServerSocket server, ArrayList<Socket> sockets) {
+	public ThreadAceptacion(ServerSocket server, ArrayList<Socket> sockets, ArrayList<Integer> idsUsuario) {
 		this.server = server;
 		this.sockets = sockets;
+		this.idsUsuario = idsUsuario;
 	}
 	
 	@Override
@@ -26,7 +28,7 @@ public class ThreadAceptacion extends Thread{
 				sockets.add(cliente);
 				System.out.println("INFO: Agrego cliente a lista de sockets");
 				
-				new ThreadCliente(cliente, sockets).start();
+				new ThreadCliente(cliente, sockets,idsUsuario).start();
 			}
 			
 		} catch (IOException | SQLException e) {

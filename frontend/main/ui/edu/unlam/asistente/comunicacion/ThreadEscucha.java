@@ -6,11 +6,9 @@ import java.net.Socket;
 
 import javax.swing.DefaultListModel;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 import edu.unlam.asistente.cliente.Main;
 import edu.unlam.asistente.entidades.Usuario;
-import edu.unlam.asistente.ventana.Chat;
+import edu.unlam.asistente.entidades.Chat;
 import edu.unlam.asistente.ventana.Home;
 
 public class ThreadEscucha extends Thread {
@@ -43,15 +41,16 @@ public class ThreadEscucha extends Thread {
 						} else {
 							Main.usuario = new Usuario(msj.getNombreUsuario(),  Integer.valueOf(msj.getMensaje()));
 							Main.usuario.obtenerContactos();
+							Main.usuario.obtenerChats();
 							Main.login.dispose();
 							Main.home = new Home();
 							Main.home.setVisible(true);
 						}
 					} else if (msj.getType().equals("CHAT_CON")) { //mock abrir chat
 						if (Boolean.parseBoolean(msj.getMensaje())) {
-							Chat nuevoChat = new Chat(cliente);
-							Main.listaChats.add(nuevoChat);
-							nuevoChat.setVisible(true);
+							//Chat nuevoChat = new Chat(cliente);
+							//Main.listaChats.add(nuevoChat);
+							//nuevoChat.setVisible(true);
 						}
 					} else if(msj.getType().equals("CONTACTOS")) {
 						if(msj.getMensaje().equals("false")) {
@@ -63,6 +62,15 @@ public class ThreadEscucha extends Thread {
 								contactos.addElement(contactostxts[i]);
 							}
 							Main.usuario.setContactos(contactos);
+						}
+					} else if(msj.getType().equals("CHATS")) {
+						if(msj.getMensaje().equals("false")) {
+							
+						} else {
+							String[] idsSalas = msj.getMensaje().split(",",-1);
+							for(int i = 0; i < idsSalas.length; i++) {
+								Main.usuario.addChat(new Chat(Integer.valueOf(idsSalas[i])));
+							}
 						}
 					}
 
