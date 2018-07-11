@@ -7,23 +7,23 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import edu.unlam.asistente.database.pojo.Evento;
+import edu.unlam.asistente.database.pojo.Sala;
 import edu.unlam.asistente.database.pojo.Usuario;
-import edu.unlam.asistente.database.dao.BaseDao;
 
-public class EventoDao extends BaseDao {
-
-	public EventoDao() {
+public class SalaDao extends BaseDao{
+	
+	public SalaDao(){
 		super();
 	}
-
-	public List<Evento> obtenerEventosPorUsuario(Usuario user) {
-
-		List<Evento> listaEventos = null;
+	
+	public List<Sala> obtenerSalasPorUsuario(Usuario usuario){
+		
+		List<Sala> listaEventos = null;
 		Session session = null;
 		try {
 			session = factory.openSession();
-			String hql = "select distinct e from Evento e " + "join e.usuarios u " + "where u.usuario = :user";
-			Query query = session.createQuery(hql).setParameter("user", user.getUsuario());
+			String hql = "select distinct s from Sala s " + "join s.usuarios u " + "where u.usuario = :user";
+			Query query = session.createQuery(hql).setParameter("user", usuario.getUsuario());
 
 			listaEventos = query.list();
 
@@ -41,32 +41,14 @@ public class EventoDao extends BaseDao {
 		}
 	}
 	
-	public Evento obtenerEventoPorId(Integer id) {
-		
-		Evento evento = null;
-		Session session = null;
-		try {
-			session = factory.openSession();
-			evento = session.get(Evento.class, id);
-			
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(session != null) {
-				session.close();;
-			}
-			return evento;
-		}
-	}
-
-	public void crearEvento(Evento evento) {
+	public void crearSala(Sala sala) {
 
 		Session session = null;
 		Transaction tx = null;
 		try {
 			session = factory.openSession();
 			tx = session.beginTransaction();
-			session.saveOrUpdate(evento);
+			session.saveOrUpdate(sala);
 			
 			tx.commit();
 		} catch (Exception e) {
@@ -77,5 +59,4 @@ public class EventoDao extends BaseDao {
 			}
 		}
 	}
-
 }

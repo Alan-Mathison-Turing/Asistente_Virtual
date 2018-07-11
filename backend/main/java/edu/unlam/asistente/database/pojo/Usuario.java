@@ -31,12 +31,11 @@ public class Usuario implements java.io.Serializable {
 	 * Chuck Norris facts que recibió el usuario. <br>
 	 */
 	private Set<ChuckNorrisFacts> chuckNorrisFacts = new HashSet<ChuckNorrisFacts>();
-
-	public Usuario() {
-	}
-
-	
 	private List<Usuario> contactos = new ArrayList<Usuario>();
+	private Set<Sala> salas = new HashSet<Sala>(0);
+	
+	public Usuario() {}
+	
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id", unique = true, nullable = false)
@@ -91,6 +90,15 @@ public class Usuario implements java.io.Serializable {
 	
 	public void setContactos(List<Usuario> contactos) {
 		this.contactos = contactos;
+	}
+	
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "usuarios")
+	public Set<Sala> getSalas() {
+		return salas;
+	}
+	
+	public void setSalas(Set<Sala> salas) {
+		this.salas = salas;
 	}
 	
 	@Override
