@@ -77,6 +77,11 @@ public class ThreadCliente extends Thread{
 					}
 					mensajeEnviar.writeObject(respuesta);
 				}
+				else if(mensajeRecibido.getType().equals("SALIR")) {
+					respuesta = new Mensaje("true", mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
+					mensajeEnviar.writeObject(respuesta);
+					//cerrar socket correspondiente al usuario
+				}
 				
 				/*
 				Iterator<Socket> iteratorClientes = this.clientes.iterator();

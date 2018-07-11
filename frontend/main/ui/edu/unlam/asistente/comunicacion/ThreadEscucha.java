@@ -6,7 +6,6 @@ import java.net.Socket;
 
 import javax.swing.DefaultListModel;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import edu.unlam.asistente.cliente.Main;
 import edu.unlam.asistente.entidades.Usuario;
@@ -65,7 +64,13 @@ public class ThreadEscucha extends Thread {
 							Main.usuario.setContactos(contactos);
 						}
 					}
+					else if(msj.getType().equals("SALIR")) {
+						
+							socket.close();
+							System.exit(0);
+					
 
+				}
 				}
 
 			}

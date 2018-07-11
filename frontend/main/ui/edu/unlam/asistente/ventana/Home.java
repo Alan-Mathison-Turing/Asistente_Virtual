@@ -34,7 +34,7 @@ public class Home extends JFrame {
 	private DefaultListModel<String> contactosUsuario;
 	private DefaultListModel<String> salasPrivadas;
 	private DefaultListModel<String> salasPublicas;
-	
+	public static Cliente cliente;
 
 	/**
 	 * Create the frame.
@@ -282,8 +282,9 @@ public class Home extends JFrame {
 	}
 
 	
-	private boolean cerrarSesion() {
-		//TODO: desarrollar metodo
-		return true;
+	private void cerrarSesion() {
+		Main.cliente.cerrarSocket();
+		System.exit(0);
+		
 	}
 }

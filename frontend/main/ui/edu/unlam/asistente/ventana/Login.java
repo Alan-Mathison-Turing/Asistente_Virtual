@@ -54,11 +54,9 @@ public class Login extends JFrame {
 		contentPane.add(lblContrasea);
 
 		pwdSecreto = new JPasswordField();
-		pwdSecreto.setText("secreto");
 		contentPane.add(pwdSecreto);
 
 		txtUsuario_1 = new JTextField();
-		txtUsuario_1.setText("Usuario");
 		contentPane.add(txtUsuario_1);
 		txtUsuario_1.setColumns(10);
 
@@ -127,9 +125,11 @@ public class Login extends JFrame {
 		JLabel lblPuertoServidor = new JLabel("Puerto Servidor:");
 
 		tfServidor = new JTextField();
+		tfServidor.setText("localhost");
 		tfServidor.setColumns(10);
 
 		tfPuertoServidor = new JTextField();
+		tfPuertoServidor.setText("12346");
 		tfPuertoServidor.setColumns(10);
 
 		JLabel lblDatosDeUsuario = new JLabel("Datos de usuario:");
@@ -138,12 +138,6 @@ public class Login extends JFrame {
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(149)
-							.addComponent(btnIniciarSesion, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(139)
-							.addComponent(lblseOlvidoSu, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(169)
 							.addComponent(lblRegistrarse, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE))
@@ -156,17 +150,24 @@ public class Login extends JFrame {
 								.addComponent(lblContrasea, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
 							.addGap(10)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(tfPuertoServidor, GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-								.addComponent(tfServidor, GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-								.addComponent(txtUsuario_1, GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-								.addComponent(pwdSecreto, GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE))))
+								.addComponent(tfPuertoServidor, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+								.addComponent(tfServidor, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+								.addComponent(txtUsuario_1, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+								.addComponent(pwdSecreto, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)))
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+							.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+								.addGap(149)
+								.addComponent(btnIniciarSesion, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+								.addGap(139)
+								.addComponent(lblseOlvidoSu, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE))))
 					.addGap(94))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(34)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblDatosDeUsuario)
 						.addComponent(lblDatosDeConexin))
-					.addContainerGap(295, Short.MAX_VALUE))
+					.addContainerGap(305, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
