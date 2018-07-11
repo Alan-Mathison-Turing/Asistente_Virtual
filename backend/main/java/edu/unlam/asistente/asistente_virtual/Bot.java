@@ -10,6 +10,7 @@ import edu.unlam.asistente.chucknorris.ChuckNorrisFact;
 import edu.unlam.asistente.clima.DiaLluvioso;
 import edu.unlam.asistente.conversor_unidades.ConversorUnidad;
 import edu.unlam.asistente.cordialidad.Cordialidad;
+import edu.unlam.asistente.financiera.ValorMoneda;
 import edu.unlam.asistente.imagenes.gif.Gif;
 import edu.unlam.asistente.leyes_robotica.LeyesRobotica;
 import edu.unlam.asistente.noticias.Noticias;
@@ -51,6 +52,7 @@ public class Bot implements IDecision {
 		DiaLluvioso diaLluvioso = new DiaLluvioso();
 		Noticias noticias = new Noticias();
 		Gif gif = new Gif();
+		ValorMoneda valorMoneda = new ValorMoneda();
 		Default def = new Default();
 
 		this.setSiguienteDecision(cordialidad);
@@ -63,7 +65,8 @@ public class Bot implements IDecision {
 		busquedaWeb.setSiguienteDecision(gif);
 		gif.setSiguienteDecision(diaLluvioso);
 		diaLluvioso.setSiguienteDecision(noticias);
-		noticias.setSiguienteDecision(calendario);
+		noticias.setSiguienteDecision(valorMoneda);
+		valorMoneda.setSiguienteDecision(calendario);
 
 		// @def debe quedar siempre al final dado que es el que mostrará el
 		// mensaje por default.

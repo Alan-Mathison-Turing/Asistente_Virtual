@@ -32,6 +32,9 @@ public class Moneda implements Cotizacion {
 		Uruguayo uruguayo = new Uruguayo();
 		Bolivar bolivar = new Bolivar();
 		Mexicano mexicano = new Mexicano();
+		Rublo rublo = new Rublo();
+		Yen yen = new Yen();
+		Yuan yuan = new Yuan();
 		Imaginaria imaginaria = new Imaginaria();
 
 		this.setSiguienteCotizacion(dolar);
@@ -46,7 +49,10 @@ public class Moneda implements Cotizacion {
 		guarani.setSiguienteCotizacion(uruguayo);
 		uruguayo.setSiguienteCotizacion(bolivar);
 		bolivar.setSiguienteCotizacion(mexicano);
-		mexicano.setSiguienteCotizacion(imaginaria);
+		mexicano.setSiguienteCotizacion(rublo);
+		rublo.setSiguienteCotizacion(yen);
+		yen.setSiguienteCotizacion(yuan);
+		yuan.setSiguienteCotizacion(imaginaria);
 
 		return this.siguienteCotizacion.leerMoneda(moneda);
 	}

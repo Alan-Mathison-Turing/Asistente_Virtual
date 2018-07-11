@@ -633,4 +633,9 @@ public class BotTests {
 		Assert.assertNotEquals(new String("Disculpa... no entiendo el pedido, @delucas ¿podrás repetirlo?"),
 				fact.toString());
 	}
+	
+	@Test
+	public void obtenerValorDolar() {
+		Assert.assertTrue(Double.parseDouble(jenkins.leerMensaje("@jenkins, cual es el valor del dolar", USUARIO)) > 25.0);
+	}
 }

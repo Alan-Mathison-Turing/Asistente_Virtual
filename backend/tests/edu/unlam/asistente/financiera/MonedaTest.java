@@ -20,8 +20,9 @@ public class MonedaTest {
 	@Parameters(name = "{1}")
 	public static Collection<Object[]> data() {
 		Object[][] data = new Object[][] { { 1, "dolar" }, { 2, "euro" }, { 3, "peso uruguayo" }, { 4, "guarani" },
-				{ 5, "bolivar" }, { 6, "peso boliviano" }, { 7, "peso Chileno" }, { 8, "Colombiano" }, { 9, "Libra" },
-				{ 10, "peso Mexicano" }, { 11, "real" }, { 12, "Sol peruano" } };
+				{ 5, "bolivar" }, { 6, "peso boliviano" }, { 7, "peso Chileno" }, { 8, "peso Colombiano" },
+				{ 9, "Libra" }, { 10, "peso Mexicano" }, { 11, "real" }, { 12, "Sol peruano" }, { 13, "rublo" },
+				{ 14, "Yen" }, { 15, "yuan" } };
 		return Arrays.asList(data);
 	}
 
