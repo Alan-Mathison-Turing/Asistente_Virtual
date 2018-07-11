@@ -1,6 +1,6 @@
 package edu.unlam.asistente.ventana;
 
-
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -23,6 +23,7 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
 import edu.unlam.asistente.comunicacion.Cliente;
+import edu.unlam.asistente.herramienta.Navegador;
 
 public class Chat extends JFrame {
 
@@ -36,7 +37,7 @@ public class Chat extends JFrame {
 	private JTextPane textAreaChat;
 	private HTMLEditorKit htmlEditorKit;
 	private HTMLDocument document;
-	
+
 	public final static String REGEX_MEME = "\\((\\w*)\\)";
 
 	/**
@@ -79,8 +80,8 @@ public class Chat extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
 		this.cliente = cliente; 
+		
 		
 		htmlEditorKit = new HTMLEditorKit();
 		document = new HTMLDocument();
@@ -161,13 +162,23 @@ public class Chat extends JFrame {
 				int largo = (int) (icon.getIconWidth() * 0.5);
 				ImageIcon newIcon = new ImageIcon(icon.getImage().getScaledInstance(ancho, largo,  java.awt.Image.SCALE_SMOOTH));
 				
-				htmlEditorKit.insertHTML(document, document.getLength(), "<br/>", 0, 0, null);
+				htmlEditorKit.insertHTML(document, document.getLength(), "\n\n", 0, 0, null);
 				textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
 				textAreaChat.insertIcon(newIcon);
+				
+			} else if(mensaje.contains("youtube")) {
+				JPanel videoPanel = new JPanel();
+				videoPanel.setSize(400,250);
+				Navegador browser = new Navegador();
+				browser.cargarURL(mensaje);
+				videoPanel.add(browser);
+				textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
+				textAreaChat.insertComponent(videoPanel);
 			} else {
 				htmlEditorKit.insertHTML(document, document.getLength(), " > testBot: " + mensaje, 0, 0, null);	
-			}			
+			}
 			textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
+			
 		} catch (BadLocationException | IOException e) {
 			System.out.println("INFO: No se pudo interpretar el mensaje de respuesta.");
 		}
