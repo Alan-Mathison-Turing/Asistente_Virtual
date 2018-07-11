@@ -56,5 +56,6 @@
 	<classpathentry kind="lib" path="F:/eclipse-workspace/Asistente_Virtual/backend/lib/slf4j/slf4j-nop-1.7.25-sources.jar"/>
 	<classpathentry kind="lib" path="F:/eclipse-workspace/Asistente_Virtual/backend/lib/slf4j/slf4j-simple-1.7.25.jar"/>
 	<classpathentry kind="lib" path="F:/eclipse-workspace/Asistente_Virtual/backend/lib/slf4j/slf4j-simple-1.7.25-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Axel/Downloads/9Search.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
