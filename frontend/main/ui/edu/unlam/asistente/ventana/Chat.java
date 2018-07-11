@@ -10,7 +10,6 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,16 +17,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
-import chrriis.common.UIUtils;
-import chrriis.dj.nativeswing.swtimpl.NativeInterface;
-import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import edu.unlam.asistente.comunicacion.Cliente;
+import edu.unlam.asistente.herramienta.Navegador;
 
 public class Chat extends JFrame {
 
@@ -171,38 +167,13 @@ public class Chat extends JFrame {
 				textAreaChat.insertIcon(newIcon);
 				
 			} else if(mensaje.contains("youtube")) {
-				// https://www.youtube.com/watch?v=M7lc1UVf-VE
-				htmlEditorKit.insertHTML(document, document.getLength(), " > testBot: <br>", 0, 0, null);	
-            	textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
-            	
-				NativeInterface.open();
-				UIUtils.setPreferredLookAndFeel();
-			    SwingUtilities.invokeLater(new Runnable() {
-			        public void run() {
-					    JWebBrowser webBrowser = new JWebBrowser(JWebBrowser.destroyOnFinalization());
-					    webBrowser.setVisible(true);
-					    webBrowser.setBarsVisible(false);
-					    webBrowser.setSize(800,600);
-					    webBrowser.navigate(mensaje);
-					    
-					    JPanel webBrowserPanel = new JPanel();	
-					    webBrowserPanel.setLayout(new BorderLayout());
-					    webBrowserPanel.setBorder(BorderFactory.createTitledBorder("Native Web Browser component"));
-					    webBrowserPanel.setSize(800,600);
-					    webBrowserPanel.add(webBrowser);
-					    webBrowserPanel.setVisible(true);
-					    
-					    textAreaChat.insertComponent(webBrowserPanel);
-			        }
-			    });
-			    NativeInterface.runEventPump();
-
-			    Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-			        @Override
-			        public void run() {
-			            NativeInterface.close();
-			        }
-			    }));
+				JPanel videoPanel = new JPanel();
+				videoPanel.setSize(400,250);
+				Navegador browser = new Navegador();
+				browser.cargarURL(mensaje);
+				videoPanel.add(browser);
+				textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
+				textAreaChat.insertComponent(videoPanel);
 			} else {
 				htmlEditorKit.insertHTML(document, document.getLength(), " > testBot: " + mensaje, 0, 0, null);	
 			}

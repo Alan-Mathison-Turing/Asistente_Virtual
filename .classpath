@@ -30,8 +30,6 @@
 	<classpathentry kind="lib" path="backend/lib/gson/gson-2.6.2-sources.jar"/>
 	<classpathentry kind="lib" path="backend/lib/gson/gson-2.6.2.jar"/>
 	<classpathentry kind="lib" path="backend/lib/mockito-core-1.8.0.jar"/>
-	<classpathentry kind="lib" path="backend/lib/DJNativeSwing-SWT.jar"/>
-	<classpathentry kind="lib" path="backend/lib/DJNativeSwing.jar"/>
 	<classpathentry kind="lib" path="backend/lib/slf4j/slf4j-api-1.7.25-sources.jar"/>
 	<classpathentry kind="lib" path="backend/lib/slf4j/slf4j-api-1.7.25.jar"/>
 	<classpathentry kind="lib" path="backend/lib/slf4j/slf4j-simple-1.7.25-sources.jar"/>

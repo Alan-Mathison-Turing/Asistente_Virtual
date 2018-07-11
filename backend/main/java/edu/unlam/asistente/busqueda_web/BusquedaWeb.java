@@ -33,7 +33,7 @@ public class BusquedaWeb implements IDecision {
 	
 	private final static String YOUTUBE_KEY = "AIzaSyAgnWeCMRhohRG9Af_cQNpbognP2-XkZbU";
 	private final static String YOUTUBE_SEARCH = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&type=video&videoDefinition=high&key=" + YOUTUBE_KEY + "&q=";
-	private final static String YOUTUBE_WATCH_URL = "https://www.youtube.com/watch?v=";
+	private final static String YOUTUBE_EMBED_URL = "https://www.youtube.com/embed/";
 	
 	private HttpsURLConnection connection;
 	
@@ -192,7 +192,7 @@ public class BusquedaWeb implements IDecision {
 	        if(videoId == null) {
 	        	return "No encontré el video que buscabas, ¿podrías ser más específico?";
 	        } else {
-	        	return YOUTUBE_WATCH_URL + videoId;
+	        	return YOUTUBE_EMBED_URL + videoId + "?autoplay=1";
 	        }	        
 	        
 		} catch (IOException e) {

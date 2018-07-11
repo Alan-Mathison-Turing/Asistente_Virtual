@@ -40,7 +40,7 @@ public class Bot implements IDecision {
 	@Override
 	public String leerMensaje(String mensaje, String usuario) {
 		mensaje = removerTildes(mensaje.toLowerCase());
-	
+
 		Cordialidad cordialidad = new Cordialidad();
 		LeyesRobotica leyesRobotica = new LeyesRobotica();
 		ChuckNorrisFact chuckFacts = new ChuckNorrisFact();
