@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import edu.unlam.asistente.cliente.Main;
 import edu.unlam.asistente.ventana.Chat;
 import edu.unlam.asistente.ventana.Login;
 import edu.unlam.asistente.ventana.Home;
@@ -34,7 +35,7 @@ public class Cliente {
 	 */
 	public void enviarMensaje(String mensaje) {
 		try {
-			Mensaje m = new Mensaje(mensaje, nombreUsuario, "CHAT");
+			Mensaje m = new Mensaje(mensaje, Main.usuario.getNombreUsuario(), "CHAT");
 			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
 			salida.writeObject(m);
 		} catch (IOException e) {

@@ -50,7 +50,7 @@ public class Usuario {
 	}
 	
 	public DefaultListModel<String> getSalasPublicas(){
-		return this.salasPrivadas;
+		return this.salasPublicas;
 	}
 
 	public String getNombreUsuario() {
@@ -78,6 +78,37 @@ public class Usuario {
 	
 	public void addChat(Chat chat) {
 		this.chats.add(chat);
+		if(chat.esGrupal()) {
+			if(chat.esPrivada()) {
+				this.salasPrivadas.addElement(chat.getNombre());
+			} else {
+				this.salasPublicas.addElement(chat.getNombre());
+			}
+		}
+	}
+	
+	public void addMensajeToChat(int idSala, String mensaje, String usuario) {
+		
+		Chat chatBuscado = this.getChatByIdSala(idSala);
+		
+		if(chatBuscado != null) {
+			chatBuscado.addMensaje(new MensajeChat(mensaje, usuario));
+			System.out.println("idSala: " + idSala + ". Recibe mensaje de: " + usuario + ". Mensaje: " + mensaje);
+		}
+		
+	}
+	
+	private Chat getChatByIdSala(int idSala) {
+		
+		for(int i = 0; i < this.chats.size(); i++) {
+			Chat chatActual = this.chats.get(i);
+			if(chatActual.getSalaId() == idSala) {
+				return chatActual;
+			}
+		}
+		
+		return null;
+		
 	}
 	
 }
