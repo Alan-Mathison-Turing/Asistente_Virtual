@@ -77,6 +77,38 @@ public class Sala implements java.io.Serializable{
 	public void setUsuarios(Set<Usuario> usuarios) {
 		this.usuarios = usuarios;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Sala other = (Sala) obj;
+		if (dueño == null) {
+			if (other.dueño != null)
+				return false;
+		} else if (!dueño.equals(other.dueño))
+			return false;
+		if (esPrivada == null) {
+			if (other.esPrivada != null)
+				return false;
+		} else if (!esPrivada.equals(other.esPrivada))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (nombre == null) {
+			if (other.nombre != null)
+				return false;
+		} else if (!nombre.equals(other.nombre))
+			return false;
+		return true;
+	}
 	
 	
 

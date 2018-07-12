@@ -15,6 +15,7 @@ public class SalaDaoTest {
 	private Usuario user;
 	private Sala sala1;
 	private Sala sala2;
+	private Sala salaNueva;
 	private SalaDao salaDao;
 	List<Sala> listaSalas;
 	
@@ -24,6 +25,7 @@ public class SalaDaoTest {
 		salaDao = new SalaDao();
 		
 		user = new Usuario();
+		user.setUsuario("testUser");
 		user.setId(1);
 		
 		sala1 = new Sala();
@@ -41,6 +43,11 @@ public class SalaDaoTest {
 		listaSalas = new ArrayList<Sala>();
 		listaSalas.add(sala1);
 		listaSalas.add(sala2);
+		
+		salaNueva = new Sala();
+		salaNueva.setNombre("testInsert");
+		salaNueva.setDueño(user);
+		salaNueva.setEsPrivada(1);
 	}
 	
 	@Test
@@ -48,5 +55,16 @@ public class SalaDaoTest {
 		
 		List<Sala> respuesta = salaDao.obtenerSalasPorUsuario(user);
 		Assert.assertTrue(listaSalas.equals(respuesta));
+	}
+	
+	@Test
+	public void crearEliminarSalaTest() {
+		
+		salaDao.crearSala(salaNueva);
+		Sala aux = salaDao.obtenerSalaPorId(salaNueva.getId());
+		Assert.assertEquals(salaNueva, aux);
+		salaDao.eliminarSala(salaNueva);
+		aux = salaDao.obtenerSalaPorId(salaNueva.getId());
+		Assert.assertNull(aux);
 	}
 }
