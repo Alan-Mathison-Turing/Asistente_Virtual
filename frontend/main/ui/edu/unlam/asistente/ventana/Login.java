@@ -21,6 +21,9 @@ import edu.unlam.asistente.comunicacion.Cliente;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Login extends JFrame {
 
@@ -51,6 +54,8 @@ public class Login extends JFrame {
 		contentPane.add(lblUsuario);
 
 		JLabel lblContrasea = new JLabel("Contraseña");
+		lblContrasea.setVerticalAlignment(SwingConstants.TOP);
+		lblContrasea.setHorizontalAlignment(SwingConstants.LEFT);
 		contentPane.add(lblContrasea);
 
 		pwdSecreto = new JPasswordField();
@@ -61,6 +66,19 @@ public class Login extends JFrame {
 		txtUsuario_1.setColumns(10);
 
 		JButton btnIniciarSesion = new JButton("Iniciar Sesion");
+		btnIniciarSesion.setVerticalAlignment(SwingConstants.TOP);
+		
+		btnIniciarSesion.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char tecla=e.getKeyChar();
+				if(tecla==KeyEvent.VK_ENTER) {
+					btnIniciarSesion.addActionListener(null);
+					btnIniciarSesion.doClick();
+				}
+			}
+		});
 		btnIniciarSesion.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -111,10 +129,12 @@ public class Login extends JFrame {
 		contentPane.add(btnIniciarSesion);
 
 		JLabel lblRegistrarse = new JLabel("Registrarse");
+		lblRegistrarse.setHorizontalAlignment(SwingConstants.CENTER);
 		lblRegistrarse.setForeground(new Color(0, 0, 255));
 		contentPane.add(lblRegistrarse);
 
 		JLabel lblseOlvidoSu = new JLabel("¿Se olvido su contraseña?");
+		lblseOlvidoSu.setVerticalAlignment(SwingConstants.BOTTOM);
 		lblseOlvidoSu.setForeground(new Color(0, 0, 255));
 		contentPane.add(lblseOlvidoSu);
 
@@ -135,39 +155,40 @@ public class Login extends JFrame {
 		JLabel lblDatosDeUsuario = new JLabel("Datos de usuario:");
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(169)
-							.addComponent(lblRegistrarse, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(96)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblUsuario, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblIpServidor)
-								.addComponent(lblPuertoServidor)
-								.addComponent(lblContrasea, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
-							.addGap(10)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(tfPuertoServidor, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-								.addComponent(tfServidor, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-								.addComponent(txtUsuario_1, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-								.addComponent(pwdSecreto, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)))
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-							.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-								.addGap(149)
-								.addComponent(btnIniciarSesion, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-							.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-								.addGap(139)
-								.addComponent(lblseOlvidoSu, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE))))
-					.addGap(94))
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(34)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblDatosDeUsuario)
 						.addComponent(lblDatosDeConexin))
 					.addContainerGap(305, Short.MAX_VALUE))
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+					.addGap(96)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblUsuario, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblIpServidor)
+						.addComponent(lblPuertoServidor)
+						.addComponent(lblContrasea, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblseOlvidoSu, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap())
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_contentPane.createSequentialGroup()
+								.addComponent(btnIniciarSesion, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
+								.addContainerGap())
+							.addGroup(gl_contentPane.createSequentialGroup()
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+									.addComponent(tfPuertoServidor, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+									.addComponent(tfServidor, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+									.addComponent(txtUsuario_1, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+									.addComponent(pwdSecreto, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE))
+								.addGap(94)))))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap(216, Short.MAX_VALUE)
+					.addComponent(lblRegistrarse, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
+					.addGap(156))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -195,16 +216,17 @@ public class Login extends JFrame {
 									.addGap(35)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 										.addComponent(pwdSecreto, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblContrasea))))
-							.addGap(53)
-							.addComponent(btnIniciarSesion)
-							.addGap(2)
-							.addComponent(lblseOlvidoSu)
-							.addGap(11)
-							.addComponent(lblRegistrarse))
+										.addComponent(lblContrasea)))))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(70)
-							.addComponent(lblDatosDeUsuario))))
+							.addComponent(lblDatosDeUsuario)))
+					.addGap(18)
+					.addComponent(btnIniciarSesion)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblseOlvidoSu)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblRegistrarse)
+					.addGap(22))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
