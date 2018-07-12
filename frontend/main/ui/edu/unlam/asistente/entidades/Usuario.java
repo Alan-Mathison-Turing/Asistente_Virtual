@@ -50,7 +50,7 @@ public class Usuario {
 	}
 	
 	public DefaultListModel<String> getSalasPublicas(){
-		return this.salasPrivadas;
+		return this.salasPublicas;
 	}
 
 	public String getNombreUsuario() {
@@ -78,6 +78,11 @@ public class Usuario {
 	
 	public void addChat(Chat chat) {
 		this.chats.add(chat);
+		if(chat.esPrivada()) {
+			this.salasPrivadas.addElement(chat.getNombre());
+		} else {
+			this.salasPublicas.addElement(chat.getNombre());
+		}
 	}
 	
 }

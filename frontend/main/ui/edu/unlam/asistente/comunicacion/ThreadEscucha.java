@@ -67,10 +67,16 @@ public class ThreadEscucha extends Thread {
 						if(msj.getMensaje().equals("false")) {
 							
 						} else {
-							String[] idsSalas = msj.getMensaje().split(",",-1);
-							for(int i = 0; i < idsSalas.length; i++) {
-								Main.usuario.addChat(new Chat(Integer.valueOf(idsSalas[i])));
+							String[] salasInfo = msj.getMensaje().split(";",-1);
+							for(int i = 0; i < salasInfo.length; i++) {
+								String[] salaInfo = salasInfo[i].split(",",-1);
+								Main.usuario.addChat(new Chat(
+										Integer.valueOf(salaInfo[0]), //Id de la sala
+										salaInfo[1], //Nombre de la sala
+										Integer.valueOf(salaInfo[2]) //Es Privado
+										));
 							}
+							
 						}
 					}
 
