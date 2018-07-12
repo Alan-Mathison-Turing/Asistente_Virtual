@@ -88,4 +88,8 @@ public class Bot implements IDecision {
 	    return output;
 	}	
 	
+	public String getNombre() {
+		return this.nombre;
+	}
+	
 }

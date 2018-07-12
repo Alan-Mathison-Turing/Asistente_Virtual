@@ -5,7 +5,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import edu.unlam.asistente.asistente_virtual.Bot;
 import edu.unlam.asistente.database.dao.SalaDao;
@@ -25,7 +27,7 @@ public class ThreadCliente extends Thread{
 	public ThreadCliente(SocketUsuario socket,ArrayList<SocketUsuario> clientes) throws IOException, SQLException {
 		this.cliente = socket;
 		this.clientes = clientes;
-		bot = new Bot("testBot");
+		bot = new Bot("@argem");
 		System.out.println("INFO: Socket de cliente creado");
 		this.userDao = new UsuarioDao();
 		this.salaDao = new SalaDao();
@@ -63,10 +65,69 @@ public class ThreadCliente extends Thread{
 				} else if (mensajeRecibido.getType().equals("CHAT_CON")) { //mock para abrir chat
 					respuesta = new Mensaje("true", mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
 					mensajeEnviar.writeObject(respuesta);
-				} else if (mensajeRecibido.getType().equals("CHAT")) { //para mensajes de chat linea directa con bot
-					respuesta = new Mensaje(bot.leerMensaje(mensajeRecibido.getMensaje(), mensajeRecibido.getNombreUsuario()),
-							mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
-					mensajeEnviar.writeObject(respuesta);
+				} else if (mensajeRecibido.getType().equals("CHAT")) {
+					System.out.println("Mensaje nuevo recibido");
+					String[] partesMensaje = mensajeRecibido.getMensaje().split("\\|",-1);
+					int idSala = Integer.valueOf(partesMensaje[0].substring(5));
+					String mensaje = partesMensaje[1];
+					
+					Sala salaActual = this.salaDao.obtenerSalaPorId(idSala);
+					Set<Usuario> usuariosEnSala = salaActual.getUsuarios();
+					
+					
+					Mensaje respuestaBot = null;
+					//Chequeo si el mensaje es especifico para el bot
+					//En el caso de que si lo sea, la respuesta se la mando a toda la sala
+					if(mensaje.contains(bot.getNombre())) {
+						respuestaBot = new Mensaje("sala:" + idSala + "|" + bot.leerMensaje(mensajeRecibido.getMensaje(), mensajeRecibido.getNombreUsuario()),
+								mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
+					}
+					
+					respuesta = new Mensaje("sala:" + idSala + "|" + mensaje, mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
+
+					Integer cantidadUsuariosEnSala = usuariosEnSala.size();
+					Integer usuariosContados = 0;
+					
+					//Recorro la lista de usuarios de la sala para poder enviarles el mensaje del usuario
+					//Y la respuesta del bot, en case de que corresponda
+					for(int i = 0; i < this.clientes.size(); i++) {
+						
+						SocketUsuario clienteActual = this.clientes.get(i);
+						int idUsuarioBuscado = clienteActual.getUsuario();
+						
+						Iterator<Usuario> iterator = usuariosEnSala.iterator();
+						while(iterator.hasNext()) {
+					        Usuario siguienteUsuario = iterator.next();
+					        if(siguienteUsuario.getId() == idUsuarioBuscado){
+					        	usuariosContados++;
+					        	ObjectOutputStream mensajeEnviarUsuario = null;
+					        	if(idUsuarioBuscado != this.usuario.getId()) {
+					        		mensajeEnviarUsuario = new ObjectOutputStream(clienteActual.getSocket().getOutputStream());
+					        		mensajeEnviarUsuario.writeObject(respuesta);
+					        	} else {
+					        		mensajeEnviarUsuario = mensajeEnviar;
+				        			if(respuestaBot == null) {
+				        				mensajeEnviarUsuario.writeObject(new Mensaje("","","CHAT"));
+					        		}
+					        	}
+					        	if(respuestaBot != null) {
+					        		mensajeEnviarUsuario.writeObject(respuestaBot);
+					        	}
+					        	break;
+					        }
+					    }
+						
+						if(usuariosContados == cantidadUsuariosEnSala) {
+							break;
+						}
+						
+					}
+					
+					
+					
+					
+					
+					
 				} else if(mensajeRecibido.getType().equals("CONTACTOS")) {
 					if(this.usuario.getContactos().isEmpty()) {
 						respuesta = new Mensaje("",usuario.getUsuario(), mensajeRecibido.getType());
@@ -89,6 +150,7 @@ public class ThreadCliente extends Thread{
 						mensajeSalas += "" + salaActual.getId()
 								+ "," + salaActual.getNombre()
 								+ "," + salaActual.getEsPrivada()
+								+ "," + salaActual.getEsGrupal()
 								+ ";";
 					}
 					mensajeSalas = mensajeSalas.substring(0, mensajeSalas.length() - 1);
@@ -116,10 +178,12 @@ public class ThreadCliente extends Thread{
 				}*/
 			}
 		} catch (IOException | ClassNotFoundException e) {
+			//TODO: Sacar el cliente que rompio o se desconecto de los sockets activos
 			System.err.println("-- TreadCliente ERROR: ocurrió un error en la gestión de mensajes");
 			e.printStackTrace();
 		}
 		
 		
 	}
+	
 }

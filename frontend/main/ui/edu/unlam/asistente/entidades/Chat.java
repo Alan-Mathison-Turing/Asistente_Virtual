@@ -7,13 +7,15 @@ public class Chat {
 	private ArrayList<MensajeChat> mensajes;
 	private String nombre;
 	private boolean esPrivada;
+	private boolean esGrupal;
 	private int salaId;
 	
-	public Chat(int salaId, String nombre, Integer esPrivada) {
+	public Chat(int salaId, String nombre, Integer esPrivada, Integer esGrupal) {
 		this.mensajes = new ArrayList<MensajeChat>();
 		this.salaId = salaId;
 		this.nombre = nombre;
 		this.esPrivada = esPrivada == 1;
+		this.esGrupal = esGrupal == 1;
 	}
 	
 	public void addMensaje(MensajeChat mensaje) {
@@ -26,6 +28,14 @@ public class Chat {
 	
 	public String getNombre() {
 		return this.nombre;
+	}
+	
+	public boolean esGrupal() {
+		return this.esGrupal;
+	}
+	
+	public int getSalaId() {
+		return this.salaId;
 	}
 	
 }

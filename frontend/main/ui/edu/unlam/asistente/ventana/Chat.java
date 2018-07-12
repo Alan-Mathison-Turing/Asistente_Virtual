@@ -22,7 +22,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
-import edu.unlam.asistente.comunicacion.Cliente;
+import edu.unlam.asistente.cliente.Main;
 
 public class Chat extends JFrame {
 
@@ -32,25 +32,23 @@ public class Chat extends JFrame {
 	private static final long serialVersionUID = 2400628064788229910L;
 	private JPanel contentPane;
 	private JTextField textFieldEnviar;
-	private final Cliente cliente;
 	private JTextPane textAreaChat;
 	private HTMLEditorKit htmlEditorKit;
 	private HTMLDocument document;
+	private int idSala;
 	
 	public final static String REGEX_MEME = "\\((\\w*)\\)";
 
 	/**
 	 * Create the frame.
 	 */
-	public Chat(final Cliente cliente) {
+	public Chat() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(200, 200, 450, 500);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		this.cliente = cliente; 
 		
 		htmlEditorKit = new HTMLEditorKit();
 		document = new HTMLDocument();
@@ -108,7 +106,7 @@ public class Chat extends JFrame {
 				} else {
 					htmlEditorKit.insertHTML(document, document.getLength(), " > Yo: " + textoEnviar, 0, 0, null);
 					textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
-					cliente.enviarMensaje(textoEnviar);	
+					Main.cliente.enviarMensaje("sala:" + this.idSala + "|" +  textoEnviar); //Al texto a enviar le agrego el id de la sala	
 				}
 			} catch (BadLocationException | IOException e) {
 				System.out.println("INFO: No se pudo interpretar el mensaje enviado por el usuario.");
