@@ -281,15 +281,11 @@ public class Home extends JFrame {
 		
 		DefaultListModel<String> listaContactos = new DefaultListModel<>();
 		
-		try {
-			//TODO: CAMBIAR POR LLAMADO VIA SOCKET
-			Usuario usuario = new UsuarioDao().obtenerUsuarioPorLogin(this.cliente.getNombreUsuario());
-			
-			for (int i = 0 ; i < usuario.getContactos().size() ; i++) {
-				listaContactos.addElement(usuario.getContactos().get(i).getUsuario());
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+		//TODO: CAMBIAR POR LLAMADO VIA SOCKET
+		Usuario usuario = new UsuarioDao().obtenerUsuarioPorLogin(this.cliente.getNombreUsuario());
+		
+		for (int i = 0 ; i < usuario.getContactos().size() ; i++) {
+			listaContactos.addElement(usuario.getContactos().get(i).getUsuario());
 		}
 		return listaContactos;
 	}

@@ -1,7 +1,5 @@
 package edu.unlam.asistente.database.dao;
 
-import java.sql.SQLException;
-
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
@@ -10,7 +8,7 @@ import edu.unlam.asistente.database.dao.BaseDao;
 
 public class UsuarioDao extends BaseDao {
 
-	public UsuarioDao() throws SQLException {
+	public UsuarioDao() {
 		super();
 	}
 

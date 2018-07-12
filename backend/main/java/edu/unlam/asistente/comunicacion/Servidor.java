@@ -5,6 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import edu.unlam.asistente.recordatorioEventos.ThreadAlarma;
+
 public class Servidor {
 	
 	int puerto;
@@ -18,6 +20,7 @@ public class Servidor {
 			System.out.println("INFO: Server creado en puerto " + puerto);
 			
 			new ThreadAceptacion(server, sockets).start();
+			new ThreadAlarma().start();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
