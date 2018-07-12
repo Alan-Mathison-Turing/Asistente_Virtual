@@ -28,13 +28,19 @@ public class ThreadEscucha extends Thread {
 				ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
 				Mensaje msj = (Mensaje) entrada.readObject();
 				if (msj != null) {
-					if (msj.getType().equals("CHAT")) { //linea directa con bot
-						if (msj.getNombreUsuario().equals(cliente.getNombreUsuario())) {
-							System.out.println("ThreadEscucha INFO: mensaje recibido " + msj);
-							//hardcode siempre primer chat para prueba
-							Main.listaChats.get(0).actualizarChat(msj.getMensaje());
-							
+					if (msj.getType().equals("CHAT")) {
+						
+						if(msj.getMensaje().equals("")) {
+							continue;
 						}
+						
+						String[] partesMensaje = msj.getMensaje().split("\\|",-1);
+						int idSala = Integer.valueOf(partesMensaje[0].substring(5));
+						String mensaje = partesMensaje[1];
+						String usuarioQueEscribio = msj.getNombreUsuario();
+						
+						Main.usuario.addMensajeToChat(idSala, mensaje, usuarioQueEscribio);
+						
 					} else if (msj.getType().equals("LOGIN")) { //mock login
 						if(msj.getMensaje().equals("false")) {
 							Main.login.loginIncorrecto();
@@ -67,10 +73,17 @@ public class ThreadEscucha extends Thread {
 						if(msj.getMensaje().equals("false")) {
 							
 						} else {
-							String[] idsSalas = msj.getMensaje().split(",",-1);
-							for(int i = 0; i < idsSalas.length; i++) {
-								Main.usuario.addChat(new Chat(Integer.valueOf(idsSalas[i])));
+							String[] salasInfo = msj.getMensaje().split(";",-1);
+							for(int i = 0; i < salasInfo.length; i++) {
+								String[] salaInfo = salasInfo[i].split(",",-1);
+								Main.usuario.addChat(new Chat(
+										Integer.valueOf(salaInfo[0]), //Id de la sala
+										salaInfo[1], //Nombre de la sala
+										Integer.valueOf(salaInfo[2]), //Es Privado
+										Integer.valueOf(salaInfo[3]) //Es Grupal
+										));
 							}
+							
 						}
 					}
 

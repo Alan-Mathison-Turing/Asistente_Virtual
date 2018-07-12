@@ -174,6 +174,7 @@ public class Home extends JFrame {
 		contentPane.add(listaSalas);
 		
 		salasList = new JList<String>(this.salasPrivadas);
+		salasList.setModel(this.salasPrivadas);
 		listaSalas.setViewportView(salasList);
 		
 		
@@ -287,7 +288,8 @@ public class Home extends JFrame {
 		scrollPaneSalasPublicas.setBounds(436, 167, 131, 203);
 		contentPane.add(scrollPaneSalasPublicas);
 		
-		salasPublicasList = new JList<String>(this.salasPublicas);
+		salasPublicasList = new JList<String>();
+		salasPublicasList.setModel(this.salasPublicas);
 		scrollPaneSalasPublicas.setViewportView(salasPublicasList);
 		
 	}
@@ -363,6 +365,10 @@ public class Home extends JFrame {
 	
 	private boolean cerrarSesion() {
 		//TODO: desarrollar metodo
+		
+		//TODO: Sacar esto. Solamente fue realizado para enviar mensajes de prueba
+		Main.cliente.enviarMensaje("sala:" + 1 + "|" +  "Mensaje de prueba");
+		
 		return true;
 	}
 	

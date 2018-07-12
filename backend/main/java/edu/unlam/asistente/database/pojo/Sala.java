@@ -26,6 +26,7 @@ public class Sala implements java.io.Serializable{
 	private String nombre;
 	private Usuario dueño;
 	private Integer esPrivada;
+	private Integer esGrupal;
 	private Set<Usuario> usuarios = new HashSet<Usuario>(0);
 	
 	public Sala() {}
@@ -65,6 +66,15 @@ public class Sala implements java.io.Serializable{
 		this.esPrivada = esPrivada;
 	}
 	
+	@Column(name = "es_grupal", nullable = false)
+	public Integer getEsGrupal() {
+		return esGrupal;
+	}
+
+	public void setEsGrupal(Integer esGrupal) {
+		this.esGrupal = esGrupal;
+	}
+	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "usuarioSalas", joinColumns = { 
 		@JoinColumn(name = "id_sala", nullable = false, updatable = false) }, 
@@ -92,6 +102,11 @@ public class Sala implements java.io.Serializable{
 				return false;
 		} else if (!dueño.equals(other.dueño))
 			return false;
+		if (esGrupal == null) {
+			if (other.esGrupal != null)
+				return false;
+		} else if (!esGrupal.equals(other.esGrupal))
+			return false;
 		if (esPrivada == null) {
 			if (other.esPrivada != null)
 				return false;
@@ -111,5 +126,4 @@ public class Sala implements java.io.Serializable{
 	}
 	
 	
-
 }
