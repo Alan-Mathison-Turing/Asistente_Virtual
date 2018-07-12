@@ -575,13 +575,9 @@ public class BotTests {
 
 	@Test
 	public void busquedaExistente() {
-		Assert.assertEquals("<a href=\"https://es.wikipedia.org/wiki/Diego_Armando_Maradona\">"
-						+ "<u>https://es.wikipedia.org/wiki/Diego_Armando_Maradona</u></a><br/>"
-						+ "<p><b>Diego Armando Maradona Franco</b> es un exfutbolista y director técnico argentino. "
-						+ "Actualmente se desempeña como presidente y director deportivo del FC Dinamo Brest de la "
-						+ "Liga Premier de Bielorrusia.</p>", 
-							jenkins.leerMensaje("@jenkins quien es Diego Maradona ?", USUARIO));
-	}
+		String resultado = jenkins.leerMensaje("@jenkins quien es Diego Maradona ?", USUARIO);
+		Assert.assertTrue(resultado.contains("https://es.wikipedia.org/wiki/Diego_Armando_Maradona"));	
+			}
 	
 	@Test
 	public void busquedaVariosResultados() {
@@ -623,6 +619,19 @@ public class BotTests {
 	@Test
 	public void busquedaEspacio() {
 		Assert.assertEquals("Disculpa... no entiendo el pedido, @delucas ¿podrás repetirlo?", jenkins.leerMensaje("@jenkins, cuál es     ", USUARIO));
+	}
+	
+	@Test
+	public void busquedaNueveGag() {
+		String resultado = jenkins.leerMensaje("@jenkins, quiero una imagen", USUARIO);
+		Assert.assertTrue(resultado.endsWith(".jpg"));
+	}
+	
+	@Test
+	public void busquedaNueveGagRandom() {
+		String resultado = jenkins.leerMensaje("@jenkins, quiero una imagen", USUARIO);
+		String resultado2 = jenkins.leerMensaje("@jenkins, quiero una imagen", USUARIO);
+		Assert.assertTrue(!resultado.equals(resultado2));
 	}
 	
 	@Test

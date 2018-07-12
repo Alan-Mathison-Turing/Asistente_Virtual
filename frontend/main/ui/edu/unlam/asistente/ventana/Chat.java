@@ -1,6 +1,6 @@
 package edu.unlam.asistente.ventana;
 
-import java.awt.BorderLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -157,14 +157,18 @@ public class Chat extends JFrame {
 				textAreaChat.insertIcon(icon);
 				
 			} else if(mensaje.endsWith(".jpg")) {
-				ImageIcon icon = new ImageIcon(mensaje);
-				int ancho = (int) (icon.getIconWidth() * 0.5);
-				int largo = (int) (icon.getIconWidth() * 0.5);
-				ImageIcon newIcon = new ImageIcon(icon.getImage().getScaledInstance(ancho, largo,  java.awt.Image.SCALE_SMOOTH));
+				URL url = new URL(mensaje);
+				ImageIcon icon = new ImageIcon(url);
+				Image image = icon.getImage();
+				Image newimg = image.getScaledInstance(256, 256,  java.awt.Image.SCALE_DEFAULT);
+
+				icon = new ImageIcon(newimg);
 				
-				htmlEditorKit.insertHTML(document, document.getLength(), "\n\n", 0, 0, null);
+				htmlEditorKit.insertHTML(document, document.getLength(), "", 0, 0, null);
+				
 				textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
-				textAreaChat.insertIcon(newIcon);
+				textAreaChat.insertIcon(icon);
+				textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
 				
 			} else if(mensaje.contains("youtube")) {
 				JPanel videoPanel = new JPanel();

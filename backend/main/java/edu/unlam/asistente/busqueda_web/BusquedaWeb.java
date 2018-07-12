@@ -1,14 +1,19 @@
 package edu.unlam.asistente.busqueda_web;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import org.apache.commons.io.IOUtils;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
@@ -20,7 +25,7 @@ public class BusquedaWeb implements IDecision {
 	
 	private IDecision siguienteDecision;
 	private final static String REGEX_WIKIPEDIA = "@\\w*\\,*\\s*(?:quien|quienes|busca|buscame|investiga|investigame|que|cual|cuales) \\w*\\s*(\\w*\\s*\\w*)\\s*\\?*";
-	private final static String REGEX_YOUTUBE = "@\\w*\\,*\\s*(?:quiero|mostra|mostrame) \\w*\\s*(?:video) \\w*\\s*(\\w*\\s*\\w*)\\s*\\?*";
+	private final static String REGEX_YOUTUBE = "@\\w*\\,*\\s*(?:quiero|mostra|mostrame|dame) \\w*\\s*(?:video) \\w*\\s*(\\w*\\s*\\w*)\\s*\\?*";
 
 	private final static String WIKIPEDIA_URL = "https://es.wikipedia.org/wiki/";
 	private final static String WIKIPEDIA_API_URL = "https://es.wikipedia.org/api/rest_v1/page/summary/";
@@ -31,6 +36,10 @@ public class BusquedaWeb implements IDecision {
 	private final static String YOUTUBE_KEY = "AIzaSyAgnWeCMRhohRG9Af_cQNpbognP2-XkZbU";
 	private final static String YOUTUBE_SEARCH = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&type=video&videoDefinition=high&key=" + YOUTUBE_KEY + "&q=";
 	private final static String YOUTUBE_EMBED_URL = "https://www.youtube.com/embed/";
+	
+	private final static String NUEVEGAG_IMAGE_URL = "https://images-cdn.9gag.com/photo/";
+	private final static String NUEVEGAG_REGEX = "@\\w*\\,*\\s*(?:quiero|dame|mostrame|mostra) \\w*\\s*(?:imagen|pic|meme)\\s*\\!*";
+	private final static String NUEVEGAG_IMAGE_REGEX = "((?<url>(href=\\\"|src=\\\")()\\s*https:\\/\\/images-cdn.9gag.com\\/photo\\/))(.*?)(\"|\\))";
 	
 	@Override
 	public String leerMensaje(String mensaje, String usuario) {
@@ -52,6 +61,12 @@ public class BusquedaWeb implements IDecision {
 			String terminoBusqueda = capitalizarPrimerLetra(matcherYoutube.group(1));
 			if(terminoBusqueda.equals("")) return siguienteDecision.leerMensaje(mensaje, usuario);
 			return busquedaVideo(terminoBusqueda);
+		}
+		
+		if(mensaje.matches(NUEVEGAG_REGEX)) {
+			String imageURL;
+			imageURL = busquedaNuevaGag();
+			return imageURL;
 		}
 		
 		return siguienteDecision.leerMensaje(mensaje, usuario);
@@ -198,6 +213,48 @@ public class BusquedaWeb implements IDecision {
 		}
 		
 		return searchResult;
+	}
+	
+	private String busquedaNuevaGag() {
+		URL url;
+		InputStream inputStream;
+		Pattern nueveGagPatron;
+		Matcher nueveGagMatcher;
+		
+		String imageURL = "";
+		String nueveGagResponse;
+		
+		try {
+			url = new URL("https://9gag.com/random");
+			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+			connection.setRequestMethod("GET");
+	        connection.setRequestProperty("charset", "UTF-8");
+	        connection.setConnectTimeout(40000);
+	        connection.connect();
+	        
+	        inputStream = connection.getInputStream();
+	        
+	        nueveGagResponse = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+	        
+	        nueveGagPatron =  Pattern.compile(NUEVEGAG_IMAGE_REGEX);
+	        nueveGagMatcher = nueveGagPatron.matcher(nueveGagResponse);
+			
+	        nueveGagMatcher.find();
+	        
+	        imageURL = NUEVEGAG_IMAGE_URL + nueveGagMatcher.group(5);
+	        
+	        
+	        connection.disconnect();
+	        
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return imageURL;
 	}
 	
 	private String capitalizarPrimerLetra(final String palabras) {
