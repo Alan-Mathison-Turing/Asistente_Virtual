@@ -33,12 +33,14 @@ public class SalaDaoTest {
 		sala1.setNombre("testSala1");
 		sala1.setDueño(user);
 		sala1.setEsPrivada(1);
+		sala1.setEsGrupal(1);
 		
 		sala2 = new Sala();
 		sala2.setId(2);
 		sala2.setNombre("testSala2");
 		sala2.setDueño(user);
 		sala2.setEsPrivada(0);
+		sala2.setEsGrupal(1);
 		
 		listaSalas = new ArrayList<Sala>();
 		listaSalas.add(sala1);
@@ -48,6 +50,7 @@ public class SalaDaoTest {
 		salaNueva.setNombre("testInsert");
 		salaNueva.setDueño(user);
 		salaNueva.setEsPrivada(1);
+		salaNueva.setEsGrupal(0);
 	}
 	
 	@Test
