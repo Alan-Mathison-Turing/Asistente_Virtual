@@ -8,27 +8,27 @@ import java.util.ArrayList;
 import edu.unlam.asistente.recordatorioEventos.ThreadAlarma;
 
 public class Servidor {
-	
+
 	int puerto;
-	ArrayList<Socket> sockets = new ArrayList<Socket>(); 
-	
+	ArrayList<Socket> sockets = new ArrayList<Socket>();
+	ArrayList<Integer> ids_usuarios = new ArrayList<Integer>();
+
 	public Servidor(int puerto) {
 		this.puerto = puerto;
-		
+
 		try {
 			ServerSocket server = new ServerSocket(puerto);
 			System.out.println("INFO: Server creado en puerto " + puerto);
-			
-			new ThreadAceptacion(server, sockets).start();
+
+			new ThreadAceptacion(server, sockets, ids_usuarios).start();
 			new ThreadAlarma().start();
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
-		} 
-		
+		}
+
 	}
-	
-	
+
 	public static void main(String[] args) {
 		new Servidor(12346);
 	}
