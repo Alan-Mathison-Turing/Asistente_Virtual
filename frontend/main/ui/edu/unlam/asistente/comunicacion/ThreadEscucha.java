@@ -92,13 +92,36 @@ public class ThreadEscucha extends Thread {
 							String[] salasInfo = msj.getMensaje().split(";",-1);
 							for(int i = 0; i < salasInfo.length; i++) {
 								String[] salaInfo = salasInfo[i].split(",",-1);
-								Main.usuario.addChat(new Chat(
-										Integer.valueOf(salaInfo[0]), //Id de la sala
-										salaInfo[1], //Nombre de la sala
-										Integer.valueOf(salaInfo[2]), //ownerId
-										Integer.valueOf(salaInfo[3]), //Es Privado
-										Integer.valueOf(salaInfo[4]) //Es Grupal
-										));
+								
+								int idSala = Integer.valueOf(salaInfo[0]); //Id de la sala
+								String nombreSala = salaInfo[1]; //Nombre de la sala
+								int ownerId = Integer.valueOf(salaInfo[2]); //ownerId
+								int esPrivado = Integer.valueOf(salaInfo[3]); //Es Privado
+								int esGrupal = Integer.valueOf(salaInfo[4]); //Es Grupal
+								
+								
+								if (salaInfo.length == 5) {
+									Main.usuario.addChat(new Chat(
+											idSala,
+											nombreSala,
+											ownerId,
+											esPrivado,
+											esGrupal
+											));
+								} else {
+									
+									String[] usuarios = 
+											new String[] {salaInfo[5], salaInfo[6]};
+									
+									Main.usuario.addChat(new Chat(
+											idSala,
+											nombreSala,
+											ownerId,
+											esPrivado,
+											esGrupal),
+											usuarios);
+								}
+								
 							}
 							
 						}

@@ -5,9 +5,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import edu.unlam.asistente.cliente.Main;
-import edu.unlam.asistente.ventana.Chat;
-import edu.unlam.asistente.ventana.Login;
-import edu.unlam.asistente.ventana.Home;
 
 
 public class Cliente {
@@ -86,7 +83,7 @@ public class Cliente {
 			salida.writeObject(m);
 		} catch (IOException e) {
 			System.err.println("-- Cliente/ObtenerContactos ERROR: ocurrio un error intentando Obtener contactos del usuario" + idUsuario);
-e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	
@@ -97,7 +94,7 @@ e.printStackTrace();
 			salida.writeObject(m);
 		} catch (IOException e) {
 			System.err.println("-- Cliente/ObtenerChats ERROR: ocurrio un error intentando Obtener contactos del usuario" + idUsuario);
-e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	
@@ -108,7 +105,7 @@ e.printStackTrace();
 			salida.writeObject(m);
 		} catch (IOException e) {
 			System.err.println("-- Cliente/Mensaje Recibido ERROR: Ocurrio un error informando que un mensaje fue recibido correctamente");
-e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	
@@ -124,7 +121,7 @@ e.printStackTrace();
 			salida.writeObject(m);
 		} catch (IOException e) {
 			System.err.println("-- Cliente/Creacion de nueva sala ERROR");
-e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
