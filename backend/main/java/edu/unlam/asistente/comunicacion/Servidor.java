@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Servidor {
 	
 	int puerto;
-	ArrayList<Socket> sockets = new ArrayList<Socket>(); 
+	ArrayList<SocketUsuario> sockets = new ArrayList<SocketUsuario>();
 	
 	public Servidor(int puerto) {
 		this.puerto = puerto;

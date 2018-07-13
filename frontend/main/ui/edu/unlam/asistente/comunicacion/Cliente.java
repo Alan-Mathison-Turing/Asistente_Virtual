@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import edu.unlam.asistente.cliente.Main;
 import edu.unlam.asistente.ventana.Chat;
 import edu.unlam.asistente.ventana.Login;
 import edu.unlam.asistente.ventana.Home;
@@ -47,7 +48,7 @@ public class Cliente {
 	 */
 	public void enviarMensaje(String mensaje) {
 		try {
-			Mensaje m = new Mensaje(mensaje, nombreUsuario, "CHAT");
+			Mensaje m = new Mensaje(mensaje, Main.usuario.getNombreUsuario(), "CHAT");
 			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
 			salida.writeObject(m);
 		} catch (IOException e) {
@@ -94,10 +95,21 @@ public class Cliente {
 	public void obtenerContactosUsuario(int idUsuario) {
 		try {
 			Mensaje m = new Mensaje("" + idUsuario, nombreUsuario, "CONTACTOS");
-			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
+ 			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
 			salida.writeObject(m);
 		} catch (IOException e) {
 			System.err.println("-- Cliente/ObtenerContactos ERROR: ocurrio un error intentando Obtener contactos del usuario" + idUsuario);
+e.printStackTrace();
+		}
+	}
+	
+	public void obtenerChatsUsuario(int idUsuario) {
+		try {
+			Mensaje m = new Mensaje("" + idUsuario, nombreUsuario, "CHATS");
+			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
+			salida.writeObject(m);
+		} catch (IOException e) {
+			System.err.println("-- Cliente/ObtenerChats ERROR: ocurrio un error intentando Obtener contactos del usuario" + idUsuario);
 e.printStackTrace();
 		}
 	}
