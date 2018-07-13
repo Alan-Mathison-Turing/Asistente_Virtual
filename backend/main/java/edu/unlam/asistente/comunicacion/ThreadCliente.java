@@ -3,6 +3,7 @@ package edu.unlam.asistente.comunicacion;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -200,7 +201,16 @@ public class ThreadCliente extends Thread{
 					+ "," + salaNueva.getEsGrupal();
 					
 					respuesta = new Mensaje(mensajeSalaNueva, mensajeRecibido.getNombreUsuario(), "NUEVA_SALA");
-					mensajeEnviar.writeObject(respuesta);
+					
+					if(salaNueva.getEsPrivada() == 0) {
+						for (SocketUsuario clienteActual : this.clientes) {
+							ObjectOutputStream outputClienteActual = new ObjectOutputStream(clienteActual.getSocket().getOutputStream());
+							outputClienteActual.writeObject(respuesta);
+						}
+					} else {
+						mensajeEnviar.writeObject(respuesta);
+					}
+					
 					
 				}
 				
