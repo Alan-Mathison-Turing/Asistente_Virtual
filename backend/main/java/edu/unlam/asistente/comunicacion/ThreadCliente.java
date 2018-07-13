@@ -136,6 +136,7 @@ public class ThreadCliente extends Thread{
 					
 					if(this.cliente.hasProximoMensajeBot()) {
 						mensajeEnviar.writeObject(this.cliente.getProximoMensajeBot());
+						this.cliente.clearProximoMensajeBot();
 					} else {
 						mensajeEnviar.writeObject(new Mensaje("","","CHAT"));
 					}
