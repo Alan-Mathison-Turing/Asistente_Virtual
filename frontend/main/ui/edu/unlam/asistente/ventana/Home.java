@@ -337,14 +337,14 @@ public class Home extends JFrame {
 	}
 
 
-	private boolean cerrarSesion() {
+	private void cerrarSesion() {
 		//TODO: desarrollar metodo
 		
 		//TODO: Sacar esto. Solamente fue realizado para enviar mensajes de prueba
 		//Main.cliente.enviarMensaje("sala:" + 1 + "|" +  "Mensaje de prueba");
 		Main.cliente.cerrarSocket();
 		System.exit(0);
-		return true;
+		
 
 	}
 	

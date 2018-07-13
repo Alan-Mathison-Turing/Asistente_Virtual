@@ -57,7 +57,9 @@ public class Login extends JFrame {
 		contentPane.add(lblUsuario);
 
 		JLabel lblContrasea = new JLabel("Contraseña");
-		lblContrasea.setVerticalAlignment(SwingConstants.TOP);
+		lblContrasea.setLocation(110, 149);
+		lblContrasea.setSize(80, 14);
+		lblContrasea.setVerticalAlignment(SwingConstants.BOTTOM);
 		lblContrasea.setHorizontalAlignment(SwingConstants.LEFT);
 		contentPane.add(lblContrasea);
 
@@ -157,11 +159,15 @@ public class Login extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(96)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblUsuario, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblUsuario, GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+							.addGap(33))
 						.addComponent(lblIpServidor)
 						.addComponent(lblPuertoServidor)
-						.addComponent(lblContrasea, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addComponent(lblContrasea, GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
+							.addGap(16)))
+					.addGap(2)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(tfPuertoServidor, GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
 						.addComponent(tfServidor, GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
@@ -192,21 +198,19 @@ public class Login extends JFrame {
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblPuertoServidor)
 								.addComponent(tfPuertoServidor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(6)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-										.addComponent(lblUsuario)
-										.addComponent(txtUsuario_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(35)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-										.addComponent(pwdSecreto, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblContrasea)))))
+							.addGap(24)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblUsuario)
+								.addComponent(txtUsuario_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(70)
 							.addComponent(lblDatosDeUsuario)))
+					.addGap(9)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(6)
+							.addComponent(lblContrasea, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addComponent(pwdSecreto, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(13)
 					.addComponent(btnIniciarSesion)
 					.addPreferredGap(ComponentPlacement.RELATED)
