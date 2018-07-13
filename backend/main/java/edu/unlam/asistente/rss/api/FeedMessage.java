@@ -1,4 +1,4 @@
-package edu.unlam.asistente.rss;
+package edu.unlam.asistente.rss.api;
 
 /*
  * Represents one RSS message
@@ -53,7 +53,9 @@ public class FeedMessage {
 
     @Override
     public String toString() {
-        return "Título: " + title + "\nLink: " + link + "\n";
+        return "FeedMessage [title=" + title + ", description=" + description
+                + ", link=" + link + ", author=" + author + ", guid=" + guid
+                + "]";
     }
 
 }

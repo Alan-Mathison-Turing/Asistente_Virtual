@@ -1,4 +1,4 @@
-package edu.unlam.asistente.rss;
+package edu.unlam.asistente.rss.api;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,11 +33,11 @@ public class RSSFeedParser {
         }
     }
 
-    public Feed leerSemilla() {
+    public Feed readFeed() {
         Feed feed = null;
         try {
             boolean isFeedHeader = true;
-            // Set header values intial to the empty string
+            // Inicializo los valores.
             String description = "";
             String title = "";
             String link = "";
@@ -47,12 +47,12 @@ public class RSSFeedParser {
             String pubdate = "";
             String guid = "";
 
-            // First create a new XMLInputFactory
+            // Creo un nuevo XMLInputFactory
             XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-            // Setup a new eventReader
+            // Creo un nuevo eventReader
             InputStream in = read();
             XMLEventReader eventReader = inputFactory.createXMLEventReader(in);
-            // read the XML document
+            // Leo el documento XML
             while (eventReader.hasNext()) {
                 XMLEvent event = eventReader.nextEvent();
                 if (event.isStartElement()) {

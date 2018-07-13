@@ -642,4 +642,11 @@ public class BotTests {
 		Assert.assertNotEquals(new String("Disculpa... no entiendo el pedido, @delucas ¿podrás repetirlo?"),
 				fact.toString());
 	}
+	
+	@Test
+	public void obtenerNovedadesBlog(){
+		Assert.assertEquals("prueba",
+				jenkins.leerMensaje("@jenkins, quiero info de mi blog", TEST_USER));		
+	}
+	
 }

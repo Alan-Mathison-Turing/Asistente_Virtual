@@ -1,4 +1,4 @@
-package edu.unlam.asistente.rss;
+package edu.unlam.asistente.rss.api;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,14 +8,14 @@ import java.util.List;
  */
 public class Feed {
 
-    final String title;
-    final String link;
-    final String description;
-    final String language;
-    final String copyright;
-    final String pubDate;
+    private String title;
+    private String link;
+    private String description;
+    private String language;
+    private String copyright;
+    private String pubDate;
 
-    final List<FeedMessage> entries = new ArrayList<FeedMessage>();
+    private List<FeedMessage> entries = new ArrayList<FeedMessage>();
 
     public Feed(String title, String link, String description, String language,
             String copyright, String pubDate) {
@@ -26,7 +26,12 @@ public class Feed {
         this.copyright = copyright;
         this.pubDate = pubDate;
     }
-
+    
+    public Feed(String title, String link) {
+    	this.title = title;
+    	this.link = link;
+    }
+    
     public List<FeedMessage> getMessages() {
         return entries;
     }
@@ -57,7 +62,9 @@ public class Feed {
 
     @Override
     public String toString() {
-        return "Título: " + title + "\nLink: " + link + "\n";
+        return "Feed [copyright=" + copyright + ", description=" + description
+                + ", language=" + language + ", link=" + link + ", pubDate="
+                + pubDate + ", title=" + title + "]";
     }
 
 }
