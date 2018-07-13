@@ -113,6 +113,33 @@ e.printStackTrace();
 e.printStackTrace();
 		}
 	}
+	
+	public void mensajeRecibido() {
+		try {
+			Mensaje m = new Mensaje("", nombreUsuario, "MENSAJE_RECIBIDO");
+			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
+			salida.writeObject(m);
+		} catch (IOException e) {
+			System.err.println("-- Cliente/Mensaje Recibido ERROR: Ocurrio un error informando que un mensaje fue recibido correctamente");
+e.printStackTrace();
+		}
+	}
+	
+	public void crearNuevaSala(String nombre, boolean esPrivada, boolean esGrupal) {
+		try {
+			String mensajeTxt = ""
+					+ nombre + ","
+					+ String.valueOf(esPrivada) + ","
+					+ String.valueOf(esGrupal);
+			
+			Mensaje m = new Mensaje(mensajeTxt, nombreUsuario, "CREACION_SALA");
+			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
+			salida.writeObject(m);
+		} catch (IOException e) {
+			System.err.println("-- Cliente/Creacion de nueva sala ERROR");
+e.printStackTrace();
+		}
+	}
 
 	public String getNombreUsuario() {
 		return nombreUsuario;

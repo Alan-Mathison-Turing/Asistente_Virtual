@@ -46,7 +46,26 @@ public class ThreadEscucha extends Thread {
 						
 						Main.usuario.addMensajeToChat(idSala, mensaje, usuarioQueEscribio);
 						
-					} else if (msj.getType().equals("LOGIN")) {
+						Main.cliente.mensajeRecibido(); //Esto lo usa por si necesita tambien saber la respuesta del bot
+						
+						
+					} else if (msj.getType().equals("CHAT_BOT")) {
+						
+						if(msj.getMensaje().equals("")) {
+							continue;
+						}
+						
+						String[] partesMensaje = msj.getMensaje().split("\\|",-1);
+						int idSala = Integer.valueOf(partesMensaje[0].substring(5));
+						String mensaje = partesMensaje[1];
+						String usuarioQueEscribio = msj.getNombreUsuario();
+						
+						Main.usuario.addMensajeToChat(idSala, mensaje, usuarioQueEscribio);
+						
+						
+					} 
+					
+					else if (msj.getType().equals("LOGIN")) {
 						if(msj.getMensaje().equals("false")) {
 							Main.login.loginIncorrecto();
 						} else {
@@ -85,6 +104,18 @@ public class ThreadEscucha extends Thread {
 										Integer.valueOf(salaInfo[4]) //Es Grupal
 										));
 							}
+							
+						}
+					} else if(msj.getType().equals("NUEVA_SALA")) {
+						if(!msj.getMensaje().equals("false")) {
+							String[] salaInfo = msj.getMensaje().split(",",-1);
+							Main.usuario.addChat(new Chat(
+									Integer.valueOf(salaInfo[0]), //Id de la sala
+									salaInfo[1], //Nombre de la sala
+									Integer.valueOf(salaInfo[2]), //ownerId
+									Integer.valueOf(salaInfo[3]), //Es Privado
+									Integer.valueOf(salaInfo[4]) //Es Grupal
+									));
 							
 						}
 					}

@@ -248,11 +248,10 @@ public class Home extends JFrame {
 		btnNuevaSalaPrivada.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		btnNuevaSalaPrivada.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				txtNombreSala.setText("");
 				txtTopicoSala.setText("");
 				int opcionElegida = JOptionPane.showConfirmDialog(null, panelCrearSala, "Creacion de nueva sala", JOptionPane.OK_CANCEL_OPTION);
 				if (opcionElegida == JOptionPane.OK_OPTION && txtNombreSala != null) {
-					crearSala(txtNombreSala.getText(), txtTopicoSala.getText());
+					crearSalaPrivada(txtNombreSala.getText());
 				}
 				
 			}
@@ -325,9 +324,11 @@ public class Home extends JFrame {
 		}
 	}
 
-	private void crearSala(String nombreSala, String topicoSala) {
+	private void crearSalaPrivada(String nombreSala) {
 		// TODO: llamar a cliente para solicitar creacion de sala
-		String prueba = nombreSala + " " + topicoSala;
+		
+		Main.cliente.crearNuevaSala(nombreSala, true, true);
+		
 	}
 
 	protected void abrirChatCon(String chatearCon) {
