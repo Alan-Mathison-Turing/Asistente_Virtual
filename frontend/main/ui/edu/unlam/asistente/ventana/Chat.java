@@ -54,6 +54,10 @@ public class Chat extends JFrame {
 		return this.nombre;
 	}
 	
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	
 	public int getidSala() {
 		return this.idSala;
 	}

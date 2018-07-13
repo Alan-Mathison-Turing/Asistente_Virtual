@@ -165,8 +165,14 @@ public class ThreadCliente extends Thread{
 							+ "," + salaActual.getNombre()
 							+ "," + salaActual.getDueño().getId()
 							+ "," + salaActual.getEsPrivada()
-							+ "," + salaActual.getEsGrupal()
-							+ ";";
+							+ "," + salaActual.getEsGrupal();
+							
+							if (salaActual.getEsPrivada() == 1 && salaActual.getEsGrupal() == 0) {
+								for (Usuario usuarioActual : salaActual.getUsuarios()) {
+									mensajeSalas += "," + usuarioActual.getUsuario();
+								}
+							}
+							mensajeSalas += ";";
 						}
 						mensajeSalas = mensajeSalas.substring(0, mensajeSalas.length() - 1);
 						respuesta = new Mensaje(mensajeSalas, usuario.getUsuario(), mensajeRecibido.getType());
@@ -189,10 +195,10 @@ public class ThreadCliente extends Thread{
 					salaNueva.setDueño(this.usuario);
 					salaNueva.setEsPrivada(valEsPrivada);
 					salaNueva.setEsGrupal(valEsGrupal);
+					//añado dueño a la tabla de relacion
+					salaNueva.getUsuarios().add(this.usuario);
 					
 					this.salaDao.crearSala(salaNueva);
-					
-					//TODO: Agregar la relacion salaUsuario en la tabla UsuarioSala
 					
 					String mensajeSalaNueva = "" + salaNueva.getId()
 					+ "," + salaNueva.getNombre()
@@ -204,8 +210,12 @@ public class ThreadCliente extends Thread{
 					
 					if(salaNueva.getEsPrivada() == 0) {
 						for (SocketUsuario clienteActual : this.clientes) {
-							ObjectOutputStream outputClienteActual = new ObjectOutputStream(clienteActual.getSocket().getOutputStream());
-							outputClienteActual.writeObject(respuesta);
+							if (clienteActual.getUsuario() != this.usuario.getId()) {
+								ObjectOutputStream outputClienteActual = new ObjectOutputStream(clienteActual.getSocket().getOutputStream());
+								outputClienteActual.writeObject(respuesta);
+							} else {
+								mensajeEnviar.writeObject(respuesta);
+							}
 						}
 					} else {
 						mensajeEnviar.writeObject(respuesta);
