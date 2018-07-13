@@ -215,7 +215,7 @@ public class GestionRecordatorio implements IDecision{
 				respuesta.append(" no tiene eventos agendados");
 			}
 			
-		} catch (SQLException | ParseException e) {
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		return respuesta.toString();
@@ -254,7 +254,7 @@ public class GestionRecordatorio implements IDecision{
 				respuesta.append(" no tiene eventos agendados");
 			}
 			
-		} catch (SQLException | ParseException e) {
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		return respuesta.toString();
@@ -264,28 +264,23 @@ public class GestionRecordatorio implements IDecision{
 		UsuarioDao usuarioDao;
 		EventoDao eventoDao;
 		StringBuilder respuesta = new StringBuilder("@" + usuario);
-		try {
-			usuarioDao = new UsuarioDao();
-			Usuario user = usuarioDao.obtenerUsuarioPorLogin(usuario);
-			
-			if (user == null) {
-				respuesta.append(": Ocurrio un error al intentar guardar tu recordatorio");
-				System.err.println("---ERROR en GestionRecordatorio/guardarRecordatorioYNotificarResultado : El usuario "
-						+ usuario + " no existe---");
-				return respuesta.toString();
-			}
-			
-			evento.setUsuarios( new HashSet<Usuario>(Arrays.asList(user)));
-			
-			eventoDao = new EventoDao();
-			eventoDao.crearEvento(evento);
-			respuesta.append(" tu alarma fue guardada existosamente!");
-			System.out.println("--INFO: GestionRecordatorio/guardarRecordatorioYNotificarResultado : "
-					+ "finalizó correctamente dando de alta el evento"+ evento +" para el usuario "+ usuario +"--");
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
+		usuarioDao = new UsuarioDao();
+		Usuario user = usuarioDao.obtenerUsuarioPorLogin(usuario);
+		
+		if (user == null) {
+			respuesta.append(": Ocurrio un error al intentar guardar tu recordatorio");
+			System.err.println("---ERROR en GestionRecordatorio/guardarRecordatorioYNotificarResultado : El usuario "
+					+ usuario + " no existe---");
+			return respuesta.toString();
 		}
+		
+		evento.setUsuarios( new HashSet<Usuario>(Arrays.asList(user)));
+		
+		eventoDao = new EventoDao();
+		eventoDao.crearEvento(evento);
+		respuesta.append(" tu alarma fue guardada existosamente!");
+		System.out.println("--INFO: GestionRecordatorio/guardarRecordatorioYNotificarResultado : "
+				+ "finalizó correctamente dando de alta el evento"+ evento +" para el usuario "+ usuario +"--");
 		
 		return respuesta.toString();
 	}

@@ -51,7 +51,7 @@ public class EventoDaoTest {
 	
 	@Test
 	public void obtenerEventosPorUsuarioTest() {
-		List<Evento> resultado = eventoDao.obtenerEventosPorUsuario(user);
+		List<Evento> resultado = eventoDao.obtenerEventosPorUsuario(user.getId());
 		Assert.assertTrue(listaEventos.equals(resultado));
 	}
 	
