@@ -1,15 +1,15 @@
-package edu.unlam.asistente.financiera;
+package edu.unlam.asistente.financiera.moneda;
 
 import java.util.regex.Pattern;
 
 /**
- * Clase que administra la cotización del Yuan. <br>
+ * Clase que administra la cotización del Guarani. <br>
  */
-public class Yuan implements Cotizacion {
+public class Guarani implements Cotizacion {
 	/**
-	 * Regex del Real. <br>
+	 * Regex del Guarani. <br>
 	 */
-	private static final Pattern REGEX_YUAN = Pattern.compile("(?:yuan|Yuan)");
+	private static final Pattern REGEX_GUARANI = Pattern.compile("(?:guarani|Guarani)");
 	/**
 	 * Indica cuál es la siguiente cotización que debe intentar resolver la
 	 * solicitud. <br>
@@ -18,8 +18,8 @@ public class Yuan implements Cotizacion {
 
 	@Override
 	public String leerMoneda(String moneda) {
-		if (REGEX_YUAN.matcher(moneda).find()) {
-			return Moneda.obtenerCotizacionActual("CNY");
+		if (REGEX_GUARANI.matcher(moneda).find()) {
+			return Moneda.obtenerCotizacionActual("PYG");
 		}
 		return this.siguienteCotizacion.leerMoneda(moneda);
 	}

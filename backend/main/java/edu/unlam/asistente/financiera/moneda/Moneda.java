@@ -1,4 +1,4 @@
-package edu.unlam.asistente.financiera;
+package edu.unlam.asistente.financiera.moneda;
 
 import java.io.IOException;
 
@@ -69,9 +69,9 @@ public class Moneda implements Cotizacion {
 			JSONObject json = JsonReads
 					.readJsonFromUrl(new StringBuilder("http://free.currencyconverterapi.com/api/v5/convert?q=")
 							.append(moneda).append("_ARS&compact=ultra").toString());
-			return json.getString(moneda + "_ARS");
+			return "$" + json.getString(moneda + "_ARS");
 		} catch (IOException | JSONException e) {
-			return "Ha ocurrido un error al obtener la cotización.";
+			return " ha ocurrido un error al obtener la cotización. Intente más tarde.";
 		}
 	}
 

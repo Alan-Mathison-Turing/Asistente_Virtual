@@ -1,4 +1,4 @@
-package edu.unlam.asistente.financiera;
+package edu.unlam.asistente.financiera.moneda;
 
 /**
  * Clase que administra la cotización de una moneda imaginaria.
@@ -10,7 +10,7 @@ public class Imaginaria implements Cotizacion {
 	/**
 	 * Mensaje a mostrar cuando no existe una moneda específica. <br>
 	 */
-	final static String MSG_NO_MONEDA = "Disculpa, pero la moneda solicitada no se encuentra disponible.";
+	final static String MSG_NO_MONEDA = "un monto no conocido ya que no se trata de una moneda que se encuentra disponible.";
 	/**
 	 * Siguiente cotización. <br>
 	 */

@@ -1,15 +1,15 @@
-package edu.unlam.asistente.financiera;
+package edu.unlam.asistente.financiera.moneda;
 
 import java.util.regex.Pattern;
 
 /**
- * Clase que administra la cotización del Bolivar. <br>
+ * Clase que administra la cotización del Sol. <br>
  */
-public class Bolivar implements Cotizacion {
+public class Sol implements Cotizacion {
 	/**
-	 * Regex del Bolivar. <br>
+	 * Regex del Sol. <br>
 	 */
-	private static final Pattern REGEX_BOLIVAR = Pattern.compile("(?:bolivar|Bolivar)");
+	private static final Pattern REGEX_SOL = Pattern.compile("(?:sol|Sol)");
 	/**
 	 * Indica cuál es la siguiente cotización que debe intentar resolver la
 	 * solicitud. <br>
@@ -18,8 +18,8 @@ public class Bolivar implements Cotizacion {
 
 	@Override
 	public String leerMoneda(String moneda) {
-		if (REGEX_BOLIVAR.matcher(moneda).find()) {
-			return Moneda.obtenerCotizacionActual("VEF");
+		if (REGEX_SOL.matcher(moneda).find()) {
+			return Moneda.obtenerCotizacionActual("PEN");
 		}
 		return this.siguienteCotizacion.leerMoneda(moneda);
 	}

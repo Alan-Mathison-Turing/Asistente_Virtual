@@ -1,15 +1,15 @@
-package edu.unlam.asistente.financiera;
+package edu.unlam.asistente.financiera.moneda;
 
 import java.util.regex.Pattern;
 
 /**
- * Clase que administra la cotización del Yen. <br>
+ * Clase que administra la cotización del Real. <br>
  */
-public class Yen implements Cotizacion {
+public class Real implements Cotizacion {
 	/**
-	 * Regex del Yen. <br>
+	 * Regex del Real. <br>
 	 */
-	private static final Pattern REGEX_YEN = Pattern.compile("(?:yen|Yen)");
+	private static final Pattern REGEX_REAL = Pattern.compile("(?:real|Real)");
 	/**
 	 * Indica cuál es la siguiente cotización que debe intentar resolver la
 	 * solicitud. <br>
@@ -18,8 +18,8 @@ public class Yen implements Cotizacion {
 
 	@Override
 	public String leerMoneda(String moneda) {
-		if (REGEX_YEN.matcher(moneda).find()) {
-			return Moneda.obtenerCotizacionActual("JPY");
+		if (REGEX_REAL.matcher(moneda).find()) {
+			return Moneda.obtenerCotizacionActual("BRL");
 		}
 		return this.siguienteCotizacion.leerMoneda(moneda);
 	}

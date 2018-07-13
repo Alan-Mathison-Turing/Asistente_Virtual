@@ -1,15 +1,15 @@
-package edu.unlam.asistente.financiera;
+package edu.unlam.asistente.financiera.moneda;
 
 import java.util.regex.Pattern;
 
 /**
- * Clase que administra la cotización del Guarani. <br>
+ * Clase que administra la cotización del peso Mexicano. <br>
  */
-public class Guarani implements Cotizacion {
+public class Mexicano implements Cotizacion {
 	/**
-	 * Regex del Guarani. <br>
+	 * Regex del peso Mexicano. <br>
 	 */
-	private static final Pattern REGEX_GUARANI = Pattern.compile("(?:guarani|Guarani)");
+	private static final Pattern REGEX_MEXICANO = Pattern.compile("(?:mexicano|Mexicano)");
 	/**
 	 * Indica cuál es la siguiente cotización que debe intentar resolver la
 	 * solicitud. <br>
@@ -18,8 +18,8 @@ public class Guarani implements Cotizacion {
 
 	@Override
 	public String leerMoneda(String moneda) {
-		if (REGEX_GUARANI.matcher(moneda).find()) {
-			return Moneda.obtenerCotizacionActual("PYG");
+		if (REGEX_MEXICANO.matcher(moneda).find()) {
+			return Moneda.obtenerCotizacionActual("MXN");
 		}
 		return this.siguienteCotizacion.leerMoneda(moneda);
 	}

@@ -1,15 +1,15 @@
-package edu.unlam.asistente.financiera;
+package edu.unlam.asistente.financiera.moneda;
 
 import java.util.regex.Pattern;
 
 /**
- * Clase que administra la cotización del peso Colombiano. <br>
+ * Clase que administra la cotización del Dolar. <br>
  */
-public class Colombiano implements Cotizacion {
+public class Dolar implements Cotizacion {
 	/**
-	 * Regex del peso Colombiano. <br>
+	 * Regex del Dolar. <br>
 	 */
-	private static final Pattern REGEX_COLOMBIANO = Pattern.compile("(?:colombiano|Colombiano)");
+	private static final Pattern REGEX_DOLAR = Pattern.compile("(?:dolar|Dolar)");
 	/**
 	 * Indica cuál es la siguiente cotización que debe intentar resolver la
 	 * solicitud. <br>
@@ -18,8 +18,8 @@ public class Colombiano implements Cotizacion {
 
 	@Override
 	public String leerMoneda(String moneda) {
-		if (REGEX_COLOMBIANO.matcher(moneda).find()) {
-			return Moneda.obtenerCotizacionActual("COP");
+		if (REGEX_DOLAR.matcher(moneda).find()) {
+			return Moneda.obtenerCotizacionActual("USD");
 		}
 		return this.siguienteCotizacion.leerMoneda(moneda);
 	}

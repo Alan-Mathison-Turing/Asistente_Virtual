@@ -1,15 +1,15 @@
-package edu.unlam.asistente.financiera;
+package edu.unlam.asistente.financiera.moneda;
 
 import java.util.regex.Pattern;
 
 /**
- * Clase que administra la cotización del Real. <br>
+ * Clase que administra la cotización del Boliviano. <br>
  */
-public class Real implements Cotizacion {
+public class Boliviano implements Cotizacion {
 	/**
-	 * Regex del Real. <br>
+	 * Regex del Boliviano. <br>
 	 */
-	private static final Pattern REGEX_REAL = Pattern.compile("(?:real|Real)");
+	private static final Pattern REGEX_BOLIVIANO = Pattern.compile("(?:boliviano|Boliviano)");
 	/**
 	 * Indica cuál es la siguiente cotización que debe intentar resolver la
 	 * solicitud. <br>
@@ -18,8 +18,8 @@ public class Real implements Cotizacion {
 
 	@Override
 	public String leerMoneda(String moneda) {
-		if (REGEX_REAL.matcher(moneda).find()) {
-			return Moneda.obtenerCotizacionActual("BRL");
+		if (REGEX_BOLIVIANO.matcher(moneda).find()) {
+			return Moneda.obtenerCotizacionActual("BOB");
 		}
 		return this.siguienteCotizacion.leerMoneda(moneda);
 	}

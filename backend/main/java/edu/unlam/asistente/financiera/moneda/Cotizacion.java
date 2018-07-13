@@ -1,4 +1,4 @@
-package edu.unlam.asistente.financiera;
+package edu.unlam.asistente.financiera.moneda;
 
 /**
  * Interfaz que administra la cotización de una moneda. <br>

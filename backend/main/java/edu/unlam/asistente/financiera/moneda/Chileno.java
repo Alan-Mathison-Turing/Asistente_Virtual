@@ -1,15 +1,15 @@
-package edu.unlam.asistente.financiera;
+package edu.unlam.asistente.financiera.moneda;
 
 import java.util.regex.Pattern;
 
 /**
- * Clase que administra la cotización del Dolar. <br>
+ * Clase que administra la cotización del peso Chileno. <br>
  */
-public class Dolar implements Cotizacion {
+public class Chileno implements Cotizacion {
 	/**
-	 * Regex del Dolar. <br>
+	 * Regex del peso Chileno. <br>
 	 */
-	private static final Pattern REGEX_DOLAR = Pattern.compile("(?:dolar|Dolar)");
+	private static final Pattern REGEX_CHILENO = Pattern.compile("(?:chileno|Chileno)");
 	/**
 	 * Indica cuál es la siguiente cotización que debe intentar resolver la
 	 * solicitud. <br>
@@ -18,8 +18,8 @@ public class Dolar implements Cotizacion {
 
 	@Override
 	public String leerMoneda(String moneda) {
-		if (REGEX_DOLAR.matcher(moneda).find()) {
-			return Moneda.obtenerCotizacionActual("USD");
+		if (REGEX_CHILENO.matcher(moneda).find()) {
+			return Moneda.obtenerCotizacionActual("CLP");
 		}
 		return this.siguienteCotizacion.leerMoneda(moneda);
 	}

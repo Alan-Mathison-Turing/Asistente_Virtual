@@ -1,15 +1,15 @@
-package edu.unlam.asistente.financiera;
+package edu.unlam.asistente.financiera.moneda;
 
 import java.util.regex.Pattern;
 
 /**
- * Clase que administra la cotización del Rublo. <br>
+ * Clase que administra la cotización del Euro. <br>
  */
-public class Rublo implements Cotizacion {
+public class Euro implements Cotizacion {
 	/**
-	 * Regex del Rublo. <br>
+	 * Regex del Euro. <br>
 	 */
-	private static final Pattern REGEX_RUBLO = Pattern.compile("(?:rublo|Rublo)");
+	private static final Pattern REGEX_EURO = Pattern.compile("(?:euro|Euro)");
 	/**
 	 * Indica cuál es la siguiente cotización que debe intentar resolver la
 	 * solicitud. <br>
@@ -18,8 +18,8 @@ public class Rublo implements Cotizacion {
 
 	@Override
 	public String leerMoneda(String moneda) {
-		if (REGEX_RUBLO.matcher(moneda).find()) {
-			return Moneda.obtenerCotizacionActual("RUB");
+		if (REGEX_EURO.matcher(moneda).find()) {
+			return Moneda.obtenerCotizacionActual("EUR");
 		}
 		return this.siguienteCotizacion.leerMoneda(moneda);
 	}

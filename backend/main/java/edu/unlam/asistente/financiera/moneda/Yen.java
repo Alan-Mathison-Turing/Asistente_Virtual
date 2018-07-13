@@ -1,16 +1,15 @@
-package edu.unlam.asistente.financiera;
+package edu.unlam.asistente.financiera.moneda;
 
 import java.util.regex.Pattern;
 
 /**
- * Clase que administra la cotización de la Libra esterlina. <br>
+ * Clase que administra la cotización del Yen. <br>
  */
-public class Libra implements Cotizacion {
+public class Yen implements Cotizacion {
 	/**
-	 * Regex de la Libra. <br>
+	 * Regex del Yen. <br>
 	 */
-	private static final Pattern REGEX_LIBRA = Pattern
-			.compile("(?:libra|Libra|libra esterlina|Libra esterlina|Libra Esterlina)");
+	private static final Pattern REGEX_YEN = Pattern.compile("(?:yen|Yen)");
 	/**
 	 * Indica cuál es la siguiente cotización que debe intentar resolver la
 	 * solicitud. <br>
@@ -19,8 +18,8 @@ public class Libra implements Cotizacion {
 
 	@Override
 	public String leerMoneda(String moneda) {
-		if (REGEX_LIBRA.matcher(moneda).find()) {
-			return Moneda.obtenerCotizacionActual("GBP");
+		if (REGEX_YEN.matcher(moneda).find()) {
+			return Moneda.obtenerCotizacionActual("JPY");
 		}
 		return this.siguienteCotizacion.leerMoneda(moneda);
 	}

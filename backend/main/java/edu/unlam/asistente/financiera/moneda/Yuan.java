@@ -1,15 +1,15 @@
-package edu.unlam.asistente.financiera;
+package edu.unlam.asistente.financiera.moneda;
 
 import java.util.regex.Pattern;
 
 /**
- * Clase que administra la cotización del Euro. <br>
+ * Clase que administra la cotización del Yuan. <br>
  */
-public class Euro implements Cotizacion {
+public class Yuan implements Cotizacion {
 	/**
-	 * Regex del Euro. <br>
+	 * Regex del Real. <br>
 	 */
-	private static final Pattern REGEX_EURO = Pattern.compile("(?:euro|Euro)");
+	private static final Pattern REGEX_YUAN = Pattern.compile("(?:yuan|Yuan)");
 	/**
 	 * Indica cuál es la siguiente cotización que debe intentar resolver la
 	 * solicitud. <br>
@@ -18,8 +18,8 @@ public class Euro implements Cotizacion {
 
 	@Override
 	public String leerMoneda(String moneda) {
-		if (REGEX_EURO.matcher(moneda).find()) {
-			return Moneda.obtenerCotizacionActual("EUR");
+		if (REGEX_YUAN.matcher(moneda).find()) {
+			return Moneda.obtenerCotizacionActual("CNY");
 		}
 		return this.siguienteCotizacion.leerMoneda(moneda);
 	}

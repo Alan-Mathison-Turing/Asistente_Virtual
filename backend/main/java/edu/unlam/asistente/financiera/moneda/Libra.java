@@ -1,15 +1,16 @@
-package edu.unlam.asistente.financiera;
+package edu.unlam.asistente.financiera.moneda;
 
 import java.util.regex.Pattern;
 
 /**
- * Clase que administra la cotización del Boliviano. <br>
+ * Clase que administra la cotización de la Libra esterlina. <br>
  */
-public class Boliviano implements Cotizacion {
+public class Libra implements Cotizacion {
 	/**
-	 * Regex del Boliviano. <br>
+	 * Regex de la Libra. <br>
 	 */
-	private static final Pattern REGEX_BOLIVIANO = Pattern.compile("(?:boliviano|Boliviano)");
+	private static final Pattern REGEX_LIBRA = Pattern
+			.compile("(?:libra|Libra|libra esterlina|Libra esterlina|Libra Esterlina)");
 	/**
 	 * Indica cuál es la siguiente cotización que debe intentar resolver la
 	 * solicitud. <br>
@@ -18,8 +19,8 @@ public class Boliviano implements Cotizacion {
 
 	@Override
 	public String leerMoneda(String moneda) {
-		if (REGEX_BOLIVIANO.matcher(moneda).find()) {
-			return Moneda.obtenerCotizacionActual("BOB");
+		if (REGEX_LIBRA.matcher(moneda).find()) {
+			return Moneda.obtenerCotizacionActual("GBP");
 		}
 		return this.siguienteCotizacion.leerMoneda(moneda);
 	}

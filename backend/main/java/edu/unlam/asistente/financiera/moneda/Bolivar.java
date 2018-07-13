@@ -1,15 +1,15 @@
-package edu.unlam.asistente.financiera;
+package edu.unlam.asistente.financiera.moneda;
 
 import java.util.regex.Pattern;
 
 /**
- * Clase que administra la cotización del peso Mexicano. <br>
+ * Clase que administra la cotización del Bolivar. <br>
  */
-public class Mexicano implements Cotizacion {
+public class Bolivar implements Cotizacion {
 	/**
-	 * Regex del peso Mexicano. <br>
+	 * Regex del Bolivar. <br>
 	 */
-	private static final Pattern REGEX_MEXICANO = Pattern.compile("(?:mexicano|Mexicano)");
+	private static final Pattern REGEX_BOLIVAR = Pattern.compile("(?:bolivar|Bolivar)");
 	/**
 	 * Indica cuál es la siguiente cotización que debe intentar resolver la
 	 * solicitud. <br>
@@ -18,8 +18,8 @@ public class Mexicano implements Cotizacion {
 
 	@Override
 	public String leerMoneda(String moneda) {
-		if (REGEX_MEXICANO.matcher(moneda).find()) {
-			return Moneda.obtenerCotizacionActual("MXN");
+		if (REGEX_BOLIVAR.matcher(moneda).find()) {
+			return Moneda.obtenerCotizacionActual("VEF");
 		}
 		return this.siguienteCotizacion.leerMoneda(moneda);
 	}
