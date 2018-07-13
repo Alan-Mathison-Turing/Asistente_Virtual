@@ -191,6 +191,8 @@ public class ThreadCliente extends Thread{
 					
 					this.salaDao.crearSala(salaNueva);
 					
+					//TODO: Agregar la relacion salaUsuario en la tabla UsuarioSala
+					
 					String mensajeSalaNueva = "" + salaNueva.getId()
 					+ "," + salaNueva.getNombre()
 					+ "," + salaNueva.getDueño().getId()
