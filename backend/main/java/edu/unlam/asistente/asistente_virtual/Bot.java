@@ -3,6 +3,7 @@ package edu.unlam.asistente.asistente_virtual;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import edu.unlam.asistente.blog.Blog;
 import edu.unlam.asistente.busqueda_web.BusquedaWeb;
 import edu.unlam.asistente.calculadora.Calculadora;
 import edu.unlam.asistente.calendario.Calendario;
@@ -40,7 +41,7 @@ public class Bot implements IDecision {
 	@Override
 	public String leerMensaje(String mensaje, String usuario) {
 		mensaje = removerTildes(mensaje.toLowerCase());
-	
+
 		Cordialidad cordialidad = new Cordialidad();
 		LeyesRobotica leyesRobotica = new LeyesRobotica();
 		ChuckNorrisFact chuckFacts = new ChuckNorrisFact();
@@ -50,6 +51,7 @@ public class Bot implements IDecision {
 		GestionRecordatorio gestionRecordatorio = new GestionRecordatorio();
 		BusquedaWeb busquedaWeb = new BusquedaWeb();
 		Gif gif = new Gif();
+		Blog blog = new Blog();
 		Default def = new Default();
 		
 		this.setSiguienteDecision(cordialidad);
@@ -60,9 +62,12 @@ public class Bot implements IDecision {
 		gestionRecordatorio.setSiguienteDecision(conversorUnidad);
 		conversorUnidad.setSiguienteDecision(busquedaWeb);
 		busquedaWeb.setSiguienteDecision(gif);
-		gif.setSiguienteDecision(calendario);
+		gif.setSiguienteDecision(blog);
+		blog.setSiguienteDecision(calendario);
 		
-		// @def debe quedar siempre al final dado que es el que mostrará el mensaje por default.
+		/*
+		 * @def debe quedar siempre al final dado que es el que mostrará el mensaje por default.
+		 */
 		calendario.setSiguienteDecision(def);
 		
 		return siguienteDecision.leerMensaje(mensaje, usuario);

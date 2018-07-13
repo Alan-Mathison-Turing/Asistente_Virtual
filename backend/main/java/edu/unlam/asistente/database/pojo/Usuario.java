@@ -11,9 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -29,6 +28,9 @@ public class Usuario implements java.io.Serializable {
 	 * Chuck Norris facts que recibió el usuario. <br>
 	 */
 	private Set<ChuckNorrisFacts> chuckNorrisFacts = new HashSet<ChuckNorrisFacts>();
+	
+	private Set<RSS> urlSeeds = new HashSet<RSS>();
+
 
 	public Usuario() {
 	}
@@ -51,6 +53,16 @@ public class Usuario implements java.io.Serializable {
 
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
+	}
+	
+
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL) 
+	public Set<RSS> getUrlSeeds() {
+		return urlSeeds;
+	}
+
+	public void setUrlSeeds(Set<RSS> urlSeeds) {
+		this.urlSeeds = urlSeeds;
 	}
 
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "usuarios")

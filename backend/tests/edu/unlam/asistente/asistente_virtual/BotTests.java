@@ -575,13 +575,9 @@ public class BotTests {
 
 	@Test
 	public void busquedaExistente() {
-		Assert.assertEquals("<a href=\"https://es.wikipedia.org/wiki/Diego_Armando_Maradona\">"
-						+ "<u>https://es.wikipedia.org/wiki/Diego_Armando_Maradona</u></a><br/>"
-						+ "<p><b>Diego Armando Maradona</b> es un exfutbolista y director técnico argentino. "
-						+ "Actualmente se desempeña como presidente y director deportivo del FC Dinamo Brest de la "
-						+ "Liga Premier de Bielorrusia.</p>", 
-							jenkins.leerMensaje("@jenkins quien es Diego Maradona ?", USUARIO));
-	}
+		String resultado = jenkins.leerMensaje("@jenkins quien es Diego Maradona ?", USUARIO);
+		Assert.assertTrue(resultado.contains("https://es.wikipedia.org/wiki/Diego_Armando_Maradona"));	
+			}
 	
 	@Test
 	public void busquedaVariosResultados() {
@@ -626,6 +622,19 @@ public class BotTests {
 	}
 	
 	@Test
+	public void busquedaNueveGag() {
+		String resultado = jenkins.leerMensaje("@jenkins, quiero una imagen", USUARIO);
+		Assert.assertTrue(resultado.endsWith(".jpg"));
+	}
+	
+	@Test
+	public void busquedaNueveGagRandom() {
+		String resultado = jenkins.leerMensaje("@jenkins, quiero una imagen", USUARIO);
+		String resultado2 = jenkins.leerMensaje("@jenkins, quiero una imagen", USUARIO);
+		Assert.assertTrue(!resultado.equals(resultado2));
+	}
+	
+	@Test
 	public void obtenerFactChuckNorris() {
 		String fact = jenkins.leerMensaje("@jenkins quiero un fact sobre Chuck Norris", TEST_USER);
 		Assert.assertNotEquals("El fact era tan groso que Chuck Norris no nos deja compartirlo. Intente más tarde.",
@@ -633,4 +642,11 @@ public class BotTests {
 		Assert.assertNotEquals(new String("Disculpa... no entiendo el pedido, @delucas ¿podrás repetirlo?"),
 				fact.toString());
 	}
+	
+	@Test
+	public void obtenerNovedadesBlog(){
+		Assert.assertEquals("prueba",
+				jenkins.leerMensaje("@jenkins, quiero info de mi blog", TEST_USER));		
+	}
+	
 }
