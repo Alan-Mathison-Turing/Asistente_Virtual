@@ -71,10 +71,10 @@ public class Login extends JFrame {
 		btnIniciarSesion.addKeyListener(new KeyAdapter() {
 
 			@Override
-			public void keyTyped(KeyEvent e) {
+			public void keyPressed(KeyEvent e) {
 				char tecla=e.getKeyChar();
 				if(tecla==KeyEvent.VK_ENTER) {
-					btnIniciarSesion.addActionListener(null);
+					
 					btnIniciarSesion.doClick();
 				}
 			}
