@@ -64,6 +64,7 @@ public class Home extends JFrame {
 			}
 			
 		});
+		
 		btnCerrarSesion.setBounds(451, 15, 116, 22);
 		contentPane.add(btnCerrarSesion);
 
@@ -335,24 +336,16 @@ public class Home extends JFrame {
 		Main.cliente.abrirChatCon(chatearCon);
 	}
 
-<<<<<<< HEAD
-	
-<<<<<<< HEAD
-	private void cerrarSesion() {
-		Main.cliente.cerrarSocket();
-		System.exit(0);
-		
-=======
-=======
->>>>>>> entrega_final
+
 	private boolean cerrarSesion() {
 		//TODO: desarrollar metodo
 		
 		//TODO: Sacar esto. Solamente fue realizado para enviar mensajes de prueba
-		Main.cliente.enviarMensaje("sala:" + 1 + "|" +  "Mensaje de prueba");
-		
+		//Main.cliente.enviarMensaje("sala:" + 1 + "|" +  "Mensaje de prueba");
+		Main.cliente.cerrarSocket();
+		System.exit(0);
 		return true;
->>>>>>> entrega_final
+
 	}
 	
 }

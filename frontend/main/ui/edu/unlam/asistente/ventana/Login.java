@@ -41,7 +41,7 @@ public class Login extends JFrame {
 	public Login() {
 		
 		setResizable(false);
-
+		 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -49,8 +49,11 @@ public class Login extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
 
+	
 		JLabel lblUsuario = new JLabel("Usuario");
+		
 		contentPane.add(lblUsuario);
 
 		JLabel lblContrasea = new JLabel("Contraseña");
@@ -60,10 +63,31 @@ public class Login extends JFrame {
 
 		pwdSecreto = new JPasswordField();
 		contentPane.add(pwdSecreto);
-
+		pwdSecreto.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char tecla=e.getKeyChar();
+				if(tecla==KeyEvent.VK_ENTER){
+					iniciarSesion();
+				}
+			}
+		});
+		
 		txtUsuario_1 = new JTextField();
 		contentPane.add(txtUsuario_1);
 		txtUsuario_1.setColumns(10);
+		txtUsuario_1.grabFocus();
+
+		txtUsuario_1.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				char tecla=arg0.getKeyChar();
+				if(tecla==KeyEvent.VK_ENTER){
+					pwdSecreto.grabFocus();
+				}
+				
+			}
+		});
 
 		JButton btnIniciarSesion = new JButton("Iniciar Sesion");
 		btnIniciarSesion.setVerticalAlignment(SwingConstants.TOP);
@@ -74,95 +98,63 @@ public class Login extends JFrame {
 			public void keyPressed(KeyEvent e) {
 				char tecla=e.getKeyChar();
 				if(tecla==KeyEvent.VK_ENTER) {
-					
-					btnIniciarSesion.doClick();
-				}
+
+					iniciarSesion();
+			}
 			}
 		});
+		
+		
 		btnIniciarSesion.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
 
-				String ip = tfServidor.getText();
-				int puerto = Integer.parseInt(tfPuertoServidor.getText());
-				String usuario = txtUsuario_1.getText();
-				char[] passwd = pwdSecreto.getPassword();
-				String clave = new String(passwd);
-				
-				if(ip.length() > 0) {
-					
-					try {
-						
-						Login.cliente.createSocket(ip, puerto);
-						
-						if(usuario.length() > 0 && clave.length() > 0) {
-							
-							Login.cliente.solicitarAutenticacion(usuario, clave);
-							
-						} else {
-
-							JOptionPane.showMessageDialog(null,
-									"Datos incompletos\n" + " Ingrese su usuario y contraseña",
-									"Mensaje de Error", JOptionPane.INFORMATION_MESSAGE);
-
-							
-						}
-						
-					} catch (IOException e) {
-						
-						JOptionPane.showMessageDialog(null,
-								"Acceso Denegado\n" + " Puerto o IP elegidos incorrectos",
-								"Mensaje de Error", JOptionPane.INFORMATION_MESSAGE);
-						
-						e.printStackTrace();
-					}
-					
-				} else {
-					JOptionPane.showMessageDialog(null,
-							"Datos incompletos\n" + " Por favor ingrese una direccion IP",
-							"Mensaje de Error", JOptionPane.INFORMATION_MESSAGE);
-				}
+		       iniciarSesion();
 				
 
 			}
-		});
+		}
+		);
 		contentPane.add(btnIniciarSesion);
 
 		JLabel lblRegistrarse = new JLabel("Registrarse");
+		lblRegistrarse.setLocation(170, 205);
+		lblRegistrarse.setSize(70, 14);
+		lblRegistrarse.setVerticalAlignment(SwingConstants.BOTTOM);
 		lblRegistrarse.setHorizontalAlignment(SwingConstants.CENTER);
 		lblRegistrarse.setForeground(new Color(0, 0, 255));
 		contentPane.add(lblRegistrarse);
 
-		JLabel lblseOlvidoSu = new JLabel("¿Se olvido su contraseña?");
-		lblseOlvidoSu.setVerticalAlignment(SwingConstants.BOTTOM);
-		lblseOlvidoSu.setForeground(new Color(0, 0, 255));
-		contentPane.add(lblseOlvidoSu);
-
 		JLabel lblDatosDeConexin = new JLabel("Datos de Conexi\u00F3n:");
+		lblDatosDeConexin.setFont(new Font("Tahoma", Font.BOLD, 11));
 
 		JLabel lblIpServidor = new JLabel("IP Servidor:");
 
 		JLabel lblPuertoServidor = new JLabel("Puerto Servidor:");
 
 		tfServidor = new JTextField();
+		tfServidor.setEnabled(false);
 		tfServidor.setText("localhost");
 		tfServidor.setColumns(10);
-
+		tfServidor.setNextFocusableComponent(lblUsuario);
 		tfPuertoServidor = new JTextField();
+		tfPuertoServidor.setEnabled(false);
 		tfPuertoServidor.setText("12346");
 		tfPuertoServidor.setColumns(10);
+		tfPuertoServidor.transferFocus();
 
 		JLabel lblDatosDeUsuario = new JLabel("Datos de usuario:");
+		lblDatosDeUsuario.setFont(new Font("Tahoma", Font.BOLD, 11));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(34)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblDatosDeUsuario)
 						.addComponent(lblDatosDeConexin))
-					.addContainerGap(305, Short.MAX_VALUE))
-				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+					.addContainerGap(292, Short.MAX_VALUE))
+				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(96)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblUsuario, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
@@ -171,24 +163,19 @@ public class Login extends JFrame {
 						.addComponent(lblContrasea, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblseOlvidoSu, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_contentPane.createSequentialGroup()
-								.addComponent(btnIniciarSesion, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
-								.addContainerGap())
-							.addGroup(gl_contentPane.createSequentialGroup()
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-									.addComponent(tfPuertoServidor, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-									.addComponent(tfServidor, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-									.addComponent(txtUsuario_1, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-									.addComponent(pwdSecreto, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE))
-								.addGap(94)))))
+						.addComponent(tfPuertoServidor, GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+						.addComponent(tfServidor, GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+						.addComponent(txtUsuario_1, GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+						.addComponent(pwdSecreto, GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE))
+					.addGap(94))
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(216, Short.MAX_VALUE)
-					.addComponent(lblRegistrarse, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
-					.addGap(156))
+					.addContainerGap(143, Short.MAX_VALUE)
+					.addComponent(btnIniciarSesion, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
+					.addGap(164))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(176)
+					.addComponent(lblRegistrarse, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(188, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -220,21 +207,67 @@ public class Login extends JFrame {
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(70)
 							.addComponent(lblDatosDeUsuario)))
-					.addGap(18)
+					.addGap(13)
 					.addComponent(btnIniciarSesion)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblseOlvidoSu)
-					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblRegistrarse)
-					.addGap(22))
+					.addGap(48))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
+	public void iniciarSesion(){
+		String ip = tfServidor.getText();
+		int puerto = Integer.parseInt(tfPuertoServidor.getText());
+		String usuario = txtUsuario_1.getText();
+		char[] passwd = pwdSecreto.getPassword();
+		String clave = new String(passwd);
+		
+		if(ip.length() > 0) {
+			
+			try {
+				
+				Login.cliente.createSocket(ip, puerto);
+				
+				if(usuario.length() > 0 && clave.length() > 0) {
+					
+					Login.cliente.solicitarAutenticacion(usuario, clave);
+					
+				} else {
 
+					JOptionPane.showMessageDialog(null,
+							"Datos incompletos\n" + " Ingrese su usuario y contraseña",
+							"Mensaje de Error", JOptionPane.INFORMATION_MESSAGE);
+					txtUsuario_1.setText(null);
+					pwdSecreto.setText(null);
+					txtUsuario_1.grabFocus();
+
+					
+				}
+				
+			} catch (IOException e) {
+				
+				JOptionPane.showMessageDialog(null,
+						"Acceso Denegado\n" + " Puerto o IP elegidos incorrectos",
+						"Mensaje de Error", JOptionPane.INFORMATION_MESSAGE);
+				
+				
+				e.printStackTrace();
+			}
+			
+		} else {
+			JOptionPane.showMessageDialog(null,
+					"Datos incompletos\n" + " Por favor ingrese una direccion IP",
+					"Mensaje de Error", JOptionPane.INFORMATION_MESSAGE);
+		}
+		
+	}
 	public void loginIncorrecto() {
 		JOptionPane.showMessageDialog(null,
 				"Acceso Denegado\n" + " Usuario o contraseña ingresados no son correctos",
 				"Mensaje de Error", JOptionPane.INFORMATION_MESSAGE);
+		txtUsuario_1.setText(null);
+		pwdSecreto.setText(null);
+		txtUsuario_1.grabFocus();
 	}
 	
 }

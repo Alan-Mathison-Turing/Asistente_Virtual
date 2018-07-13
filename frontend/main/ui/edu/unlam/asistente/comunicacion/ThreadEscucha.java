@@ -6,10 +6,7 @@ import java.net.Socket;
 
 import javax.swing.DefaultListModel;
 
-<<<<<<< HEAD
 
-=======
->>>>>>> entrega_final
 import edu.unlam.asistente.cliente.Main;
 import edu.unlam.asistente.entidades.Usuario;
 //import edu.unlam.asistente.entidades.Chat;
