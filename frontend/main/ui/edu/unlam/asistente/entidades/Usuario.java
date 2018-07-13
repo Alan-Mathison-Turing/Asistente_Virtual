@@ -1,10 +1,12 @@
 package edu.unlam.asistente.entidades;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 
 import edu.unlam.asistente.cliente.Main;
+import edu.unlam.asistente.ventana.Chat;
 
 public class Usuario {
 
@@ -52,6 +54,10 @@ public class Usuario {
 	public DefaultListModel<String> getSalasPublicas(){
 		return this.salasPublicas;
 	}
+	
+	public List<Chat> getVentanasChat(){
+		return this.chats;
+	}
 
 	public String getNombreUsuario() {
 		return nombreUsuario;
@@ -79,7 +85,7 @@ public class Usuario {
 	public void addChat(Chat chat) {
 		this.chats.add(chat);
 		if(chat.esGrupal()) {
-			if(chat.esPrivada()) {
+			if(chat.esPrivado()) {
 				this.salasPrivadas.addElement(chat.getNombre());
 			} else {
 				this.salasPublicas.addElement(chat.getNombre());
@@ -92,7 +98,7 @@ public class Usuario {
 		Chat chatBuscado = this.getChatByIdSala(idSala);
 		
 		if(chatBuscado != null) {
-			chatBuscado.addMensaje(new MensajeChat(mensaje, usuario));
+			chatBuscado.actualizarChat(new MensajeChat(mensaje, usuario));
 			System.out.println("idSala: " + idSala + ". Recibe mensaje de: " + usuario + ". Mensaje: " + mensaje);
 		}
 		
@@ -100,15 +106,13 @@ public class Usuario {
 	
 	private Chat getChatByIdSala(int idSala) {
 		
-		for(int i = 0; i < this.chats.size(); i++) {
-			Chat chatActual = this.chats.get(i);
-			if(chatActual.getSalaId() == idSala) {
+		for (Chat chatActual : chats) {
+			if(chatActual.getidSala() == idSala) {
 				return chatActual;
 			}
 		}
 		
 		return null;
-		
 	}
 	
 }

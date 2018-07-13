@@ -7,7 +7,6 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import edu.unlam.asistente.database.pojo.Evento;
-import edu.unlam.asistente.database.pojo.Usuario;
 import edu.unlam.asistente.database.dao.BaseDao;
 
 public class EventoDao extends BaseDao {
@@ -16,14 +15,14 @@ public class EventoDao extends BaseDao {
 		super();
 	}
 
-	public List<Evento> obtenerEventosPorUsuario(Usuario user) {
+	public List<Evento> obtenerEventosPorUsuario(Integer userId) {
 
 		List<Evento> listaEventos = null;
 		Session session = null;
 		try {
 			session = factory.openSession();
 			String hql = "select distinct e from Evento e " + "join e.usuarios u " + "where u.usuario = :user";
-			Query query = session.createQuery(hql).setParameter("user", user.getUsuario());
+			Query query = session.createQuery(hql).setParameter("user", userId);
 
 			listaEventos = query.list();
 

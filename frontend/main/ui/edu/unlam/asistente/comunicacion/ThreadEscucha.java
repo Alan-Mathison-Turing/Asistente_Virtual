@@ -12,7 +12,8 @@ import javax.swing.DefaultListModel;
 >>>>>>> entrega_final
 import edu.unlam.asistente.cliente.Main;
 import edu.unlam.asistente.entidades.Usuario;
-import edu.unlam.asistente.entidades.Chat;
+//import edu.unlam.asistente.entidades.Chat;
+import edu.unlam.asistente.ventana.Chat;
 import edu.unlam.asistente.ventana.Home;
 
 public class ThreadEscucha extends Thread {
@@ -45,7 +46,7 @@ public class ThreadEscucha extends Thread {
 						
 						Main.usuario.addMensajeToChat(idSala, mensaje, usuarioQueEscribio);
 						
-					} else if (msj.getType().equals("LOGIN")) { //mock login
+					} else if (msj.getType().equals("LOGIN")) {
 						if(msj.getMensaje().equals("false")) {
 							Main.login.loginIncorrecto();
 						} else {
@@ -56,35 +57,32 @@ public class ThreadEscucha extends Thread {
 							Main.home = new Home();
 							Main.home.setVisible(true);
 						}
-					} else if (msj.getType().equals("CHAT_CON")) { //mock abrir chat
+					} else if (msj.getType().equals("CHAT_CON")) {
 						if (Boolean.parseBoolean(msj.getMensaje())) {
 							//Chat nuevoChat = new Chat(cliente);
 							//Main.listaChats.add(nuevoChat);
 							//nuevoChat.setVisible(true);
 						}
 					} else if(msj.getType().equals("CONTACTOS")) {
-						if(msj.getMensaje().equals("false")) {
-							
-						} else {
-							String[] contactostxts = msj.getMensaje().split(",",-1); 
+						if(!msj.getMensaje().equals("false")) {
+							String[] contactosTxts = msj.getMensaje().split(",",-1); 
 							DefaultListModel<String> contactos = new DefaultListModel<String>();
-							for(int i = 0; i < contactostxts.length; i++) {
-								contactos.addElement(contactostxts[i]);
+							for(int i = 0; i < contactosTxts.length; i++) {
+								contactos.addElement(contactosTxts[i]);
 							}
 							Main.usuario.setContactos(contactos);
 						}
-					} else if(msj.getType().equals("CHATS")) {
-						if(msj.getMensaje().equals("false")) {
-							
-						} else {
+					} else if(msj.getType().equals("GET_CHATS")) {
+						if(!msj.getMensaje().equals("false")) {
 							String[] salasInfo = msj.getMensaje().split(";",-1);
 							for(int i = 0; i < salasInfo.length; i++) {
 								String[] salaInfo = salasInfo[i].split(",",-1);
 								Main.usuario.addChat(new Chat(
 										Integer.valueOf(salaInfo[0]), //Id de la sala
 										salaInfo[1], //Nombre de la sala
-										Integer.valueOf(salaInfo[2]), //Es Privado
-										Integer.valueOf(salaInfo[3]) //Es Grupal
+										Integer.valueOf(salaInfo[2]), //ownerId
+										Integer.valueOf(salaInfo[3]), //Es Privado
+										Integer.valueOf(salaInfo[4]) //Es Grupal
 										));
 							}
 							

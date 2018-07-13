@@ -96,7 +96,8 @@ public class Home extends JFrame {
 							"Operacion incorrecta\n" + "Seleccione un usuario para abrir el chat",
 							"Mensaje de informacion", JOptionPane.INFORMATION_MESSAGE);
 				}else {
-					abrirChatCon(chatearCon);
+					//abrirChatCon(chatearCon);
+					abrirChatSala(chatearCon);
 				}
 			}
 		});
@@ -153,7 +154,7 @@ public class Home extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String nombreSala = salasList.getSelectedValue();
 				if(nombreSala != null) {
-					ingresarSalaPrivada(nombreSala);
+					abrirChatSala(nombreSala);
 				}else {
 					JOptionPane.showMessageDialog(null,
 							"Operacion incorrecta\n" + "Seleccione una sala para ingresar",
@@ -277,7 +278,7 @@ public class Home extends JFrame {
 							"Operacion incorrecta\n" + "Seleccione una sala para ingresar",
 							"Mensaje de informacion", JOptionPane.INFORMATION_MESSAGE);
 				}else {
-					ingresarSalaPublica(salaPublica);
+					abrirChatSala(salaPublica);
 				}
 			}
 		});
@@ -315,31 +316,13 @@ public class Home extends JFrame {
 		
 	}
 
-	protected void ingresarSalaPublica(String salaPublica) {
-		// TODO: hacer metodo
-		
-	}
-
-	protected void ingresarSalaPrivada(String nombreSala) {
-		// TODO: hacer metodo
-	}
-
-	private ListModel<String> obtenerSalasPublicas(Cliente cliente2) {
-		DefaultListModel<String> listaSalasPublicas = new DefaultListModel<>();
-		listaSalasPublicas.addElement("Sala Publica1");
-		listaSalasPublicas.addElement("Sala Publica2");
-		listaSalasPublicas.addElement("Sala Publica3");
-		listaSalasPublicas.addElement("Sala Publica4");
-		listaSalasPublicas.addElement("Sala Publica5");
-		listaSalasPublicas.addElement("Sala Publica6");
-		listaSalasPublicas.addElement("Sala Publica7");
-		listaSalasPublicas.addElement("Sala Publica8");
-		listaSalasPublicas.addElement("Sala Publica9");
-		listaSalasPublicas.addElement("Sala Publica10");
-		listaSalasPublicas.addElement("Sala Publica11");
-		listaSalasPublicas.addElement("Sala Publica12");
-		listaSalasPublicas.addElement("Sala Publica13");
-		return listaSalasPublicas;
+	protected void abrirChatSala(String nombreSala) {
+		for (Chat chatActual : Main.usuario.getVentanasChat()) {
+			if (chatActual.getNombre().equals(nombreSala)) {
+				chatActual.setVisible(true);
+				break;
+			}
+		}
 	}
 
 	private void crearSala(String nombreSala, String topicoSala) {
@@ -347,21 +330,11 @@ public class Home extends JFrame {
 		String prueba = nombreSala + " " + topicoSala;
 	}
 
-	private ListModel<String> obtenerSalasPrivadas(Cliente cliente2) {
-		DefaultListModel<String> listaSalas = new DefaultListModel<>();
-		
-		listaSalas.addElement("Sala1");
-		listaSalas.addElement("Sala2");
-		listaSalas.addElement("Sala3");
-		listaSalas.addElement("Sala4");
-
-		return listaSalas;
-	}
-
 	protected void abrirChatCon(String chatearCon) {
 		Main.cliente.abrirChatCon(chatearCon);
 	}
 
+<<<<<<< HEAD
 	
 <<<<<<< HEAD
 	private void cerrarSesion() {
@@ -369,6 +342,8 @@ public class Home extends JFrame {
 		System.exit(0);
 		
 =======
+=======
+>>>>>>> entrega_final
 	private boolean cerrarSesion() {
 		//TODO: desarrollar metodo
 		

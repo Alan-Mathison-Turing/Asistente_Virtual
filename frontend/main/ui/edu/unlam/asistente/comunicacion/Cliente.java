@@ -105,7 +105,7 @@ e.printStackTrace();
 	
 	public void obtenerChatsUsuario(int idUsuario) {
 		try {
-			Mensaje m = new Mensaje("" + idUsuario, nombreUsuario, "CHATS");
+			Mensaje m = new Mensaje("" + idUsuario, nombreUsuario, "GET_CHATS");
 			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
 			salida.writeObject(m);
 		} catch (IOException e) {
