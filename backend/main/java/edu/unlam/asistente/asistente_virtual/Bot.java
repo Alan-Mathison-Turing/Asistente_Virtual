@@ -3,7 +3,6 @@ package edu.unlam.asistente.asistente_virtual;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import edu.unlam.asistente.blog.Blog;
 import edu.unlam.asistente.busqueda_web.BusquedaWeb;
 import edu.unlam.asistente.calculadora.Calculadora;
 import edu.unlam.asistente.calendario.Calendario;
@@ -13,6 +12,7 @@ import edu.unlam.asistente.cordialidad.Cordialidad;
 import edu.unlam.asistente.imagenes.gif.Gif;
 import edu.unlam.asistente.leyes_robotica.LeyesRobotica;
 import edu.unlam.asistente.recordatorioEventos.GestionRecordatorio;
+import edu.unlam.asistente.rss.Blog;
 
 
 

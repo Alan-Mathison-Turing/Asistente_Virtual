@@ -1,15 +1,11 @@
-package edu.unlam.asistente.blog;
+package edu.unlam.asistente.rss;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import edu.unlam.asistente.asistente_virtual.IDecision;
-import edu.unlam.asistente.database.dao.RSSDao;
-import edu.unlam.asistente.database.dao.UsuarioDao;
-import edu.unlam.asistente.database.pojo.RSS;
 import edu.unlam.asistente.rss.api.Feed;
 import edu.unlam.asistente.rss.api.FeedMessage;
 import edu.unlam.asistente.rss.api.RSSFeedParser;
@@ -43,8 +39,8 @@ public class Blog implements IDecision {
 			Blog rss = new Blog();
 			String result = "";
 			// test: https://www.20minutos.com.mx/rss/cultura/
-			try {
-				List<RSS> feedList = new RSSDao().obtenerUsuarioSeeds(new UsuarioDao().obtenerUsuarioPorLogin(usuario));
+			/*try {
+				//List<RSS> feedList = new RSSDao().obtenerUsuarioSeeds(new UsuarioDao().obtenerUsuarioPorLogin(usuario));
 				
 				for(RSS feed : feedList) {
 					rss.buscarNovedades(feed.getUrlSeed());
@@ -54,7 +50,7 @@ public class Blog implements IDecision {
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
 			
 			return result;
 		}

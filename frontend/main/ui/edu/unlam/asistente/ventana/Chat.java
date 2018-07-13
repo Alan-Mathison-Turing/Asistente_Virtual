@@ -7,7 +7,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,12 +22,9 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
-<<<<<<< HEAD
-import edu.unlam.asistente.comunicacion.Cliente;
-import edu.unlam.asistente.herramienta.Navegador;
-=======
 import edu.unlam.asistente.cliente.Main;
 import edu.unlam.asistente.entidades.MensajeChat;
+import edu.unlam.asistente.herramienta.Navegador;
 
 public class Chat extends JFrame {
 
@@ -83,10 +79,7 @@ public class Chat extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
-
-		this.cliente = cliente; 
-		
+		contentPane.setLayout(null);		
 		
 		htmlEditorKit = new HTMLEditorKit();
 		document = new HTMLDocument();
@@ -190,11 +183,11 @@ public class Chat extends JFrame {
 				textAreaChat.insertIcon(icon);
 				textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
 				
-			} else if(mensaje.contains("youtube")) {
+			} else if(txtMensaje.contains("youtube")) {
 				JPanel videoPanel = new JPanel();
 				videoPanel.setSize(400,250);
 				Navegador browser = new Navegador();
-				browser.cargarURL(mensaje);
+				browser.cargarURL(txtMensaje);
 				videoPanel.add(browser);
 				textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
 				textAreaChat.insertComponent(videoPanel);
