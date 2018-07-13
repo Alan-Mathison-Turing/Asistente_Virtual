@@ -4,7 +4,6 @@
 	<classpathentry kind="src" path="frontend/main/ui"/>
 	<classpathentry kind="src" path="backend/main/resources"/>
 	<classpathentry kind="src" path="backend/tests"/>
-<<<<<<< HEAD
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="backend/lib/sqlite-jdbc-3.21.0.jar"/>
@@ -35,7 +34,6 @@
 	<classpathentry kind="lib" path="backend/lib/slf4j/slf4j-api-1.7.25.jar"/>
 	<classpathentry kind="lib" path="backend/lib/slf4j/slf4j-simple-1.7.25-sources.jar"/>
 	<classpathentry kind="lib" path="backend/lib/slf4j/slf4j-simple-1.7.25.jar"/>
-=======
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 			<attribute name="module" value="true"/>
@@ -67,6 +65,5 @@
 	<classpathentry exported="true" kind="lib" path="backend/lib/gson/gson-2.6.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="backend/lib/gson/gson-2.6.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="backend/lib/mockito-core-1.8.0.jar"/>
->>>>>>> 1abf871aa147aa704566a3448c26fdc0bf795495
 	<classpathentry kind="output" path="bin"/>
 </classpath>
