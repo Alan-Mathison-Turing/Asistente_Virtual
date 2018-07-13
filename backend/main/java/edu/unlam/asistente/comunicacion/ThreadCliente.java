@@ -62,7 +62,8 @@ public class ThreadCliente extends Thread{
 					}
 					
 					mensajeEnviar.writeObject(respuesta);
-				} else if (mensajeRecibido.getType().equals("CHAT_CON")) { //mock para abrir chat
+				} else if (mensajeRecibido.getType().equals("CHAT_CON")) {
+					//TODO: validar que el socket del usuario mensajeRecibido.getMensaje() este activo
 					respuesta = new Mensaje("true", mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
 					mensajeEnviar.writeObject(respuesta);
 				} else if (mensajeRecibido.getType().equals("CHAT")) {
@@ -90,11 +91,9 @@ public class ThreadCliente extends Thread{
 					
 					//Recorro la lista de usuarios de la sala para poder enviarles el mensaje del usuario
 					//Y la respuesta del bot, en case de que corresponda
-					for(int i = 0; i < this.clientes.size(); i++) {
+					for (SocketUsuario clienteActual : this.clientes) {
 						
-						SocketUsuario clienteActual = this.clientes.get(i);
 						int idUsuarioBuscado = clienteActual.getUsuario();
-						
 						Iterator<Usuario> iterator = usuariosEnSala.iterator();
 						while(iterator.hasNext()) {
 					        Usuario siguienteUsuario = iterator.next();
@@ -130,32 +129,34 @@ public class ThreadCliente extends Thread{
 					
 				} else if(mensajeRecibido.getType().equals("CONTACTOS")) {
 					if(this.usuario.getContactos().isEmpty()) {
-						respuesta = new Mensaje("",usuario.getUsuario(), mensajeRecibido.getType());
+						respuesta = new Mensaje("false",usuario.getUsuario(), mensajeRecibido.getType());
 					} else {
 						String mensajeTexto = "";
-						for(int i = 0; i < this.usuario.getContactos().size(); i++) {
-							mensajeTexto += "" + this.usuario.getContactos().get(i).getUsuario() + ",";
+						for (Usuario contacto : this.usuario.getContactos()) {
+							mensajeTexto += "" + contacto.getUsuario() + ",";
 						}
 						mensajeTexto = mensajeTexto.substring(0, mensajeTexto.length() - 1);
 						respuesta = new Mensaje(mensajeTexto,usuario.getUsuario(), mensajeRecibido.getType());
 					}
 					mensajeEnviar.writeObject(respuesta);
-				} else if(mensajeRecibido.getType().equals("CHATS")) {
-					//TODO: Obtener las salas y devolver los ids de la sala concatenado
+				} else if(mensajeRecibido.getType().equals("GET_CHATS")) {
 					List<Sala> salasUsuario = this.salaDao.obtenerSalasPorUsuario(this.usuario);
-					//Ejemplo:
-					String mensajeSalas = "";
-					for(int i = 0; i < salasUsuario.size(); i++) {
-						Sala salaActual = salasUsuario.get(i);
-						mensajeSalas += "" + salaActual.getId()
-								+ "," + salaActual.getNombre()
-								+ "," + salaActual.getEsPrivada()
-								+ "," + salaActual.getEsGrupal()
-								+ ";";
+					if (salasUsuario == null || salasUsuario.isEmpty()) {
+						respuesta = new Mensaje("false", usuario.getUsuario(), mensajeRecibido.getType());
+					} else {
+						String mensajeSalas = "";
+						for (Sala salaActual : salasUsuario) {
+							mensajeSalas += "" + salaActual.getId()
+							+ "," + salaActual.getNombre()
+							+ "," + salaActual.getDueño().getId()
+							+ "," + salaActual.getEsPrivada()
+							+ "," + salaActual.getEsGrupal()
+							+ ";";
+						}
+						mensajeSalas = mensajeSalas.substring(0, mensajeSalas.length() - 1);
+						respuesta = new Mensaje(mensajeSalas, usuario.getUsuario(), mensajeRecibido.getType());
+						mensajeEnviar.writeObject(respuesta);
 					}
-					mensajeSalas = mensajeSalas.substring(0, mensajeSalas.length() - 1);
-					respuesta = new Mensaje(mensajeSalas, usuario.getUsuario(), mensajeRecibido.getType());
-					mensajeEnviar.writeObject(respuesta);
 				}
 				
 				/*

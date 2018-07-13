@@ -9,5 +9,12 @@ public class MensajeChat {
 		this.usuario = usuario;
 		this.mensaje = mensaje;
 	}
-	
+
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public String getMensaje() {
+		return mensaje;
+	}
 }
