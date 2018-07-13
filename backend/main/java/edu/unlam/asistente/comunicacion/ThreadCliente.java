@@ -210,8 +210,12 @@ public class ThreadCliente extends Thread{
 					
 					if(salaNueva.getEsPrivada() == 0) {
 						for (SocketUsuario clienteActual : this.clientes) {
-							ObjectOutputStream outputClienteActual = new ObjectOutputStream(clienteActual.getSocket().getOutputStream());
-							outputClienteActual.writeObject(respuesta);
+							if (clienteActual.getUsuario() != this.usuario.getId()) {
+								ObjectOutputStream outputClienteActual = new ObjectOutputStream(clienteActual.getSocket().getOutputStream());
+								outputClienteActual.writeObject(respuesta);
+							} else {
+								mensajeEnviar.writeObject(respuesta);
+							}
 						}
 					} else {
 						mensajeEnviar.writeObject(respuesta);
