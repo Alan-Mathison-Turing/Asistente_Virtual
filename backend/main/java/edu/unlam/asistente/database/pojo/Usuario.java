@@ -2,7 +2,9 @@ package edu.unlam.asistente.database.pojo;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -29,10 +31,11 @@ public class Usuario implements java.io.Serializable {
 	 * Chuck Norris facts que recibió el usuario. <br>
 	 */
 	private Set<ChuckNorrisFacts> chuckNorrisFacts = new HashSet<ChuckNorrisFacts>();
-
-	public Usuario() {
-	}
-
+	private List<Usuario> contactos = new ArrayList<Usuario>();
+	private Set<Sala> salas = new HashSet<Sala>(0);
+	
+	public Usuario() {}
+	
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id", unique = true, nullable = false)
@@ -76,6 +79,28 @@ public class Usuario implements java.io.Serializable {
 		this.chuckNorrisFacts = chuckNorrisFacts;
 	}
 
+	
+	@ManyToMany(fetch = FetchType.EAGER, cascade= {CascadeType.ALL}, targetEntity=Usuario.class)
+	@JoinTable(name="usuarioUsuario",
+	joinColumns=@JoinColumn(name="id_usuario"),
+	inverseJoinColumns=@JoinColumn(name="id_contacto"))
+	public List<Usuario> getContactos() {
+		return contactos;
+	}
+	
+	public void setContactos(List<Usuario> contactos) {
+		this.contactos = contactos;
+	}
+	
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "usuarios")
+	public Set<Sala> getSalas() {
+		return salas;
+	}
+	
+	public void setSalas(Set<Sala> salas) {
+		this.salas = salas;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -116,4 +141,9 @@ public class Usuario implements java.io.Serializable {
 	public void agregarFact(ChuckNorrisFacts chuckNorrisFacts) {
 		this.chuckNorrisFacts.add(chuckNorrisFacts);
 	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
 }

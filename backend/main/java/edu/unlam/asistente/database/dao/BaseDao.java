@@ -12,6 +12,7 @@ public abstract class BaseDao {
 			Configuration config = new Configuration().configure();
 			factory = config.buildSessionFactory();
 		} catch (Exception e) {
+			System.err.println("-- BaseDao ERROR: ocurrió un error al intentar conectarse a la base de datos.");
 			e.printStackTrace();
 		}
 	}
