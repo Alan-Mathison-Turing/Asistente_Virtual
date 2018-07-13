@@ -27,7 +27,7 @@ public class ThreadCliente extends Thread{
 	public ThreadCliente(SocketUsuario socket,ArrayList<SocketUsuario> clientes) throws IOException, SQLException {
 		this.cliente = socket;
 		this.clientes = clientes;
-		bot = new Bot("@argem");
+		bot = new Bot("argem");
 		System.out.println("INFO: Socket de cliente creado");
 		this.userDao = new UsuarioDao();
 		this.salaDao = new SalaDao();
@@ -81,7 +81,7 @@ public class ThreadCliente extends Thread{
 					//En el caso de que si lo sea, la respuesta se la mando a toda la sala
 					if(mensaje.contains(bot.getNombre())) {
 						respuestaBot = new Mensaje("sala:" + idSala + "|" + bot.leerMensaje(mensajeRecibido.getMensaje(), mensajeRecibido.getNombreUsuario()),
-								mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
+								bot.getNombre(), "CHAT_BOT");
 					}
 					
 					respuesta = new Mensaje("sala:" + idSala + "|" + mensaje, mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
@@ -100,9 +100,11 @@ public class ThreadCliente extends Thread{
 					        if(siguienteUsuario.getId() == idUsuarioBuscado){
 					        	usuariosContados++;
 					        	ObjectOutputStream mensajeEnviarUsuario = null;
+					        	Boolean primerMensajeEnviado = false;
 					        	if(idUsuarioBuscado != this.usuario.getId()) {
 					        		mensajeEnviarUsuario = new ObjectOutputStream(clienteActual.getSocket().getOutputStream());
 					        		mensajeEnviarUsuario.writeObject(respuesta);
+					        		primerMensajeEnviado = true;
 					        	} else {
 					        		mensajeEnviarUsuario = mensajeEnviar;
 				        			if(respuestaBot == null) {
@@ -110,7 +112,12 @@ public class ThreadCliente extends Thread{
 					        		}
 					        	}
 					        	if(respuestaBot != null) {
-					        		mensajeEnviarUsuario.writeObject(respuestaBot);
+					        		if(primerMensajeEnviado) {
+					        			clienteActual.setProximoMensajeBot(respuestaBot);
+					        		} else {
+					        			mensajeEnviarUsuario.writeObject(respuestaBot);
+					        		}
+					        		
 					        	}
 					        	break;
 					        }
@@ -125,7 +132,13 @@ public class ThreadCliente extends Thread{
 					
 					
 					
+				} else if(mensajeRecibido.getType().equals("MENSAJE_RECIBIDO")) {
 					
+					if(this.cliente.hasProximoMensajeBot()) {
+						mensajeEnviar.writeObject(this.cliente.getProximoMensajeBot());
+					} else {
+						mensajeEnviar.writeObject(new Mensaje("","","CHAT"));
+					}
 					
 				} else if(mensajeRecibido.getType().equals("CONTACTOS")) {
 					if(this.usuario.getContactos().isEmpty()) {
@@ -157,6 +170,35 @@ public class ThreadCliente extends Thread{
 						respuesta = new Mensaje(mensajeSalas, usuario.getUsuario(), mensajeRecibido.getType());
 						mensajeEnviar.writeObject(respuesta);
 					}
+				} else if(mensajeRecibido.getType().equals("CREACION_SALA")) {
+					
+					String[] salaInfo = mensajeRecibido.getMensaje().split(",",-1);
+					String nombre = salaInfo[0];
+					boolean esPrivada = Boolean.valueOf(salaInfo[1]);
+					boolean esGrupal = Boolean.valueOf(salaInfo[2]);
+					
+					int valEsPrivada, valEsGrupal;
+					
+					valEsPrivada = esPrivada ? 1 : 0;
+					valEsGrupal = esGrupal ? 1 : 0;
+					
+					Sala salaNueva = new Sala();
+					salaNueva.setNombre(nombre);
+					salaNueva.setDueño(this.usuario);
+					salaNueva.setEsPrivada(valEsPrivada);
+					salaNueva.setEsGrupal(valEsGrupal);
+					
+					this.salaDao.crearSala(salaNueva);
+					
+					String mensajeSalaNueva = "" + salaNueva.getId()
+					+ "," + salaNueva.getNombre()
+					+ "," + salaNueva.getDueño().getId()
+					+ "," + salaNueva.getEsPrivada()
+					+ "," + salaNueva.getEsGrupal();
+					
+					respuesta = new Mensaje(mensajeSalaNueva, mensajeRecibido.getNombreUsuario(), "NUEVA_SALA");
+					mensajeEnviar.writeObject(respuesta);
+					
 				}
 				
 				/*
