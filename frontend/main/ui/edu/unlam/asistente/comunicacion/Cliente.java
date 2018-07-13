@@ -131,4 +131,17 @@ e.printStackTrace();
 	public String getNombreUsuario() {
 		return nombreUsuario;
 	}
+
+	public void agregarContacto(String contactoAgregar) {
+		try {
+			
+			Mensaje m = new Mensaje(contactoAgregar, nombreUsuario, "AGREGAR_CONTACTO");
+			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
+			salida.writeObject(m);
+		} catch (IOException e) {
+			System.err.println("-- Cliente/Agregar nuevo contacto ERROR");
+e.printStackTrace();
+		}
+		
+	}
 }

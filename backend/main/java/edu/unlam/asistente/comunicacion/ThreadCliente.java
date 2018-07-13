@@ -212,6 +212,39 @@ public class ThreadCliente extends Thread{
 					}
 					
 					
+				} else if(mensajeRecibido.getType().equals("AGREGAR_CONTACTO")) {
+					
+					String nombreUsuario = mensajeRecibido.getMensaje();
+					
+					Usuario usuarioContacto = this.userDao.obtenerUsuarioPorLogin(nombreUsuario);
+					
+					Sala salaNueva = new Sala();
+					salaNueva.setNombre("1a1");
+					salaNueva.setDueño(this.usuario);
+					salaNueva.setEsPrivada(1);
+					salaNueva.setEsGrupal(0);
+					salaNueva.getUsuarios().add(this.usuario);
+					salaNueva.getUsuarios().add(usuarioContacto);
+					
+					this.salaDao.crearSala(salaNueva);
+					
+					String mensajeSalaNueva = "" + salaNueva.getId()
+					+ "," + salaNueva.getNombre()
+					+ "," + salaNueva.getDueño().getId()
+					+ "," + salaNueva.getEsPrivada()
+					+ "," + salaNueva.getEsGrupal();
+					
+					respuesta = new Mensaje(mensajeSalaNueva, mensajeRecibido.getNombreUsuario(), "NUEVA_SALA");
+					mensajeEnviar.writeObject(respuesta);
+					
+					for (SocketUsuario clienteActual : this.clientes) {
+						if(clienteActual.getUsuario() == usuarioContacto.getId()) {
+							ObjectOutputStream outputClienteActual = new ObjectOutputStream(clienteActual.getSocket().getOutputStream());
+							outputClienteActual.writeObject(respuesta);
+							break;
+						}
+					}
+					
 				}
 				
 				/*
