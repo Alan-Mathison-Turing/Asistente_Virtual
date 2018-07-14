@@ -73,8 +73,10 @@ public class Chat extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				char tecla=e.getKeyChar();
-				if(tecla!=KeyEvent.VK_ENTER) {
+				if(tecla!=KeyEvent.VK_ENTER && tecla != KeyEvent.VK_ESCAPE) {
 					textFieldEnviar.grabFocus();
+				}else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					cerrarChat();
 				}
 			}
 		});
@@ -93,6 +95,7 @@ public class Chat extends JFrame {
 			}
 			
 		});
+	
 		
 		//this.mensajes = new ArrayList<MensajeChat>();
 		this.idSala = idSala;
@@ -147,7 +150,7 @@ public class Chat extends JFrame {
 		
 		JButton btnAgegarContacto = new JButton("Agregar contacto");
 		btnAgegarContacto.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnAgegarContacto.setBounds(270, 4, 130, 23);
+		btnAgegarContacto.setBounds(262, 4, 147, 23);
 		contentPane.add(btnAgegarContacto);
 		
 		btnAgegarContacto.setVisible(false);
@@ -161,7 +164,9 @@ public class Chat extends JFrame {
 			}
 		}
 	}
-	
+	public void cerrarChat() {
+		this.setVisible(false);
+	}
 	public void enviarMensaje() {
 		String textoEnviar = textFieldEnviar.getText();
 		textFieldEnviar.setText(null);

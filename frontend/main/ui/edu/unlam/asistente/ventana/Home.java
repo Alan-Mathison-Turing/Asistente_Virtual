@@ -22,6 +22,8 @@ import javax.swing.border.EmptyBorder;
 
 import edu.unlam.asistente.cliente.Main;
 import edu.unlam.asistente.comunicacion.Cliente;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Home extends JFrame {
 
@@ -41,6 +43,7 @@ public class Home extends JFrame {
 	 * Create the frame.
 	 */
 	public Home() {
+		
 		
 		this.contactosUsuario = Main.usuario.getContactos();
 		this.salasPrivadas = Main.usuario.getSalasPrivadas();
@@ -108,26 +111,6 @@ public class Home extends JFrame {
 		JScrollPane scrollPaneContactos = new JScrollPane(contactosList);
 		scrollPaneContactos.setBounds(24, 167, 131, 203);
 		contentPane.add(scrollPaneContactos);
-		
-		JButton btnEliminarContacto = new JButton("-");
-		btnEliminarContacto.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String contactoSeleccionado = contactosList.getSelectedValue();
-				if(contactoSeleccionado == null){
-					JOptionPane.showMessageDialog(null,
-							"Operacion incorrecta\n" + "Seleccione un contacto para eliminar",
-							"Mensaje de informacion", JOptionPane.INFORMATION_MESSAGE);
-				}else {
-					if(0 == JOptionPane.showConfirmDialog(null, "Seguro que desea eliminar al contacto: " + contactoSeleccionado,
-							"Mensaje de confirmacion", JOptionPane.OK_CANCEL_OPTION)) {
-						eliminarContacto(contactoSeleccionado);
-					}
-				}
-			}
-		});
-		btnEliminarContacto.setFont(new Font("Tahoma", Font.PLAIN, 8));
-		btnEliminarContacto.setBounds(165, 240, 47, 32);
-		contentPane.add(btnEliminarContacto);
 
 		JButton btnAgregarContacto = new JButton("+");
 		btnAgregarContacto.addActionListener(new ActionListener() {

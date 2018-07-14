@@ -208,6 +208,7 @@ public class ThreadCliente extends Thread{
 					mensajeEnviar.writeObject(respuesta);
 					//cerrar socket correspondiente al usuario recorro lista de usuarios para eliminar el que cierra su sesion
 					int idUsuario=this.cliente.getUsuario();
+					this.cliente.getSocket().close();
 					for (SocketUsuario clienteActual : this.clientes) {
 						
 						if(idUsuario == clienteActual.getUsuario()) {
@@ -216,6 +217,7 @@ public class ThreadCliente extends Thread{
 							//this.cliente.close();
 						}
 					}
+					this.stop();;
 					
 				}
 				

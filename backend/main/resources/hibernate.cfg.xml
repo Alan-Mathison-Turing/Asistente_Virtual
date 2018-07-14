@@ -13,7 +13,7 @@
       </property>
       
       <property name = "hibernate.connection.url">
-         jdbc:sqlite:../database/database.sqlite
+         jdbc:sqlite:database/database.sqlite
       </property>
       
       <property name="hibernate.show_sql" >true</property>

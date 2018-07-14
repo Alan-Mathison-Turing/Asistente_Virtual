@@ -135,12 +135,19 @@ public class Login extends JFrame {
 		JLabel lblPuertoServidor = new JLabel("Puerto Servidor:");
 
 		tfServidor = new JTextField();
-		tfServidor.setEnabled(false);
+		tfServidor.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				char tecla=arg0.getKeyChar();
+				if(tecla==KeyEvent.VK_ENTER){
+					txtUsuario_1.grabFocus();
+				}
+			}
+		});
 		tfServidor.setText("localhost");
 		tfServidor.setColumns(10);
-		tfServidor.setNextFocusableComponent(lblUsuario);
+		tfServidor.transferFocus();
 		tfPuertoServidor = new JTextField();
-		tfPuertoServidor.setEnabled(false);
 		tfPuertoServidor.setText("12346");
 		tfPuertoServidor.setColumns(10);
 		tfPuertoServidor.transferFocus();

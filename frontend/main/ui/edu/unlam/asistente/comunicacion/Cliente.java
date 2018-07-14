@@ -32,7 +32,7 @@ public class Cliente {
 	public void cerrarSocket() {
 		try {
 			
-			Mensaje m = new Mensaje(null, nombreUsuario, "SALIR");
+			Mensaje m = new Mensaje("", nombreUsuario, "SALIR");
 			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
 			salida.writeObject(m);
 		} catch (IOException e) {
