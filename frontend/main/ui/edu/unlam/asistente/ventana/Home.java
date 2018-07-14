@@ -22,6 +22,8 @@ import javax.swing.border.EmptyBorder;
 
 import edu.unlam.asistente.cliente.Main;
 import edu.unlam.asistente.comunicacion.Cliente;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Home extends JFrame {
 
@@ -35,12 +37,13 @@ public class Home extends JFrame {
 	private DefaultListModel<String> contactosUsuario;
 	private DefaultListModel<String> salasPrivadas;
 	private DefaultListModel<String> salasPublicas;
-	
+	public static Cliente cliente;
 
 	/**
 	 * Create the frame.
 	 */
 	public Home() {
+		
 		
 		this.contactosUsuario = Main.usuario.getContactos();
 		this.salasPrivadas = Main.usuario.getSalasPrivadas();
@@ -64,6 +67,7 @@ public class Home extends JFrame {
 			}
 			
 		});
+		
 		btnCerrarSesion.setBounds(451, 15, 116, 22);
 		contentPane.add(btnCerrarSesion);
 
@@ -106,26 +110,6 @@ public class Home extends JFrame {
 		JScrollPane scrollPaneContactos = new JScrollPane(contactosList);
 		scrollPaneContactos.setBounds(24, 167, 131, 203);
 		contentPane.add(scrollPaneContactos);
-		
-		JButton btnEliminarContacto = new JButton("-");
-		btnEliminarContacto.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String contactoSeleccionado = contactosList.getSelectedValue();
-				if(contactoSeleccionado == null){
-					JOptionPane.showMessageDialog(null,
-							"Operacion incorrecta\n" + "Seleccione un contacto para eliminar",
-							"Mensaje de informacion", JOptionPane.INFORMATION_MESSAGE);
-				}else {
-					if(0 == JOptionPane.showConfirmDialog(null, "Seguro que desea eliminar al contacto: " + contactoSeleccionado,
-							"Mensaje de confirmacion", JOptionPane.OK_CANCEL_OPTION)) {
-						eliminarContacto(contactoSeleccionado);
-					}
-				}
-			}
-		});
-		btnEliminarContacto.setFont(new Font("Tahoma", Font.PLAIN, 8));
-		btnEliminarContacto.setBounds(165, 240, 47, 32);
-		contentPane.add(btnEliminarContacto);
 
 		JButton btnAgregarContacto = new JButton("+");
 		btnAgregarContacto.addActionListener(new ActionListener() {
@@ -330,6 +314,8 @@ public class Home extends JFrame {
 				break;
 			}
 		}
+		
+		//TODO: checkear que el usuario este dentro de la sala en este punto
 	}
 	
 	private void abrirChatIndividual(String nombreUsuario2) {
@@ -342,7 +328,6 @@ public class Home extends JFrame {
 	}
 	
 	private void crearSalaPublica(String nombreSala) {
-		//TODO: checkear que el usuario este dentro de la sala
 		Main.cliente.crearNuevaSala(nombreSala, false, true);
 	}
 
@@ -354,13 +339,16 @@ public class Home extends JFrame {
 		Main.cliente.abrirChatCon(chatearCon);
 	}
 
-	private boolean cerrarSesion() {
+
+	private void cerrarSesion() {
 		//TODO: desarrollar metodo
 		
 		//TODO: Sacar esto. Solamente fue realizado para enviar mensajes de prueba
-		Main.cliente.enviarMensaje("sala:" + 1 + "|" +  "Mensaje de prueba");
+		//Main.cliente.enviarMensaje("sala:" + 1 + "|" +  "Mensaje de prueba");
+		Main.cliente.cerrarSocket();
+		System.exit(0);
 		
-		return true;
+
 	}
 	
 	public void showDialogUsuarioEncontrado(boolean encontrado) {
@@ -370,6 +358,12 @@ public class Home extends JFrame {
 		} else {
 			JOptionPane.showMessageDialog(null, "Hubo un error al agregar el contacto", "Error", JOptionPane.ERROR_MESSAGE);
 		}
+		
+	}
+	
+	public void showDialogRecordatorioAlarma(String nombreEvento, String fecha) {
+			JOptionPane.showMessageDialog(null, "Recordatorio de evento " + nombreEvento, 
+					"No olvide que el evento " + nombreEvento + " ocurre " + fecha, JOptionPane.WARNING_MESSAGE);
 		
 	}
 	

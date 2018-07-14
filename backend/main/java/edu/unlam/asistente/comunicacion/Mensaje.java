@@ -9,6 +9,7 @@ public class Mensaje implements java.io.Serializable {
 	private String mensaje;
 	private String nombreUsuario;
 	public String type; //CAMBIAR POR ENUM
+	
 	public Mensaje(String mensaje, String nombreUsuario, String type) {
 		this.mensaje = mensaje;
 		this.nombreUsuario = nombreUsuario;
@@ -34,4 +35,6 @@ public class Mensaje implements java.io.Serializable {
 	public String getType() {
 		return this.type;
 	}
+	
+	
 }

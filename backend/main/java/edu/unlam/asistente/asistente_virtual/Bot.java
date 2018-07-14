@@ -44,7 +44,7 @@ public class Bot implements IDecision {
 	public String leerMensaje(String mensaje, String usuario) {
 		String mensajeOriginal = mensaje;
 		mensaje = removerTildes(mensaje.toLowerCase());
-
+		
 		Cordialidad cordialidad = new Cordialidad();
 		LeyesRobotica leyesRobotica = new LeyesRobotica();
 		ChuckNorrisFact chuckFacts = new ChuckNorrisFact();

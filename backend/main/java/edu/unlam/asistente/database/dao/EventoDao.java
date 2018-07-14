@@ -21,8 +21,8 @@ public class EventoDao extends BaseDao {
 		Session session = null;
 		try {
 			session = factory.openSession();
-			String hql = "select distinct e from Evento e " + "join e.usuarios u " + "where u.usuario = :user";
-			Query query = session.createQuery(hql).setParameter("user", userId);
+			String hql = "select e from Evento e, in(e.usuarios) u " + "where u.id = :userId";
+			Query query = session.createQuery(hql).setParameter("userId", userId);
 
 			listaEventos = query.list();
 
@@ -36,26 +36,27 @@ public class EventoDao extends BaseDao {
 					e.printStackTrace();
 				}
 			}
-			return listaEventos;
 		}
+		return listaEventos;
 	}
-	
+
 	public Evento obtenerEventoPorId(Integer id) {
-		
+
 		Evento evento = null;
 		Session session = null;
 		try {
 			session = factory.openSession();
 			evento = session.get(Evento.class, id);
-			
-		} catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if(session != null) {
-				session.close();;
+			if (session != null) {
+				session.close();
+				;
 			}
-			return evento;
 		}
+		return evento;
 	}
 
 	public void crearEvento(Evento evento) {
@@ -66,7 +67,7 @@ public class EventoDao extends BaseDao {
 			session = factory.openSession();
 			tx = session.beginTransaction();
 			session.saveOrUpdate(evento);
-			
+
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();

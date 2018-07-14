@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.regex.Matcher;
@@ -17,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
@@ -68,6 +71,34 @@ public class Chat extends JFrame {
 	 * Create the frame.
 	 */
 	public Chat(int idSala, String nombre, int dueñoId, int esPrivado, int esGrupal) {
+		
+		addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char tecla=e.getKeyChar();
+				if(tecla!=KeyEvent.VK_ENTER && tecla != KeyEvent.VK_ESCAPE) {
+					textFieldEnviar.grabFocus();
+				}else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					cerrarChat();
+				}
+			}
+		});
+		addWindowFocusListener(new WindowFocusListener(){
+
+			@Override
+			public void windowGainedFocus(WindowEvent arg0) {
+				textFieldEnviar.grabFocus();
+				
+			}
+
+			@Override
+			public void windowLostFocus(WindowEvent arg0) {
+				textFieldEnviar.grabFocus();
+				
+			}
+			
+		});
+	
 		
 		//this.mensajes = new ArrayList<MensajeChat>();
 		this.idSala = idSala;
@@ -121,7 +152,8 @@ public class Chat extends JFrame {
 		scrollPane.setViewportView(textAreaChat);
 		
 		JButton btnAgegarContacto = new JButton("Agregar contacto");
-		btnAgegarContacto.setBounds(263, 4, 124, 23);
+		btnAgegarContacto.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnAgegarContacto.setBounds(262, 4, 147, 23);
 		contentPane.add(btnAgegarContacto);
 		
 		btnAgegarContacto.setVisible(false);
@@ -134,6 +166,9 @@ public class Chat extends JFrame {
 				btnAgegarContacto.setVisible(true);
 			}
 		}
+	}
+	public void cerrarChat() {
+		this.setVisible(false);
 	}
 	
 	public void enviarMensaje() {
@@ -155,7 +190,7 @@ public class Chat extends JFrame {
 				} else {
 					htmlEditorKit.insertHTML(document, document.getLength(), " > Yo: " + textoEnviar, 0, 0, null);
 					textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
-					Main.cliente.enviarMensaje("sala:" + this.idSala + "|" +  textoEnviar); //Al texto a enviar le agrego el id de la sala	
+					Main.cliente.enviarMensaje(this.idSala, textoEnviar);
 				}
 			} catch (BadLocationException | IOException e) {
 				System.out.println("INFO: No se pudo interpretar el mensaje enviado por el usuario.");

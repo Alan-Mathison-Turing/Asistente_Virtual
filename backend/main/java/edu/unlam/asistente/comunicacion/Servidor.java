@@ -2,8 +2,9 @@ package edu.unlam.asistente.comunicacion;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
+
+import edu.unlam.asistente.recordatorioEventos.ThreadAlarma;
 
 //import edu.unlam.asistente.recordatorioEventos.ThreadAlarma;
 

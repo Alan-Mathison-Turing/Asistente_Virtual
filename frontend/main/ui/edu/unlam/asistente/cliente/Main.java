@@ -32,7 +32,7 @@ public class Main {
 		Main.login = new Login();
 		
 		Main.login.setVisible(true);
-
+		
 	}
 
 }
