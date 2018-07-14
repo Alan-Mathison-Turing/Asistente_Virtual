@@ -1,5 +1,7 @@
 package edu.unlam.asistente.database.dao;
 
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -27,7 +29,6 @@ public class UsuarioDao extends BaseDao {
 			user = (Usuario)query.getSingleResult();
 			
 			tx.commit();
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -38,7 +39,6 @@ public class UsuarioDao extends BaseDao {
 					e.printStackTrace();
 				}
 			}
-
 		}
 		
 		return user;
@@ -126,5 +126,33 @@ public class UsuarioDao extends BaseDao {
 				session.close();
 			}
 		}
+	}
+
+	public List<Usuario> getAllUsers() {
+		List<Usuario> users = null;
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = factory.openSession();
+			tx = session.beginTransaction();
+			Query query = session.createQuery("from Usuario");
+			users = query.getResultList();
+			
+			tx.commit();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null) {
+				try {
+					session.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+		}
+		
+		return users;
 	}
 }

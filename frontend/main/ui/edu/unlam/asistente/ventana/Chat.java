@@ -175,8 +175,6 @@ public class Chat extends JFrame {
 				if (this.dueñoId == Main.usuario.getID()) {
 					btnAgegarContacto.setVisible(true);
 				}
-			} else {
-				btnAgegarContacto.setVisible(true);
 			}
 		}
 	}

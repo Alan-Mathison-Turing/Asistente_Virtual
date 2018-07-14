@@ -119,14 +119,6 @@ public class Login extends JFrame {
 		);
 		contentPane.add(btnIniciarSesion);
 
-		JLabel lblRegistrarse = new JLabel("Registrarse");
-		lblRegistrarse.setLocation(170, 205);
-		lblRegistrarse.setSize(70, 14);
-		lblRegistrarse.setVerticalAlignment(SwingConstants.BOTTOM);
-		lblRegistrarse.setHorizontalAlignment(SwingConstants.CENTER);
-		lblRegistrarse.setForeground(new Color(0, 0, 255));
-		contentPane.add(lblRegistrarse);
-
 		JLabel lblDatosDeConexin = new JLabel("Datos de Conexi\u00F3n:");
 		lblDatosDeConexin.setFont(new Font("Tahoma", Font.BOLD, 11));
 
@@ -187,7 +179,6 @@ public class Login extends JFrame {
 					.addGap(164))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(176)
-					.addComponent(lblRegistrarse, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(188, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
@@ -221,7 +212,6 @@ public class Login extends JFrame {
 					.addGap(13)
 					.addComponent(btnIniciarSesion)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblRegistrarse)
 					.addGap(48))
 		);
 		contentPane.setLayout(gl_contentPane);

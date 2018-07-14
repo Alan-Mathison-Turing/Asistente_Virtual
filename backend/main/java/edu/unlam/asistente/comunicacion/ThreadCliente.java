@@ -233,7 +233,18 @@ public class ThreadCliente extends Thread{
 					salaNueva.setEsPrivada(valEsPrivada);
 					salaNueva.setEsGrupal(valEsGrupal);
 					//añado dueño a la tabla de relacion
-					salaNueva.getUsuarios().add(this.usuario);
+					
+					if (valEsPrivada == 0) {
+						List<Usuario> listaUsuarios = this.userDao.getAllUsers();
+						
+						for (Usuario usuarioAct : listaUsuarios) {
+							salaNueva.getUsuarios().add(usuarioAct);
+						}
+						
+					} else {
+						salaNueva.getUsuarios().add(this.usuario);
+					}
+					
 					
 					this.salaDao.crearSala(salaNueva);
 					
