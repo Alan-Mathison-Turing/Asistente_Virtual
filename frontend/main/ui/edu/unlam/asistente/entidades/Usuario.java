@@ -83,6 +83,7 @@ public class Usuario {
 	}
 	
 	public void addChat(Chat chat) {
+		
 		this.chats.add(chat);
 		if(chat.esGrupal()) {
 			if(chat.esPrivado()) {
@@ -90,7 +91,21 @@ public class Usuario {
 			} else {
 				this.salasPublicas.addElement(chat.getNombre());
 			}
+		} 
+	}
+	
+	public void addChat(Chat chat, String[] usuarios) {
+		
+		String nombreSala;
+		if (usuarios[0].equals(nombreUsuario)) {
+			nombreSala = usuarios[1];
+		} else {
+			nombreSala = usuarios[0];
 		}
+		
+		this.contactos.addElement(nombreSala);
+		chat.setNombre(nombreSala);
+		this.chats.add(chat);
 	}
 	
 	public void addMensajeToChat(int idSala, String mensaje, String usuario) {

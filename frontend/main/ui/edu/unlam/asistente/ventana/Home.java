@@ -96,8 +96,7 @@ public class Home extends JFrame {
 							"Operacion incorrecta\n" + "Seleccione un usuario para abrir el chat",
 							"Mensaje de informacion", JOptionPane.INFORMATION_MESSAGE);
 				}else {
-					//abrirChatCon(chatearCon);
-					abrirChatSala(chatearCon);
+					abrirChatIndividual(chatearCon);
 				}
 			}
 		});
@@ -133,12 +132,7 @@ public class Home extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String contactoAgregar = JOptionPane.showInputDialog("Ingrese el nombre del contacto a agregar:");
 				if(contactoAgregar != null) {
-					if(agregarContacto(contactoAgregar)) {
-						JOptionPane.showMessageDialog(null, "Se agrego correctamente el usuario: " + contactoAgregar + " a la lista de contactos", 
-								"Confirmacion exitosa", JOptionPane.INFORMATION_MESSAGE);
-					}else {
-						JOptionPane.showMessageDialog(null, "Hubo un error al agregar el contacto", "Error", JOptionPane.ERROR_MESSAGE);
-					}
+					Main.cliente.agregarContacto(contactoAgregar);
 				}
 			}
 		});
@@ -267,7 +261,7 @@ public class Home extends JFrame {
 		lblSalasPublicas.setBounds(436, 81, 116, 22);
 		contentPane.add(lblSalasPublicas);
 		
-		JButton btnEntrarSalaPublica = new JButton("Entrar a la sala");
+		JButton btnEntrarSalaPublica = new JButton("Entrar");
 		btnEntrarSalaPublica.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 11));
 		btnEntrarSalaPublica.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -281,7 +275,7 @@ public class Home extends JFrame {
 				}
 			}
 		});
-		btnEntrarSalaPublica.setBounds(436, 114, 131, 22);
+		btnEntrarSalaPublica.setBounds(436, 114, 74, 22);
 		contentPane.add(btnEntrarSalaPublica);
 		
 		JScrollPane scrollPaneSalasPublicas = new JScrollPane((Component) null);
@@ -291,6 +285,20 @@ public class Home extends JFrame {
 		salasPublicasList = new JList<String>();
 		salasPublicasList.setModel(this.salasPublicas);
 		scrollPaneSalasPublicas.setViewportView(salasPublicasList);
+		
+		JButton btnNuevaSalaPublica = new JButton("+");
+		btnNuevaSalaPublica.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				txtTopicoSala.setText("");
+				int opcionElegida = JOptionPane.showConfirmDialog(null, panelCrearSala, "Creacion de nueva sala", JOptionPane.OK_CANCEL_OPTION);
+				if (opcionElegida == JOptionPane.OK_OPTION && txtNombreSala != null) {
+					crearSalaPublica(txtNombreSala.getText());
+				}
+			}
+		});
+		btnNuevaSalaPublica.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		btnNuevaSalaPublica.setBounds(520, 115, 47, 23);
+		contentPane.add(btnNuevaSalaPublica);
 		
 	}
 
@@ -323,12 +331,23 @@ public class Home extends JFrame {
 			}
 		}
 	}
+	
+	private void abrirChatIndividual(String nombreUsuario2) {
+		for (Chat chatActual : Main.usuario.getVentanasChat()) {
+			if (chatActual.getNombre().equals(nombreUsuario2)) {
+				chatActual.setVisible(true);
+				return;
+			}
+		}
+	}
+	
+	private void crearSalaPublica(String nombreSala) {
+		//TODO: checkear que el usuario este dentro de la sala
+		Main.cliente.crearNuevaSala(nombreSala, false, true);
+	}
 
 	private void crearSalaPrivada(String nombreSala) {
-		// TODO: llamar a cliente para solicitar creacion de sala
-		
 		Main.cliente.crearNuevaSala(nombreSala, true, true);
-		
 	}
 
 	protected void abrirChatCon(String chatearCon) {
@@ -342,6 +361,16 @@ public class Home extends JFrame {
 		Main.cliente.enviarMensaje("sala:" + 1 + "|" +  "Mensaje de prueba");
 		
 		return true;
+	}
+	
+	public void showDialogUsuarioEncontrado(boolean encontrado) {
+		if(encontrado) {
+			JOptionPane.showMessageDialog(null, "Se agrego correctamente el contacto", 
+					"Confirmacion exitosa", JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(null, "Hubo un error al agregar el contacto", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		
 	}
 	
 }
