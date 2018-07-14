@@ -119,14 +119,6 @@ public class Login extends JFrame {
 		);
 		contentPane.add(btnIniciarSesion);
 
-		JLabel lblRegistrarse = new JLabel("Registrarse");
-		lblRegistrarse.setLocation(170, 205);
-		lblRegistrarse.setSize(70, 14);
-		lblRegistrarse.setVerticalAlignment(SwingConstants.BOTTOM);
-		lblRegistrarse.setHorizontalAlignment(SwingConstants.CENTER);
-		lblRegistrarse.setForeground(new Color(0, 0, 255));
-		contentPane.add(lblRegistrarse);
-
 		JLabel lblDatosDeConexin = new JLabel("Datos de Conexi\u00F3n:");
 		lblDatosDeConexin.setFont(new Font("Tahoma", Font.BOLD, 11));
 
@@ -165,13 +157,13 @@ public class Login extends JFrame {
 					.addContainerGap(292, Short.MAX_VALUE))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(96)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblUsuario, GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+							.addComponent(lblUsuario, GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
 							.addGap(33))
 						.addComponent(lblIpServidor)
 						.addComponent(lblPuertoServidor)
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(lblContrasea, GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
 							.addGap(16)))
 					.addGap(2)
@@ -185,10 +177,6 @@ public class Login extends JFrame {
 					.addContainerGap(143, Short.MAX_VALUE)
 					.addComponent(btnIniciarSesion, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
 					.addGap(164))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(176)
-					.addComponent(lblRegistrarse, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(188, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -220,9 +208,7 @@ public class Login extends JFrame {
 						.addComponent(pwdSecreto, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(13)
 					.addComponent(btnIniciarSesion)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblRegistrarse)
-					.addGap(48))
+					.addGap(68))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}

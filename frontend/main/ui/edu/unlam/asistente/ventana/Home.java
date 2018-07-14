@@ -326,7 +326,7 @@ public class Home extends JFrame {
 		//TODO: Sacar esto. Solamente fue realizado para enviar mensajes de prueba
 		//Main.cliente.enviarMensaje("sala:" + 1 + "|" +  "Mensaje de prueba");
 		Main.cliente.cerrarSocket();
-		System.exit(0);
+		
 		
 
 	}
