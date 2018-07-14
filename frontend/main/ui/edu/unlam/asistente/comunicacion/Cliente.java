@@ -147,4 +147,20 @@ e.printStackTrace();
 		}
 		
 	}
+
+	public void agregarContactoASala(int idSala, String contactoAgregar) {
+try {
+			
+			AgregarContactoSalaOut request = new AgregarContactoSalaOut();
+			request.setIdSala(idSala);
+			request.setContacto(contactoAgregar);
+			
+			Mensaje m = new Mensaje(this.gson.toJson(request), Main.usuario.getNombreUsuario(), "AGREGAR_CONTACTO_SALA");
+			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
+			salida.writeObject(m);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 }

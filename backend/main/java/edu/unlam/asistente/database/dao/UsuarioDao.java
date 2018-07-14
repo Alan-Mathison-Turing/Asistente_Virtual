@@ -35,9 +35,10 @@ public class UsuarioDao extends BaseDao {
 					e.printStackTrace();
 				}
 			}
-			return user;
+			
 		}
 		
+		return user;
 		
 
 	}

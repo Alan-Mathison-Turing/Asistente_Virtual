@@ -111,7 +111,7 @@ public class ThreadEscucha extends Thread {
 								int esPrivado = salaInfo.getEsPrivada(); //Es Privado
 								int esGrupal = salaInfo.getEsGrupal(); //Es Grupal
 								
-								if(esPrivado == 1 && esGrupal == 0) {
+								if(!(esPrivado == 1 && esGrupal == 0)) {
 									Main.usuario.addChat(new Chat(
 											idSala,
 											nombreSala,

@@ -304,6 +304,44 @@ public class ThreadCliente extends Thread{
 					
 					
 					
+				} else if(mensajeRecibido.getType().equals("AGREGAR_CONTACTO_SALA")) {
+					
+					AgregarContactoSalaRequest request = this.gson.fromJson(mensajeRecibido.getMensaje(), AgregarContactoSalaRequest.class);
+					
+					String nuevoContacto = request.getContacto();
+					int idSala = request.getIdSala();
+					
+					Usuario contacto = this.userDao.obtenerUsuarioPorLogin(nuevoContacto);
+					
+					if(contacto != null) {
+						
+						Sala sala = this.salaDao.obtenerSalaPorId(idSala);
+						
+						sala.getUsuarios().add(contacto);
+						
+						this.salaDao.crearSala(sala);
+						
+						SalaResponseObj salaAgregar = new SalaResponseObj();
+						salaAgregar.setId(sala.getId());
+						salaAgregar.setDueño(sala.getDueño().getId());
+						salaAgregar.setEsPrivada(sala.getEsPrivada());
+						salaAgregar.setEsGrupal(sala.getEsGrupal());
+						
+						respuesta = new Mensaje(this.gson.toJson(salaAgregar), mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
+						
+						for(SocketUsuario clienteActual : this.clientes) {
+							if(clienteActual.getUsuario() == contacto.getId()) {
+								ObjectOutputStream outputClienteActual = new ObjectOutputStream(clienteActual.getSocket().getOutputStream());
+								outputClienteActual.writeObject(respuesta);
+								break;
+							}
+						}
+					} else {
+						respuesta = new Mensaje("", mensajeRecibido.getNombreUsuario(), "CONTACTO_NO_ENCONTRADO");
+						mensajeEnviar.writeObject(respuesta);
+					}
+					
+					
 				}
 				
 				/*

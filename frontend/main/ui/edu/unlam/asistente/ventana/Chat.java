@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -28,6 +29,8 @@ import edu.unlam.asistente.entidades.MensajeChat;
 
 public class Chat extends JFrame {
 
+	private Chat self = this;
+	
 	private static final long serialVersionUID = 2400628064788229910L;
 	private JPanel contentPane;
 	private JTextField textFieldEnviar;
@@ -121,6 +124,15 @@ public class Chat extends JFrame {
 		scrollPane.setViewportView(textAreaChat);
 		
 		JButton btnAgegarContacto = new JButton("Agregar contacto");
+		btnAgegarContacto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String contactoAgregar = JOptionPane.showInputDialog("Ingrese el nombre del contacto para invitar:");
+				if(contactoAgregar != null) {
+					Main.cliente.agregarContactoASala(self.idSala,contactoAgregar);
+				}
+			}
+		});
+		
 		btnAgegarContacto.setBounds(263, 4, 124, 23);
 		contentPane.add(btnAgegarContacto);
 		

@@ -365,7 +365,7 @@ public class Home extends JFrame {
 			JOptionPane.showMessageDialog(null, "Se agrego correctamente el contacto", 
 					"Confirmacion exitosa", JOptionPane.INFORMATION_MESSAGE);
 		} else {
-			JOptionPane.showMessageDialog(null, "Hubo un error al agregar el contacto", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "No se encontro al contacto", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}

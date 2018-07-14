@@ -67,6 +67,7 @@ public class SalaDao extends BaseDao {
 		try {
 			session = factory.openSession();
 			tx = session.beginTransaction();
+			this.obtenerSalaPorId(sala.getId());
 			session.saveOrUpdate(sala);
 
 			tx.commit();
