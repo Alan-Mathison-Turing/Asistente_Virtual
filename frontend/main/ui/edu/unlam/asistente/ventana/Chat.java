@@ -29,6 +29,8 @@ import javax.swing.text.html.HTMLEditorKit;
 import edu.unlam.asistente.cliente.Main;
 import edu.unlam.asistente.entidades.MensajeChat;
 import javax.swing.SwingConstants;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class Chat extends JFrame {
 
@@ -68,15 +70,33 @@ public class Chat extends JFrame {
 	 * Create the frame.
 	 */
 	public Chat(int idSala, String nombre, int dueñoId, int esPrivado, int esGrupal) {
+		addComponentListener(new ComponentAdapter() {
+			public void componentMoved(ComponentEvent e) {
+				int x = getX();
+				int y = getY();
+			
+				}
+			@Override
+			public void componentResized(ComponentEvent e) {
+				int x = getX();
+				int y = getY();
+				int w = getWidth();
+				int h = getHeight();
+				textAreaChat.repaint(x, y, w, h);
+				textFieldEnviar.repaint(x, y, w, h);
+				//maximizar();
+			}
+		});
 		
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				char tecla=e.getKeyChar();
+				if (tecla== KeyEvent.VK_ESCAPE) {
+					cerrarChat();
+				}
 				if(tecla!=KeyEvent.VK_ENTER && tecla != KeyEvent.VK_ESCAPE) {
 					textFieldEnviar.grabFocus();
-				}else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-					cerrarChat();
 				}
 			}
 		});
@@ -109,6 +129,7 @@ public class Chat extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(200, 200, 450, 500);
 		contentPane = new JPanel();
+
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -123,11 +144,15 @@ public class Chat extends JFrame {
 			
 		JButton btnEnviar = new JButton("Enviar");
 		textFieldEnviar.addKeyListener(new KeyAdapter() {
+			
+			
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode()==KeyEvent.VK_ENTER){
 		            enviarMensaje();
-		        }
+		        }else if (e.getKeyCode()== KeyEvent.VK_ESCAPE) {
+					cerrarChat();
+				}
 			}
 		});
 		btnEnviar.addActionListener(new ActionListener() {
@@ -142,6 +167,7 @@ public class Chat extends JFrame {
 		textAreaChat.setEditable(false);
 		textAreaChat.setEditorKit(htmlEditorKit);
 		textAreaChat.setDocument(document);
+		textAreaChat.repaint();
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 38, 414, 359);
@@ -149,8 +175,9 @@ public class Chat extends JFrame {
 		scrollPane.setViewportView(textAreaChat);
 		
 		JButton btnAgegarContacto = new JButton("Agregar contacto");
+		btnAgegarContacto.setSelectedIcon(new ImageIcon("C:\\Users\\Usuario\\Documents\\GitHub\\Asistente_Virtual\\icons8-contactos-26.png"));
 		btnAgegarContacto.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnAgegarContacto.setBounds(262, 4, 147, 23);
+		btnAgegarContacto.setBounds(263, 4, 147, 23);
 		contentPane.add(btnAgegarContacto);
 		
 		btnAgegarContacto.setVisible(false);
@@ -164,8 +191,17 @@ public class Chat extends JFrame {
 			}
 		}
 	}
+	public void maximizar() {
+		int x = getX();
+		int y = getY();
+		int w = getWidth();
+		int h = getHeight();
+		textAreaChat.setBounds(x, y, w, h);
+		textFieldEnviar.setBounds(x, y, w, h);
+	}
 	public void cerrarChat() {
 		this.setVisible(false);
+		
 	}
 	public void enviarMensaje() {
 		String textoEnviar = textFieldEnviar.getText();
