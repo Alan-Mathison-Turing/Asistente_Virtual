@@ -319,6 +319,8 @@ public class Home extends JFrame {
 				break;
 			}
 		}
+		
+		//TODO: checkear que el usuario este dentro de la sala en este punto
 	}
 	
 	private void abrirChatIndividual(String nombreUsuario2) {
@@ -331,7 +333,6 @@ public class Home extends JFrame {
 	}
 	
 	private void crearSalaPublica(String nombreSala) {
-		//TODO: checkear que el usuario este dentro de la sala
 		Main.cliente.crearNuevaSala(nombreSala, false, true);
 	}
 
