@@ -1,10 +1,13 @@
 package edu.unlam.asistente.ventana;
 
 
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -25,6 +28,7 @@ import javax.swing.text.html.HTMLEditorKit;
 
 import edu.unlam.asistente.cliente.Main;
 import edu.unlam.asistente.entidades.MensajeChat;
+import javax.swing.SwingConstants;
 
 public class Chat extends JFrame {
 
@@ -68,6 +72,34 @@ public class Chat extends JFrame {
 	 * Create the frame.
 	 */
 	public Chat(int idSala, String nombre, int dueñoId, int esPrivado, int esGrupal) {
+		
+		addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char tecla=e.getKeyChar();
+				if(tecla!=KeyEvent.VK_ENTER && tecla != KeyEvent.VK_ESCAPE) {
+					textFieldEnviar.grabFocus();
+				}else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					cerrarChat();
+				}
+			}
+		});
+		addWindowFocusListener(new WindowFocusListener(){
+
+			@Override
+			public void windowGainedFocus(WindowEvent arg0) {
+				textFieldEnviar.grabFocus();
+				
+			}
+
+			@Override
+			public void windowLostFocus(WindowEvent arg0) {
+				textFieldEnviar.grabFocus();
+				
+			}
+			
+		});
+	
 		
 		//this.mensajes = new ArrayList<MensajeChat>();
 		this.idSala = idSala;
@@ -121,7 +153,8 @@ public class Chat extends JFrame {
 		scrollPane.setViewportView(textAreaChat);
 		
 		JButton btnAgegarContacto = new JButton("Agregar contacto");
-		btnAgegarContacto.setBounds(263, 4, 124, 23);
+		btnAgegarContacto.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnAgegarContacto.setBounds(262, 4, 147, 23);
 		contentPane.add(btnAgegarContacto);
 		
 		btnAgegarContacto.setVisible(false);
@@ -135,7 +168,9 @@ public class Chat extends JFrame {
 			}
 		}
 	}
-	
+	public void cerrarChat() {
+		this.setVisible(false);
+	}
 	public void enviarMensaje() {
 		String textoEnviar = textFieldEnviar.getText();
 		textFieldEnviar.setText(null);

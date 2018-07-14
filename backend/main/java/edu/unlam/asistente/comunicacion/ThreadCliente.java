@@ -223,6 +223,23 @@ public class ThreadCliente extends Thread{
 					
 					
 				}
+				else if(mensajeRecibido.getType().equals("SALIR")) {
+					respuesta = new Mensaje("true", mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
+					mensajeEnviar.writeObject(respuesta);
+					//cerrar socket correspondiente al usuario recorro lista de usuarios para eliminar el que cierra su sesion
+					int idUsuario=this.cliente.getUsuario();
+					this.cliente.getSocket().close();
+					for (SocketUsuario clienteActual : this.clientes) {
+						
+						if(idUsuario == clienteActual.getUsuario()) {
+							this.clientes.remove(clienteActual);
+							break;
+							//this.cliente.close();
+						}
+					}
+					this.stop();;
+					
+				}
 				
 				/*
 				Iterator<Socket> iteratorClientes = this.clientes.iterator();

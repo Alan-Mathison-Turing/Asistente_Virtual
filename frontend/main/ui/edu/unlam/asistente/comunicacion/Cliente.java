@@ -26,6 +26,19 @@ public class Cliente {
 		}
 	}
 	
+	public void cerrarSocket() {
+		try {
+			
+			Mensaje m = new Mensaje("", nombreUsuario, "SALIR");
+			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
+			salida.writeObject(m);
+		} catch (IOException e) {
+			System.err.println("-- Cliente/cerrarSocket ERROR: ocurrio un error intentando cerrar Socket: \n "
+					+ "nombre de Usuario: " + nombreUsuario );
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Metodo utilizado para enviar mensajes de texto en el chat
 	 * @param mensaje

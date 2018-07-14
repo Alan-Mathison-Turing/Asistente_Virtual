@@ -6,11 +6,13 @@ import java.net.Socket;
 
 import javax.swing.DefaultListModel;
 
+
 import edu.unlam.asistente.cliente.Main;
 import edu.unlam.asistente.entidades.Usuario;
 //import edu.unlam.asistente.entidades.Chat;
 import edu.unlam.asistente.ventana.Chat;
 import edu.unlam.asistente.ventana.Home;
+import edu.unlam.asistente.ventana.Login;
 
 public class ThreadEscucha extends Thread {
 	private Socket socket;
@@ -138,7 +140,15 @@ public class ThreadEscucha extends Thread {
 							
 						}
 					}
+					else if(msj.getType().equals("SALIR")) {
+						
+							socket.close();
+							Main.home.dispose();
+							Main.login = new Login();
+							Main.login.setVisible(true);
+					
 
+				}
 				}
 
 			}

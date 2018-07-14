@@ -14,7 +14,11 @@ import edu.unlam.asistente.asistente_virtual.IDecision;
  */
 public class Calculadora implements IDecision {
 	/**
+<<<<<<< HEAD
 	 * Cantidad de símbolos y números en la cuenta. <br>
+=======
+	 * Cantidad de números y símbolos en una cuenta. <br>
+>>>>>>> 61537f5ab41aed120dc3a946ccacdfc04398b32c
 	 */
 	private int cantidad = 0;
 
@@ -96,14 +100,14 @@ public class Calculadora implements IDecision {
 	public Calculadora(final String cuenta) throws IllegalArgumentException {
 		try {
 			this.validarFormato(cuenta);
+			this.cuenta = cuenta;
+			this.corregirCuenta();
+			this.iniciarVectores();
+			this.extraerNumeros();
+			this.extraerSimbolos();
 		} catch (IllegalArgumentException e) {
 			throw new IllegalArgumentException(e.getMessage());
 		}
-		this.cuenta = cuenta;
-		this.corregirCuenta();
-		this.iniciarVectores();
-		this.extraerNumeros();
-		this.extraerSimbolos();
 	}
 
 	/**
@@ -142,6 +146,36 @@ public class Calculadora implements IDecision {
 	}
 
 	/**
+	 * Obtiene el siguiente valor de la cuenta. <br>
+	 */
+	private double obtenerSiguienteValor() {
+		double auxiliar;
+		// Compruebo si el próximo símbolo es un paréntesis. De serlo,
+		// resuelvo todo lo de adentro.
+		if (this.simbolos[this.indiceSimbolo + 1] == '(') {
+			this.indiceSimbolo += 2;
+			auxiliar = this.resolver();
+		} else {
+			auxiliar = this.numeros[this.indiceNumero];
+			this.controlarIndices(1, 1);
+		}
+		return auxiliar;
+	}
+
+	/**
+	 * Controla los índices. <br>
+	 * 
+	 * @param indiceNumero
+	 *            Cantidad de posiciones a mover el índice de números. <br>
+	 * @param indiceSimbolo
+	 *            Cantidad de posiciones a mover el índice de símbolos. <br>
+	 */
+	private void controlarIndices(final int indiceNumero, final int indiceSimbolo) {
+		this.indiceNumero += indiceNumero;
+		this.indiceSimbolo += indiceSimbolo;
+	}
+
+	/**
 	 * Resuelve la cuenta. <br>
 	 * 
 	 * @return Resultado. <br>
@@ -150,118 +184,61 @@ public class Calculadora implements IDecision {
 		double resultado = 0;
 		double auxiliar = 0;
 
-		auxiliar = this.numeros[indiceNumero];
-		indiceNumero++;
+		auxiliar = this.numeros[this.indiceNumero];
+		this.indiceNumero++;
 
 		while (this.indiceNumero + this.indiceSimbolo < this.cantidad) {
 			switch (this.simbolos[this.indiceSimbolo]) {
 			case '+':
 				resultado += auxiliar;
-				// Compruebo si el próximo símbolo es un paréntesis. De serlo,
-				// resuelvo todo lo de adentro y eso lo multiplico.
-				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
-					this.indiceSimbolo += 2;
-					auxiliar = this.resolver();
-				} else {
-					auxiliar = this.numeros[this.indiceNumero];
-					this.indiceNumero++;
-					this.indiceSimbolo++;
-				}
+				auxiliar = this.obtenerSiguienteValor();
 				break;
 
 			case '-':
 				resultado += auxiliar;
-				// Compruebo si el próximo símbolo es un paréntesis. De serlo,
-				// resuelvo todo lo de adentro y eso lo multiplico.
-				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
-					this.indiceSimbolo += 2;
-					auxiliar = this.resolver() * (-1);
-				} else {
-					auxiliar = this.numeros[this.indiceNumero] * (-1);
-					this.indiceNumero++;
-					this.indiceSimbolo++;
-				}
+				auxiliar = this.obtenerSiguienteValor() * (-1);
 				break;
 
 			case '*':
-				// Compruebo si el próximo símbolo es un paréntesis. De serlo,
-				// resuelvo todo lo de adentro y eso lo multiplico.
-				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
-					this.indiceSimbolo += 2;
-					auxiliar *= this.resolver();
-				} else {
-					auxiliar *= this.numeros[this.indiceNumero];
-					this.indiceNumero++;
-					this.indiceSimbolo++;
-				}
+				auxiliar *= this.obtenerSiguienteValor();
 				break;
 
 			case '/':
-				// Compruebo si el próximo símbolo es un paréntesis. De serlo,
-				// resuelvo todo lo de adentro y eso lo multiplico.
-				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
-					this.indiceSimbolo += 2;
-					auxiliar /= this.resolver();
-				} else {
-					auxiliar /= this.numeros[this.indiceNumero];
-					this.indiceNumero++;
-					this.indiceSimbolo++;
-				}
+				auxiliar /= this.obtenerSiguienteValor();
 				break;
 
 			case '(':
 				// Para que no se pase el índice. En este caso volvemos uno
 				// atrás para número.
-				this.indiceSimbolo++;
-				this.indiceNumero--;
+				this.controlarIndices(-1, 1);
 				auxiliar = this.resolver();
-
 				break;
 
 			case ')':
 				// Este caso no nos interesa el break ya que nos interesa el
 				// resultado adentro de los paréntesis.
-
 				resultado += auxiliar;
-
-				this.indiceSimbolo++;
+				this.controlarIndices(0, 1);
 				return resultado;
+
 			case '^':
-
-				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
-					this.indiceSimbolo += 2;
-					auxiliar = Math.pow(auxiliar, this.resolver());
-				} else {
-					auxiliar = Math.pow(auxiliar, this.numeros[this.indiceNumero]);
-					this.indiceNumero++;
-					this.indiceSimbolo++;
-				}
-
+				auxiliar = Math.pow(auxiliar, this.obtenerSiguienteValor());
 				break;
 
-			case '?': // este seria el caso de raiz, si el caracter fuera ?.
-						// Para probar, usar el test raizCuadrada
-
-				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
-					this.indiceSimbolo += 2;
-					auxiliar = Math.sqrt(this.resolver());
-				} else {
-					auxiliar = Math.sqrt(auxiliar);
-					this.indiceNumero++;
-					this.indiceSimbolo++;
-				}
-
-				break;
+			// case '?': // este seria el caso de raiz, si el caracter fuera ?.
+			// // Para probar, usar el test raizCuadrada
+			//
+			// if (this.simbolos[this.indiceSimbolo + 1] == '(') {
+			// this.indiceSimbolo += 2;
+			// auxiliar = Math.sqrt(this.resolver());
+			// } else {
+			// auxiliar = Math.sqrt(auxiliar);
+			// this.controlarIndices(1, 1);
+			// }
+			// break;
 
 			case '%':
-				if (this.simbolos[this.indiceSimbolo + 1] == '(') {
-					this.indiceSimbolo += 2;
-					auxiliar = this.resolver() * auxiliar / 100;
-				} else {
-					auxiliar = this.numeros[this.indiceNumero] * auxiliar / 100;
-					this.indiceNumero++;
-					this.indiceSimbolo++;
-				}
+				auxiliar = this.obtenerSiguienteValor() * auxiliar / 100;
 				break;
 			}
 		}
