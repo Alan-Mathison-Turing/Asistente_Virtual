@@ -4,8 +4,10 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -20,10 +22,11 @@ import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseAdapter;
+
 import edu.unlam.asistente.cliente.Main;
 import edu.unlam.asistente.comunicacion.Cliente;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class Home extends JFrame {
 
@@ -44,10 +47,27 @@ public class Home extends JFrame {
 	 */
 	public Home() {
 		
+		addWindowStateListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				cerrarSesion();
+			}
+		});
+		
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addMouseListener(new MouseAdapter() {
+			@Override			
+			public void mouseClicked(MouseEvent e) {
+				cerrarSesion();
+			}
+		});
+		
 		
 		this.contactosUsuario = Main.usuario.getContactos();
 		this.salasPrivadas = Main.usuario.getSalasPrivadas();
 		this.salasPublicas = Main.usuario.getSalasPublicas();
+
+		
 		
 		setResizable(false);
 		
@@ -341,14 +361,15 @@ public class Home extends JFrame {
 
 
 	private void cerrarSesion() {
-		//TODO: desarrollar metodo
+		Object[] opciones = {"Aceptar", "Cancelar"};
+		int eleccion = JOptionPane.showOptionDialog(rootPane, "¿Está seguro que desea cerrar sesión?", "Mensaje de Confirmación", 
+													JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, 
+													opciones, "Aceptar");
 		
-		//TODO: Sacar esto. Solamente fue realizado para enviar mensajes de prueba
-		//Main.cliente.enviarMensaje("sala:" + 1 + "|" +  "Mensaje de prueba");
-		Main.cliente.cerrarSocket();
-		System.exit(0);
+		if(eleccion == JOptionPane.YES_OPTION) {
+			Main.cliente.cerrarSocket();	
+		}
 		
-
 	}
 	
 	public void showDialogUsuarioEncontrado(boolean encontrado) {

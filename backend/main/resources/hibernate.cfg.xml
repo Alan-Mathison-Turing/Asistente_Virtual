@@ -25,6 +25,6 @@
       <mapping class = "edu.unlam.asistente.database.pojo.Usuario"/>
       <mapping class = "edu.unlam.asistente.database.pojo.ChuckNorrisFacts"/>
       <mapping class = "edu.unlam.asistente.database.pojo.Sala"/>
-      
+      <mapping class = "edu.unlam.asistente.database.pojo.Seed"/>
    </session-factory>
 </hibernate-configuration>

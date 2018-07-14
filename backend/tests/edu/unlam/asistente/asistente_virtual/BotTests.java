@@ -575,13 +575,9 @@ public class BotTests {
 
 	@Test
 	public void busquedaExistente() {
-		Assert.assertEquals("<a href=\"https://es.wikipedia.org/wiki/Diego_Armando_Maradona\">"
-						+ "<u>https://es.wikipedia.org/wiki/Diego_Armando_Maradona</u></a><br/>"
-						+ "<p><b>Diego Armando Maradona</b> es un exfutbolista y director técnico argentino. "
-						+ "Actualmente se desempeña como presidente y director deportivo del FC Dinamo Brest de la "
-						+ "Liga Premier de Bielorrusia.</p>", 
-							jenkins.leerMensaje("@jenkins quien es Diego Maradona ?", USUARIO));
-	}
+		String resultado = jenkins.leerMensaje("@jenkins quien es Diego Maradona ?", USUARIO);
+		Assert.assertTrue(resultado.contains("https://es.wikipedia.org/wiki/Diego_Armando_Maradona"));	
+			}
 	
 	@Test
 	public void busquedaVariosResultados() {
@@ -626,11 +622,52 @@ public class BotTests {
 	}
 	
 	@Test
+	public void busquedaNueveGag() {
+		String resultado = jenkins.leerMensaje("@jenkins, quiero una imagen", USUARIO);
+		Assert.assertTrue(resultado.endsWith(".jpg"));
+	}
+	
+	@Test
+	public void busquedaNueveGagRandom() {
+		String resultado = jenkins.leerMensaje("@jenkins, quiero una imagen", USUARIO);
+		String resultado2 = jenkins.leerMensaje("@jenkins, quiero una imagen", USUARIO);
+		Assert.assertTrue(!resultado.equals(resultado2));
+	}
+	
+	@Test
 	public void obtenerFactChuckNorris() {
 		String fact = jenkins.leerMensaje("@jenkins quiero un fact sobre Chuck Norris", TEST_USER);
 		Assert.assertNotEquals("El fact era tan groso que Chuck Norris no nos deja compartirlo. Intente más tarde.",
 				fact);
 		Assert.assertNotEquals(new String("Disculpa... no entiendo el pedido, @delucas ¿podrás repetirlo?"),
 				fact.toString());
+	}
+	
+	@Test
+	public void obtenerNovedadesBlog(){
+		Assert.assertNotEquals("", jenkins.leerMensaje("@jenkins, quiero info de mi blog", TEST_USER));
+	}
+	
+	@Test
+	public void agregarBlog() {
+		Assert.assertEquals("@" + TEST_USER + " se agregó el blog a tus favoritos exitósamente.", 
+							jenkins.leerMensaje("@argem, agrega el blog http://rss.nytimes.com/services/xml/rss/nyt/Americas.xml", TEST_USER));
+	}
+	
+	@Test
+	public void obtenerValorDolar() {
+		Assert.assertTrue(Double.parseDouble(jenkins.leerMensaje("@jenkins, cual es el valor del dolar", USUARIO)
+				.substring(17)) > 25.0);
+	}
+
+	@Test
+	public void obtenerAcciones() {
+		String datos = jenkins.leerMensaje("@jenkins, como fueron las acciones de GOOGL?", USUARIO);
+		Assert.assertNotEquals(
+				"@" + USUARIO
+						+ " el nombre de la empresa (BCBA) no esta bien escrito, por favor escribalo correctamente.",
+				datos);
+		Assert.assertNotEquals(
+				"@" + USUARIO + " ha ocurrido un problema al obtener los datos financiero. Intente más tarde.", datos);
 	}
 }

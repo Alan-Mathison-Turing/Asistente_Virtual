@@ -9,6 +9,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -84,18 +87,20 @@ public class ThreadCliente extends Thread{
 				} else if (mensajeRecibido.getType().equals("CHAT")) {
 					
 					ChatRequest chatRequest = gson.fromJson(mensajeRecibido.getMensaje(), ChatRequest.class);
-					
 					Sala salaActual = this.salaDao.obtenerSalaPorId(chatRequest.getIdSala());
 					Set<Usuario> usuariosEnSala = salaActual.getUsuarios();
+					
 					
 					Mensaje respuestaBot = null;
 					
 					ChatResponse response = new ChatResponse();
 					response.setIdSala(chatRequest.getIdSala());
+
+		      
 					//Chequeo si el mensaje es especifico para el bot
-					//En el caso de que si lo sea, la respuesta se la mando a toda la sala
+					//En el caso de que si lo sea, la respuesta se la mando a toda la sala					
 					if(chatRequest.getMensaje().contains(bot.getNombre())) {
-						response.setMensaje(bot.leerMensaje(mensajeRecibido.getMensaje(), mensajeRecibido.getNombreUsuario()));
+						response.setMensaje(bot.leerMensaje(chatRequest.getMensaje(), mensajeRecibido.getNombreUsuario()));
 						respuestaBot = new Mensaje(this.gson.toJson(response),
 								bot.getNombre(), "CHAT_BOT");
 					}
