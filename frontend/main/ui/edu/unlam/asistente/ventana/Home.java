@@ -200,9 +200,9 @@ public class Home extends JFrame {
 //		panelCrearSala.add(txtTopicoSala);
 		
 		//CONTACTOS IZQ SALA
-		JList<String> contactosTotales = new JList<String>();
-		contactosTotales.setModel(this.contactosUsuario);
-		contactosTotales.setBounds(58, 148, 104, 152);
+		//JList<String> contactosTotales = new JList<String>();
+		//contactosTotales.setModel(this.contactosUsuario);
+		//contactosTotales.setBounds(58, 148, 104, 152);
 //		panelCrearSala.add(contactosTotales);
 		
 		//CONTACTOS DER SALA
@@ -212,32 +212,32 @@ public class Home extends JFrame {
 //		panelCrearSala.add(contactosAgregados);
 		
 		//BOTON PARA AGREGAR CONTACTOS A LA LISTA
-		JButton btnSeleccionar = new JButton(">");
-		btnSeleccionar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				ListSelectionModel seleccionado = contactosTotales.getSelectionModel();
-				if(seleccionado != null) {
-					//TODO: eliminar de lista izquierda, agregar en lista derecha
-//					contactosAgregados.add(seleccionado.)
-//					contactosTotales.remove(arg0);(contactosTotales.getSelectedIndex());
-				};
-			}
-		});
-		btnSeleccionar.setBounds(189, 148, 55, 47);
-//		panelCrearSala.add(btnSeleccionar);
+//		JButton btnSeleccionar = new JButton(">");
+//		btnSeleccionar.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent arg0) {
+//				ListSelectionModel seleccionado = contactosTotales.getSelectionModel();
+//				if(seleccionado != null) {
+//					//TODO: eliminar de lista izquierda, agregar en lista derecha
+////					contactosAgregados.add(seleccionado.)
+////					contactosTotales.remove(arg0);(contactosTotales.getSelectedIndex());
+//				};
+//			}
+//		});
+//		btnSeleccionar.setBounds(189, 148, 55, 47);
+////		panelCrearSala.add(btnSeleccionar);
 		
-		JButton btnSacar = new JButton("<");
-		btnSeleccionar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				ListSelectionModel seleccionado = contactosAgregados.getSelectionModel();
-				if(seleccionado != null) {
-					//TODO: eliminar de lista derecha, agregar en lista izquierda
-//					contactosAgregados.add(seleccionado.)
-//					contactosTotales.remove(arg0);(contactosTotales.getSelectedIndex());
-				};
-			}
-		});
-		btnSacar.setBounds(189, 217, 55, 47);
+//		JButton btnSacar = new JButton("<");
+//		btnSeleccionar.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent arg0) {
+//				ListSelectionModel seleccionado = contactosAgregados.getSelectionModel();
+//				if(seleccionado != null) {
+//					//TODO: eliminar de lista derecha, agregar en lista izquierda
+////					contactosAgregados.add(seleccionado.)
+////					contactosTotales.remove(arg0);(contactosTotales.getSelectedIndex());
+//				};
+//			}
+//		});
+//		btnSacar.setBounds(189, 217, 55, 47);
 //		panelCrearSala.add(btnSacar);
 		
 		
@@ -306,15 +306,15 @@ public class Home extends JFrame {
 		
 	}
 
-	protected ListModel<JCheckBox> obtenerContactosCheckbox() {
-		JList<JCheckBox> checkBoxList = new JList<>();
-		for (int i = 0 ; i < this.contactosUsuario.size() ; i++) {
-			JCheckBox checkbox = new JCheckBox(this.contactosUsuario.get(i));
-			checkBoxList.add(checkbox);
-		}
-		
-		return null;
-	}
+//	protected ListModel<JCheckBox> obtenerContactosCheckbox() {
+//		JList<JCheckBox> checkBoxList = new JList<>();
+//		for (int i = 0 ; i < this.contactosUsuario.size() ; i++) {
+//			JCheckBox checkbox = new JCheckBox(this.contactosUsuario.get(i));
+//			checkBoxList.add(checkbox);
+//		}
+//		
+//		return null;
+//	}
 
 	protected boolean agregarContacto(String contactoAgregar) {
 		boolean bolean = false;
@@ -377,11 +377,16 @@ public class Home extends JFrame {
 			JOptionPane.showMessageDialog(null, "Se agrego correctamente el contacto", 
 					"Confirmacion exitosa", JOptionPane.INFORMATION_MESSAGE);
 		} else {
-			JOptionPane.showMessageDialog(null, "Hubo un error al agregar el contacto", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "No se encontro al contacto", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}
 	
+	public void showDialogUsuarioYaExisteEnChat() {
+		
+			JOptionPane.showMessageDialog(null, "El usuario ya existe en la sala", 
+					"Confirmacion exitosa", JOptionPane.INFORMATION_MESSAGE);
+			}
 	public void showDialogRecordatorioAlarma(String nombreEvento, String fecha) {
 			JOptionPane.showMessageDialog(null, "Recordatorio de evento " + nombreEvento, 
 					"No olvide que el evento " + nombreEvento + " ocurre " + fecha, JOptionPane.WARNING_MESSAGE);

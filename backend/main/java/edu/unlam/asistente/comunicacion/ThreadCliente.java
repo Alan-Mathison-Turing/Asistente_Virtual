@@ -238,17 +238,29 @@ public class ThreadCliente extends Thread{
 					salaNueva.setEsPrivada(valEsPrivada);
 					salaNueva.setEsGrupal(valEsGrupal);
 					//añado dueño a la tabla de relacion
-					salaNueva.getUsuarios().add(this.usuario);
+					
+					if (valEsPrivada == 0) {
+						List<Usuario> listaUsuarios = this.userDao.getAllUsers();
+						
+						for (Usuario usuarioAct : listaUsuarios) {
+							salaNueva.getUsuarios().add(usuarioAct);
+						}
+						
+					} else {
+						salaNueva.getUsuarios().add(this.usuario);
+					}
+					
 					
 					this.salaDao.crearSala(salaNueva);
 					
-					String mensajeSalaNueva = "" + salaNueva.getId()
-					+ "," + salaNueva.getNombre()
-					+ "," + salaNueva.getDueño().getId()
-					+ "," + salaNueva.getEsPrivada()
-					+ "," + salaNueva.getEsGrupal();
+					SalaResponseObj salaAgregar = new SalaResponseObj();
+					salaAgregar.setId(salaNueva.getId());
+					salaAgregar.setNombre(salaNueva.getNombre());
+					salaAgregar.setDueño(salaNueva.getDueño().getId());
+					salaAgregar.setEsPrivada(salaNueva.getEsPrivada());
+					salaAgregar.setEsGrupal(salaNueva.getEsGrupal());
 					
-					respuesta = new Mensaje(mensajeSalaNueva, mensajeRecibido.getNombreUsuario(), "NUEVA_SALA");
+					respuesta = new Mensaje(this.gson.toJson(salaAgregar), mensajeRecibido.getNombreUsuario(), "NUEVA_SALA");
 					
 					if(salaNueva.getEsPrivada() == 0) {
 						for (SocketUsuario clienteActual : this.clientes) {
@@ -284,19 +296,19 @@ public class ThreadCliente extends Thread{
 						usuarioContacto.getContactos().add(this.usuario);
 						
 						this.userDao.guardar(this.usuario);
-						this.userDao.guardar(usuarioContacto);
+						//this.userDao.guardar(usuarioContacto);
 						
-						String mensajeSalaNueva = "" + salaNueva.getId()
-						+ "," + salaNueva.getNombre()
-						+ "," + salaNueva.getDueño().getId()
-						+ "," + salaNueva.getEsPrivada()
-						+ "," + salaNueva.getEsGrupal()
-						+ "," + mensajeRecibido.getNombreUsuario()
-						+ "," + usuarioContacto.getUsuario();
+						SalaResponseObj salaAgregar = new SalaResponseObj();
+						salaAgregar.setId(salaNueva.getId());
+						salaAgregar.setNombre(salaNueva.getNombre());
+						salaAgregar.setDueño(salaNueva.getDueño().getId());
+						salaAgregar.setEsPrivada(salaNueva.getEsPrivada());
+						salaAgregar.setEsGrupal(salaNueva.getEsGrupal());
+						salaAgregar.setNombreUsuario1(mensajeRecibido.getNombreUsuario());
+						salaAgregar.setNombreUsuario2(usuarioContacto.getUsuario());
 						
-						mensajeSalaNueva += ";";
+						respuesta = new Mensaje(this.gson.toJson(salaAgregar), mensajeRecibido.getNombreUsuario(), "NUEVA_SALA");
 						
-						respuesta = new Mensaje(mensajeSalaNueva, mensajeRecibido.getNombreUsuario(), "NUEVA_SALA");
 						mensajeEnviar.writeObject(respuesta);
 						
 						for (SocketUsuario clienteActual : this.clientes) {
@@ -312,44 +324,81 @@ public class ThreadCliente extends Thread{
 					}
 					
 					
+				} else if(mensajeRecibido.getType().equals("AGREGAR_CONTACTO_SALA")) {
+
 					
-				}
-				else if(mensajeRecibido.getType().equals("SALIR")) {
-					respuesta = new Mensaje("true", mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
-					mensajeEnviar.writeObject(respuesta);
-					//cerrar socket correspondiente al usuario recorro lista de usuarios para eliminar el que cierra su sesion
-					int idUsuario=this.cliente.getUsuario();
-					this.cliente.getSocket().close();
-					for (SocketUsuario clienteActual : this.clientes) {
+					AgregarContactoSalaRequest request = this.gson.fromJson(mensajeRecibido.getMensaje(), AgregarContactoSalaRequest.class);
+					
+					String nuevoContacto = request.getContacto();
+					int idSala = request.getIdSala();
+					
+					Usuario contacto = this.userDao.obtenerUsuarioPorLogin(nuevoContacto);
+					
+					if(contacto != null) {
 						
-						if(idUsuario == clienteActual.getUsuario()) {
-							this.clientes.remove(clienteActual);
-							break;
-							//this.cliente.close();
+						Sala sala = this.salaDao.obtenerSalaPorId(idSala);
+						
+						boolean encontrado = false;
+						for(Usuario usuarioEnSala : sala.getUsuarios()) {
+							if(usuarioEnSala.getId() == contacto.getId()) {
+								encontrado = true;
+								break;
+							}
 						}
+						
+						if(!encontrado) {
+							//sala.getUsuarios().add(contacto);
+							this.salaDao.agregarUsuario(sala, contacto);
+							
+							SalaResponseObj salaAgregar = new SalaResponseObj();
+							salaAgregar.setId(sala.getId());
+							salaAgregar.setNombre(sala.getNombre());
+							salaAgregar.setDueño(sala.getDueño().getId());
+							salaAgregar.setEsPrivada(sala.getEsPrivada());
+							salaAgregar.setEsGrupal(sala.getEsGrupal());
+							
+							respuesta = new Mensaje(this.gson.toJson(salaAgregar), mensajeRecibido.getNombreUsuario(), "NUEVA_SALA");
+							
+							for(SocketUsuario clienteActual : this.clientes) {
+								if(clienteActual.getUsuario() == contacto.getId()) {
+									ObjectOutputStream outputClienteActual = new ObjectOutputStream(clienteActual.getSocket().getOutputStream());
+									outputClienteActual.writeObject(respuesta);
+									break;
+								}
+							}
+							
+							respuesta = new Mensaje("", mensajeRecibido.getNombreUsuario(), "CONTACTO_AGREGADO_A_SALA");
+							mensajeEnviar.writeObject(respuesta);
+							
+						} else {
+							respuesta = new Mensaje("", mensajeRecibido.getNombreUsuario(), "CONTACTO_YA_EXISTE_EN_SALA");
+							mensajeEnviar.writeObject(respuesta);
+						}
+						
+					} else if(mensajeRecibido.getType().equals("SALIR")) {
+						respuesta = new Mensaje("true", mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
+						mensajeEnviar.writeObject(respuesta);
+						//cerrar socket correspondiente al usuario recorro lista de usuarios para eliminar el que cierra su sesion
+						int idUsuario=this.cliente.getUsuario();
+						this.cliente.getSocket().close();
+						for (SocketUsuario clienteActual : this.clientes) {
+							
+							if(idUsuario == clienteActual.getUsuario()) {
+								this.clientes.remove(clienteActual);
+								break;
+								//this.cliente.close();
+							}
+						}
+						this.stop();
+						
+					} else {
+						respuesta = new Mensaje("", mensajeRecibido.getNombreUsuario(), "CONTACTO_NO_ENCONTRADO");
+						mensajeEnviar.writeObject(respuesta);
 					}
-					this.stop();;
+					
 					
 				}
 				
-				/*
-				Iterator<Socket> iteratorClientes = this.clientes.iterator();
-				
-				while(iteratorClientes.hasNext()){
-					Socket clienteAEnviar = iteratorClientes.next();
-					if(clienteAEnviar.isClosed()) {
-						iteratorClientes.remove();
-						continue;
-					}
-					//Para chat de grupo?
-//					if(this.cliente.equals(clienteAEnviar)) {
-//						continue;
-//					}
-					
-					
-					
-					
-				}*/
 			}
 		} catch (IOException | ClassNotFoundException e) {
 			//TODO: Sacar el cliente que rompio o se desconecto de los sockets activos

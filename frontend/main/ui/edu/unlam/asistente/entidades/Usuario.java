@@ -76,10 +76,10 @@ public class Usuario {
 	}
 	
 	public void setContactos(DefaultListModel<String> contactos) {
-		this.contactos.removeAllElements();
-		for(int i = 0; i < contactos.size(); i++) {
-			this.contactos.addElement(contactos.get(i));
-		}
+//		this.contactos.removeAllElements();
+//		for(int i = 0; i < contactos.size(); i++) {
+//			this.contactos.addElement(contactos.get(i));
+//		}
 	}
 	
 	public void addChat(Chat chat) {

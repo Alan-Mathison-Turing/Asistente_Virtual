@@ -67,6 +67,7 @@ public class SalaDao extends BaseDao {
 		try {
 			session = factory.openSession();
 			tx = session.beginTransaction();
+			session.clear();
 			session.saveOrUpdate(sala);
 
 			tx.commit();
@@ -103,4 +104,30 @@ public class SalaDao extends BaseDao {
 			}
 		}
 	}
+	
+	public void agregarUsuario(Sala sala, Usuario contacto) {
+
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = factory.openSession();
+			tx = session.beginTransaction();
+			sala.getUsuarios().add(contacto);
+			
+			session.update(sala);
+			tx.commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null) {
+				try {
+					session.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 }

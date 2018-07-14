@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -31,6 +32,8 @@ import edu.unlam.asistente.herramienta.Navegador;
 
 public class Chat extends JFrame {
 
+	private Chat self = this;
+	
 	private static final long serialVersionUID = 2400628064788229910L;
 	private JPanel contentPane;
 	private JTextField textFieldEnviar;
@@ -159,6 +162,15 @@ public class Chat extends JFrame {
 		textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
 		
 		JButton btnAgegarContacto = new JButton("Agregar contacto");
+		btnAgegarContacto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String contactoAgregar = JOptionPane.showInputDialog("Ingrese el nombre del contacto para invitar:");
+				if(contactoAgregar != null) {
+					Main.cliente.agregarContactoASala(self.idSala,contactoAgregar);
+				}
+			}
+		});
+		
 		btnAgegarContacto.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnAgegarContacto.setBounds(262, 4, 147, 23);
 		contentPane.add(btnAgegarContacto);
@@ -169,8 +181,6 @@ public class Chat extends JFrame {
 				if (this.dueñoId == Main.usuario.getID()) {
 					btnAgegarContacto.setVisible(true);
 				}
-			} else {
-				btnAgegarContacto.setVisible(true);
 			}
 		}
 	}
