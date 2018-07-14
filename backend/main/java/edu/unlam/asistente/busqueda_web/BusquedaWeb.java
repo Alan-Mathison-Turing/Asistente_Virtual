@@ -66,7 +66,11 @@ public class BusquedaWeb implements IDecision {
 		if(mensaje.matches(NUEVEGAG_REGEX)) {
 			String imageURL;
 			imageURL = busquedaNuevaGag();
-			return imageURL;
+			if(imageURL.equals("")) {
+				return "@" + usuario + ", no se pudo encontrar una imagen, intenta nuevamente";
+			} else {
+				return imageURL;	
+			}
 		}
 		
 		return siguienteDecision.leerMensaje(mensaje, usuario);
@@ -240,9 +244,12 @@ public class BusquedaWeb implements IDecision {
 	        nueveGagMatcher = nueveGagPatron.matcher(nueveGagResponse);
 			
 	        nueveGagMatcher.find();
-	        
-	        imageURL = NUEVEGAG_IMAGE_URL + nueveGagMatcher.group(5);
-	        
+	        	        
+	        if(nueveGagMatcher.group(5).isEmpty()) {
+	        	return "";
+	        } else {
+	        	imageURL = NUEVEGAG_IMAGE_URL + nueveGagMatcher.group(5);
+	        }
 	        
 	        connection.disconnect();
 	        
