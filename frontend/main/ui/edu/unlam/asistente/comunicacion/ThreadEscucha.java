@@ -164,8 +164,8 @@ public class ThreadEscucha extends Thread {
 										esGrupal),
 										usuarios);
 								
-								Main.usuario.obtenerContactos();
 							}
+							Main.usuario.obtenerContactos();
 							
 						}
 					} else if(msj.getType().equals("CONTACTO_NO_ENCONTRADO")) {

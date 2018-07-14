@@ -286,15 +286,15 @@ public class Home extends JFrame {
 		
 	}
 
-	protected ListModel<JCheckBox> obtenerContactosCheckbox() {
-		JList<JCheckBox> checkBoxList = new JList<>();
-		for (int i = 0 ; i < this.contactosUsuario.size() ; i++) {
-			JCheckBox checkbox = new JCheckBox(this.contactosUsuario.get(i));
-			checkBoxList.add(checkbox);
-		}
-		
-		return null;
-	}
+//	protected ListModel<JCheckBox> obtenerContactosCheckbox() {
+//		JList<JCheckBox> checkBoxList = new JList<>();
+//		for (int i = 0 ; i < this.contactosUsuario.size() ; i++) {
+//			JCheckBox checkbox = new JCheckBox(this.contactosUsuario.get(i));
+//			checkBoxList.add(checkbox);
+//		}
+//		
+//		return null;
+//	}
 
 	protected boolean agregarContacto(String contactoAgregar) {
 		boolean bolean = false;

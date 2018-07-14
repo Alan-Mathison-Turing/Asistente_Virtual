@@ -67,7 +67,7 @@ public class ThreadCliente extends Thread{
 						response.setSuccess(true);
 						
 						//añado a lista de sockets de alarma durante auth exitosa
-						ThreadAlarma.agregarUserSocket(this.cliente);
+						//ThreadAlarma.agregarUserSocket(this.cliente);
 					} else {
 						//Caso contrario devuelve false
 						response.setIdUsuario(-1);
@@ -237,13 +237,14 @@ public class ThreadCliente extends Thread{
 					
 					this.salaDao.crearSala(salaNueva);
 					
-					String mensajeSalaNueva = "" + salaNueva.getId()
-					+ "," + salaNueva.getNombre()
-					+ "," + salaNueva.getDueño().getId()
-					+ "," + salaNueva.getEsPrivada()
-					+ "," + salaNueva.getEsGrupal();
+					SalaResponseObj salaAgregar = new SalaResponseObj();
+					salaAgregar.setId(salaNueva.getId());
+					salaAgregar.setNombre(salaNueva.getNombre());
+					salaAgregar.setDueño(salaNueva.getDueño().getId());
+					salaAgregar.setEsPrivada(salaNueva.getEsPrivada());
+					salaAgregar.setEsGrupal(salaNueva.getEsGrupal());
 					
-					respuesta = new Mensaje(mensajeSalaNueva, mensajeRecibido.getNombreUsuario(), "NUEVA_SALA");
+					respuesta = new Mensaje(this.gson.toJson(salaAgregar), mensajeRecibido.getNombreUsuario(), "NUEVA_SALA");
 					
 					if(salaNueva.getEsPrivada() == 0) {
 						for (SocketUsuario clienteActual : this.clientes) {
@@ -279,10 +280,11 @@ public class ThreadCliente extends Thread{
 						usuarioContacto.getContactos().add(this.usuario);
 						
 						this.userDao.guardar(this.usuario);
-						this.userDao.guardar(usuarioContacto);
+						//this.userDao.guardar(usuarioContacto);
 						
 						SalaResponseObj salaAgregar = new SalaResponseObj();
 						salaAgregar.setId(salaNueva.getId());
+						salaAgregar.setNombre(salaNueva.getNombre());
 						salaAgregar.setDueño(salaNueva.getDueño().getId());
 						salaAgregar.setEsPrivada(salaNueva.getEsPrivada());
 						salaAgregar.setEsGrupal(salaNueva.getEsGrupal());
@@ -334,6 +336,7 @@ public class ThreadCliente extends Thread{
 							
 							SalaResponseObj salaAgregar = new SalaResponseObj();
 							salaAgregar.setId(sala.getId());
+							salaAgregar.setNombre(sala.getNombre());
 							salaAgregar.setDueño(sala.getDueño().getId());
 							salaAgregar.setEsPrivada(sala.getEsPrivada());
 							salaAgregar.setEsGrupal(sala.getEsGrupal());
