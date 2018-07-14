@@ -649,4 +649,9 @@ public class BotTests {
 				jenkins.leerMensaje("@jenkins, quiero info de mi blog", TEST_USER));		
 	}
 	
+	@Test
+	public void agregarBlog() {
+		Assert.assertEquals("@" + TEST_USER + " se agregó el blog a tus favoritos exitósamente.", jenkins.leerMensaje("@argem, agrega el blog http://rss.nytimes.com/services/xml/rss/nyt/Americas.xml", TEST_USER));
+	}
+	
 }

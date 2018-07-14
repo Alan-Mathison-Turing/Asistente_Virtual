@@ -16,7 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -33,7 +33,7 @@ public class Usuario implements java.io.Serializable {
 	 */
 	private Set<ChuckNorrisFacts> chuckNorrisFacts = new HashSet<ChuckNorrisFacts>();
 	
-	//private Set<Blog> urlSeeds = new HashSet<Blog>();
+	private Set<Seed> urlSeeds = new HashSet<Seed>();
 
 
 	public Usuario() {
@@ -63,14 +63,14 @@ public class Usuario implements java.io.Serializable {
 	}
 	
 
-/*	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL) 
-	public Set<RSS> getUrlSeeds() {
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "usuario")
+	public Set<Seed> getUrlSeeds() {
 		return urlSeeds;
 	}
 
-	public void setUrlSeeds(Set<RSS> urlSeeds) {
+	public void setUrlSeeds(Set<Seed> urlSeeds) {
 		this.urlSeeds = urlSeeds;
-	}*/
+	}
 
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "usuarios")
 	public Set<Evento> getEventos() {

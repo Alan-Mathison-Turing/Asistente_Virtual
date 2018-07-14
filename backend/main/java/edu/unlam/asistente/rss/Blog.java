@@ -1,11 +1,15 @@
 package edu.unlam.asistente.rss;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import edu.unlam.asistente.asistente_virtual.IDecision;
+import edu.unlam.asistente.database.dao.SeedDao;
+import edu.unlam.asistente.database.dao.UsuarioDao;
+import edu.unlam.asistente.database.pojo.Seed;
+import edu.unlam.asistente.database.pojo.Usuario;
 import edu.unlam.asistente.rss.api.Feed;
 import edu.unlam.asistente.rss.api.FeedMessage;
 import edu.unlam.asistente.rss.api.RSSFeedParser;
@@ -14,46 +18,42 @@ public class Blog implements IDecision {
 
 	private IDecision siguienteDecision;
 	private ArrayList<Feed> feedResults;
-	private String urlSeed;
+	private String mensajeOriginal;
 	
-	private final static String ADD_SEED_REGEX = "@\\w*\\,* (?:agrega|suma) \\D* (?:blog)\\s*(https?:\\/\\/www\\.\\w*\\.\\w*(?:\\.?\\w*\\/?\\w*\\/?\\w*))";
+	private final static String ADD_SEED_REGEX = "@\\w*,? (?:agrega|agregame) \\w* (?:blog) ((?:https?:\\/\\/)?(?:[\\da-z\\.-]+)\\.(?:[a-z\\.]{2,6})(?:[\\/\\w \\.-]*)*\\/?$)";
 	private final static String GET_SEED_INFO_REGEX = "@\\w*\\,? (?:quiero|dame|informame|informa)\\s*(?:informacion|info|novedades|noticias)\\s*\\w*\\s*\\w* (?:blogs?)";
 	
 	@Override
 	public String leerMensaje(String mensaje, String usuario) {
 		
 		Pattern patronRSS =  Pattern.compile(ADD_SEED_REGEX);
-		Matcher matcherRSS = patronRSS.matcher(mensaje);
+		Matcher matcherRSS = patronRSS.matcher(this.mensajeOriginal);
 		
-		if(mensaje.matches(ADD_SEED_REGEX)) {
+		if(this.mensajeOriginal.matches(ADD_SEED_REGEX)) {
 			matcherRSS.find();
-			String url = "";
-			if(agregarSeed(usuario, url) == 1) {
-				return "@" + usuario + ", se agregó el blog a tus favoritos exitósamente.";
-			} else {
-				return "@" + usuario + ", no se pudo agregar el blog, revisa la URL enviada.";
-			}
+			String url = matcherRSS.group(1);
+			agregarSeed(usuario, url);
+			
+			return "@" + usuario + ", se agregó el blog a tus favoritos exitósamente.";
 		}
 		
 		if(mensaje.matches(GET_SEED_INFO_REGEX)) {
 			Blog rss = new Blog();
 			String result = "";
-			// test: https://www.20minutos.com.mx/rss/cultura/
-			/*try {
-				//List<RSS> feedList = new RSSDao().obtenerUsuarioSeeds(new UsuarioDao().obtenerUsuarioPorLogin(usuario));
-				
-				for(RSS feed : feedList) {
-					rss.buscarNovedades(feed.getUrlSeed());
-					result += rss.toString();	
-				}
-				
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
+			UsuarioDao usuarioDao = new UsuarioDao();
+			Usuario user = usuarioDao.obtenerUsuarioPorLogin(usuario);
 			
+			Set<Seed> feedList = user.getUrlSeeds();
+			
+			for(Seed seed : feedList) {
+				
+				rss.buscarNovedades(seed.getUrl());
+				result += rss.toString();	
+			}
+		
 			return result;
 		}
+		
 		
 		return siguienteDecision.leerMensaje(mensaje, usuario);
 	}
@@ -66,12 +66,6 @@ public class Blog implements IDecision {
 	@Override
 	public void setSiguienteDecision(IDecision decision) {
 		siguienteDecision = decision;
-	}
-	
-	public int agregarSeed(String usuario, String url) {
-		// TODO: Lógica para agregar seeds a un usuario, recordar controlar que la misma no exista para él. 
-		
-		return -1;
 	}
 	
 	public void buscarNovedades(String url) {
@@ -87,22 +81,37 @@ public class Blog implements IDecision {
         }
 		
 	}
-    
-	// constructor por default
-	public Blog() {}
 	
-	// constructor para generar listado de urls de un usuario
-	public Blog(String urlSeed) {
-		this.urlSeed = urlSeed;
+	public Blog() {
+		
 	}
 	
+	public Blog(String mensajeOriginal) {
+		this.mensajeOriginal = mensajeOriginal;
+	}
+	
+	public void agregarSeed(String usuario, String url) {
+		Seed seed = new Seed();
+		Usuario user = new Usuario();
+		UsuarioDao userDao = new UsuarioDao();
+		user = userDao.obtenerUsuarioPorLogin(usuario);
+		seed.setUrl(url);
+		seed.setActive(1);
+		seed.setUsuario(user);
+
+		SeedDao seadDao = new SeedDao();
+		
+		seadDao.crearSeed(seed);
+		
+	}
+    	
     @Override
     public String toString() {
     	String parser = "";
     	
     	for(Feed f : feedResults) {
-    		parser += "<i>" + f.getTitle() + "</i>\n" 
-    				+ "<a href=\"" + f.getLink() + "\"><u><b>" + f.getLink() + "</b></u></a>\n\n";    	
+    		parser += "<i>" + f.getTitle() + "</i><br/>" 
+    				+ "<a href=\"" + f.getLink() + "\"><u><b>" + f.getLink() + "</b></u></a><br/><br/>";    	
     	}
     	
     	return parser;

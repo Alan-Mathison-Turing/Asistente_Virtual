@@ -81,7 +81,7 @@ public class ThreadCliente extends Thread{
 					//Chequeo si el mensaje es especifico para el bot
 					//En el caso de que si lo sea, la respuesta se la mando a toda la sala
 					if(mensaje.contains(bot.getNombre())) {
-						respuestaBot = new Mensaje("sala:" + idSala + "|" + bot.leerMensaje(mensajeRecibido.getMensaje(), mensajeRecibido.getNombreUsuario()),
+						respuestaBot = new Mensaje("sala:" + idSala + "|" + bot.leerMensaje(mensaje, mensajeRecibido.getNombreUsuario()),
 								bot.getNombre(), "CHAT_BOT");
 					}
 					

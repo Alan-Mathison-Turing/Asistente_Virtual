@@ -19,9 +19,7 @@ public class ConversorUnidad implements IDecision {
 	public String leerMensaje(String mensaje, String usuario) {
 		Pattern patron =  Pattern.compile(REGEX);
 		Matcher matcher = patron.matcher(mensaje);
-
-		if(mensaje.matches(REGEX)) {
-			
+		if(mensaje.matches(REGEX)) {	
 			DecimalFormatSymbols simbolo = new DecimalFormatSymbols();
 			simbolo.setDecimalSeparator(',');
 			DecimalFormat df = new DecimalFormat("#0.00", simbolo);

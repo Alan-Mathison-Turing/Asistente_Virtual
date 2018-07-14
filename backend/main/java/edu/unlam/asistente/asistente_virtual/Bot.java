@@ -40,6 +40,7 @@ public class Bot implements IDecision {
 	
 	@Override
 	public String leerMensaje(String mensaje, String usuario) {
+		String mensajeOriginal = mensaje;
 		mensaje = removerTildes(mensaje.toLowerCase());
 
 		Cordialidad cordialidad = new Cordialidad();
@@ -51,7 +52,7 @@ public class Bot implements IDecision {
 		GestionRecordatorio gestionRecordatorio = new GestionRecordatorio();
 		BusquedaWeb busquedaWeb = new BusquedaWeb();
 		Gif gif = new Gif();
-		Blog blog = new Blog();
+		Blog blog = new Blog(mensajeOriginal);
 		Default def = new Default();
 		
 		this.setSiguienteDecision(cordialidad);
