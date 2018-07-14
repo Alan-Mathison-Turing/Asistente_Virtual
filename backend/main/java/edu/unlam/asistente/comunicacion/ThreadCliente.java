@@ -17,6 +17,7 @@ import edu.unlam.asistente.database.dao.SalaDao;
 import edu.unlam.asistente.database.dao.UsuarioDao;
 import edu.unlam.asistente.database.pojo.Sala;
 import edu.unlam.asistente.database.pojo.Usuario;
+import edu.unlam.asistente.recordatorioEventos.ThreadAlarma;
 
 public class ThreadCliente extends Thread{
 	
@@ -64,6 +65,9 @@ public class ThreadCliente extends Thread{
 						//Devuelve el id del usuario si es que se logueo correctamente
 						response.setIdUsuario(this.usuario.getId());
 						response.setSuccess(true);
+						
+						//añado a lista de sockets de alarma durante auth exitosa
+						ThreadAlarma.agregarUserSocket(this.cliente);
 					} else {
 						//Caso contrario devuelve false
 						response.setIdUsuario(-1);
@@ -302,8 +306,8 @@ public class ThreadCliente extends Thread{
 					}
 					
 					
-					
 				} else if(mensajeRecibido.getType().equals("AGREGAR_CONTACTO_SALA")) {
+
 					
 					AgregarContactoSalaRequest request = this.gson.fromJson(mensajeRecibido.getMensaje(), AgregarContactoSalaRequest.class);
 					
@@ -351,6 +355,22 @@ public class ThreadCliente extends Thread{
 							respuesta = new Mensaje("", mensajeRecibido.getNombreUsuario(), "CONTACTO_YA_EXISTE_EN_SALA");
 							mensajeEnviar.writeObject(respuesta);
 						}
+						
+					} else if(mensajeRecibido.getType().equals("SALIR")) {
+						respuesta = new Mensaje("true", mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
+						mensajeEnviar.writeObject(respuesta);
+						//cerrar socket correspondiente al usuario recorro lista de usuarios para eliminar el que cierra su sesion
+						int idUsuario=this.cliente.getUsuario();
+						this.cliente.getSocket().close();
+						for (SocketUsuario clienteActual : this.clientes) {
+							
+							if(idUsuario == clienteActual.getUsuario()) {
+								this.clientes.remove(clienteActual);
+								break;
+								//this.cliente.close();
+							}
+						}
+						this.stop();
 						
 					} else {
 						respuesta = new Mensaje("", mensajeRecibido.getNombreUsuario(), "CONTACTO_NO_ENCONTRADO");

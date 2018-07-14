@@ -8,12 +8,12 @@ import javax.swing.DefaultListModel;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import edu.unlam.asistente.cliente.Main;
 import edu.unlam.asistente.entidades.Usuario;
 //import edu.unlam.asistente.entidades.Chat;
 import edu.unlam.asistente.ventana.Chat;
 import edu.unlam.asistente.ventana.Home;
+import edu.unlam.asistente.ventana.Login;
 
 public class ThreadEscucha extends Thread {
 	private Socket socket;
@@ -175,7 +175,18 @@ public class ThreadEscucha extends Thread {
 					} else if(msj.getType().equals("CONTACTO_AGREGADO_A_SALA")) {
 						Main.home.showDialogUsuarioEncontrado(true);
 					}
+					else if(msj.getType().equals("SALIR")) {
+						
+							socket.close();
+							Main.home.dispose();
+							Main.login = new Login();
+							Main.login.setVisible(true);
+					
 
+					} else if(msj.getType().equals("ALARMA_EVENTO")) {
+						AlarmaInput response = this.gson.fromJson(msj.getMensaje(), AlarmaInput.class);
+						Main.home.showDialogRecordatorioAlarma(response.getNombreEvento(), response.getFecha());
+					}
 				}
 
 			} 
