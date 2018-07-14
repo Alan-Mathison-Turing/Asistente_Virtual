@@ -1,68 +1,44 @@
 package edu.unlam.asistente.noticias;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.regex.Pattern;
+import java.io.IOException;
 
-import edu.unlam.asistente.asistente_virtual.IDecision;
-import edu.unlam.asistente.clima.Clima;
-import edu.unlam.asistente.financiera.moneda.Moneda;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import edu.unlam.asistente.json.JsonReads;
 
 /**
- * Clase que administra las noticias generales que puede ver un usuario. <br>
+ * Clase para obtener noticias importantes de distintos medios. <br>
  */
-public class Noticias implements IDecision {
+public class Noticias {
 	/**
-	 * Siguiente decisión. <br>
+	 * API web para obtener las noticias. <br>
 	 */
-	private IDecision siguienteDecision;
+	private static final String API_WEB = "https://newsapi.org/v2/top-headlines?country=ar&apiKey=";
 	/**
-	 * Regex para obtener noticias. <br>
+	 * Key de la API. <br>
 	 */
-	private static final Pattern REGEX_NOTICIAS = Pattern.compile("@\\w*\\s*(?:\\w|\\s)*(?:noticias|noticia)+");
+	private static final String API_KEY = "7f368a9bb27d44f49bfce90fd1ace7ed";
 
-	@Override
-	public String leerMensaje(String mensaje, String usuario) {
-		if (REGEX_NOTICIAS.matcher(mensaje).find()) {
-			return obtenerNoticiasGenerales(usuario);
+	/**
+	 * Obtiene las noticias locales más importantes. <br>
+	 * 
+	 * @return Noticias actuales. <br>
+	 */
+	public String obtenerNoticiasActuales() {
+		try {
+			StringBuilder noticias = new StringBuilder();
+			JSONObject json = JsonReads.readJsonFromUrl(API_WEB + API_KEY);
+			JSONObject noticia;
+			for (int i = 0; i < /* json.getInt("totalResults") */ 5; i++) {
+				noticia = ((JSONObject) json.getJSONArray("articles").get(i));
+				noticias.append('"').append(noticia.get("title")).append('"');
+				noticias.append(" (Fuente: ").append(noticia.getJSONObject("source").get("name")).append("). ");
+				noticias.append('\n').append('\r');
+			}
+			return noticias.toString();
+		} catch (IOException | JSONException e) {
+			return " Ha ocurrido un error al obtener información sobre las noticias. Intente más tarde.";
 		}
-		return siguienteDecision.leerMensaje(mensaje, usuario);
-	}
-
-	@Override
-	public IDecision getSiguienteDecision() {
-		return this.siguienteDecision;
-	}
-
-	@Override
-	public void setSiguienteDecision(IDecision decision) {
-		this.siguienteDecision = decision;
-	}
-
-	/**
-	 * Obtiene las noticias generales. <br>
-	 * 
-	 * @return
-	 */
-	private String obtenerNoticiasGenerales(final String usuario) {
-		StringBuilder noticias = new StringBuilder();
-		noticias.append("@" + usuario + " estas son algunas noticias:");
-		noticias.append("\nSon las ");
-		noticias.append(this.getHoraLocal());
-		noticias.append(new Clima("Buenos Aires").obtenerClimaActual());
-		noticias.append(new Moneda().leerMoneda("dolar"));
-
-		return noticias.toString();
-	}
-
-	/**
-	 * Devuelve la hora local. <br>
-	 * 
-	 * @return Hora local. <br>
-	 */
-	private String getHoraLocal() {
-		return LocalDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires"))
-				.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 	}
 }

@@ -15,7 +15,7 @@ import edu.unlam.asistente.financiera.acciones.Acciones;
 import edu.unlam.asistente.financiera.moneda.ValorMoneda;
 import edu.unlam.asistente.imagenes.gif.Gif;
 import edu.unlam.asistente.leyes_robotica.LeyesRobotica;
-import edu.unlam.asistente.noticias.Noticias;
+import edu.unlam.asistente.noticias.NoticiasActaules;
 import edu.unlam.asistente.recordatorioEventos.GestionRecordatorio;
 
 public class Bot implements IDecision {
@@ -53,7 +53,7 @@ public class Bot implements IDecision {
 		BusquedaWeb busquedaWeb = new BusquedaWeb();
 		ClimaCiudad climaCiudad = new ClimaCiudad();
 		DiaLluvioso diaLluvioso = new DiaLluvioso();
-		Noticias noticias = new Noticias();
+		NoticiasActaules noticias = new NoticiasActaules();
 		Gif gif = new Gif();
 		Acciones acciones = new Acciones();
 		ValorMoneda valorMoneda = new ValorMoneda();

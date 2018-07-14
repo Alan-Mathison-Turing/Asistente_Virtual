@@ -66,7 +66,7 @@ public class Clima {
 		} catch (JSONException e) {
 			return " La ciudad solicitada no es encuentra disponible o no existe. Controle el nombre por si acaso.";
 		} catch (IOException e) {
-			return " Ha ocurrido al obtener información sobre el clima. Intente más tarde.";
+			return " Ha ocurrido un error al obtener información sobre el clima. Intente más tarde.";
 		}
 	}
 
