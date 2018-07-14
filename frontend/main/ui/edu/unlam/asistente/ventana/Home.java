@@ -24,6 +24,10 @@ import edu.unlam.asistente.cliente.Main;
 import edu.unlam.asistente.comunicacion.Cliente;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Home extends JFrame {
 
@@ -43,15 +47,26 @@ public class Home extends JFrame {
 	 * Create the frame.
 	 */
 	public Home() {
-		
-		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				cerrarSesion();
+			}
+		});
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				cerrarSesion();
+			}
+		});
+
+
 		this.contactosUsuario = Main.usuario.getContactos();
 		this.salasPrivadas = Main.usuario.getSalasPrivadas();
 		this.salasPublicas = Main.usuario.getSalasPublicas();
 		
 		setResizable(false);
-		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 500);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -321,12 +336,13 @@ public class Home extends JFrame {
 
 
 	private void cerrarSesion() {
-		//TODO: desarrollar metodo
-		
-		//TODO: Sacar esto. Solamente fue realizado para enviar mensajes de prueba
-		//Main.cliente.enviarMensaje("sala:" + 1 + "|" +  "Mensaje de prueba");
-		Main.cliente.cerrarSocket();
-		
+		Object [] opciones ={"Aceptar","Cancelar"};
+		int eleccion = JOptionPane.showOptionDialog(rootPane,"Esta seguro que desea cerrar sesion","Mensaje de Confirmacion",
+		JOptionPane.YES_NO_OPTION,
+		JOptionPane.QUESTION_MESSAGE,null,opciones,"Aceptar");
+		if (eleccion == JOptionPane.YES_OPTION) {
+			Main.cliente.cerrarSocket();
+		}
 		
 
 	}

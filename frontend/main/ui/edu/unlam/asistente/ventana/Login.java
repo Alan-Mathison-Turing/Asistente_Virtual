@@ -24,6 +24,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Login extends JFrame {
 
@@ -39,6 +41,12 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent e) {
+				txtUsuario_1.requestFocus();
+			}
+		});
 		
 		setResizable(false);
 		 
@@ -132,7 +140,7 @@ public class Login extends JFrame {
 			public void keyPressed(KeyEvent arg0) {
 				char tecla=arg0.getKeyChar();
 				if(tecla==KeyEvent.VK_ENTER){
-					txtUsuario_1.grabFocus();
+					tfPuertoServidor.grabFocus();
 				}
 			}
 		});

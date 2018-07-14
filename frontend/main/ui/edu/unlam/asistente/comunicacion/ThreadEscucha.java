@@ -122,7 +122,7 @@ public class ThreadEscucha extends Thread {
 							socket.close();
 							Main.home.dispose();
 							Main.login = new Login();
-							Main.login.setVisible(true);
+							//Main.login.setVisible(true);
 					
 
 				}
