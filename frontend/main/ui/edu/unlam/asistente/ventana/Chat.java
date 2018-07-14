@@ -45,6 +45,8 @@ public class Chat extends JFrame {
 	private boolean esPrivado;
 	private boolean esGrupal;
 	
+	public final static String REGEX_MEME = "@\\w*(?:\\w|\\s|\\,)* \\((\\w*)\\)";
+	
 	public boolean esPrivado() {
 		return this.esPrivado;
 	}
@@ -65,7 +67,6 @@ public class Chat extends JFrame {
 		return this.idSala;
 	}
 	
-	public final static String REGEX_MEME = "\\((\\w*)\\)";
 
 	/**
 	 * Create the frame.
@@ -178,20 +179,15 @@ public class Chat extends JFrame {
 		if (!textoEnviar.isEmpty() && textoEnviar != null) {
 			textFieldEnviar.setText(null);
 			try {
-				Pattern pattern = Pattern.compile(REGEX_MEME);
-				Matcher matcher = pattern.matcher(textoEnviar);
-				if(textoEnviar.matches(REGEX_MEME)) {
-					matcher.find();
-					ImageIcon icon = new ImageIcon("./frontend/img/" + matcher.group(1) + ".jpg");
-					
-					htmlEditorKit.insertHTML(document, document.getLength(), " > Yo: <br/>", 0, 0, null);
-					textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
-					textAreaChat.insertIcon(icon);
-				} else {
+				if(textoEnviar.matches(REGEX_MEME)){
+					Main.cliente.enviarMensaje(this.idSala, textoEnviar);
+				}else{
 					htmlEditorKit.insertHTML(document, document.getLength(), " > Yo: " + textoEnviar, 0, 0, null);
 					textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
 					Main.cliente.enviarMensaje(this.idSala, textoEnviar);
 				}
+				
+				
 			} catch (BadLocationException | IOException e) {
 				System.out.println("INFO: No se pudo interpretar el mensaje enviado por el usuario.");
 			}
@@ -209,8 +205,15 @@ public class Chat extends JFrame {
 				textAreaChat.insertIcon(icon);
 				
 			} else if(txtMensaje.endsWith(".jpg")) {
-				URL url = new URL(txtMensaje);
-				ImageIcon icon = new ImageIcon(url);
+				ImageIcon icon = null;
+
+				if (mensaje.getMensaje().contains("gag")) {
+					URL url = new URL(txtMensaje);
+					icon = new ImageIcon(url);
+				} else {
+					htmlEditorKit.insertHTML(document, document.getLength(), " > Yo: ", 0, 0, null);
+					icon = new ImageIcon(mensaje.getMensaje());
+				}
 				Image image = icon.getImage();
 				Image newimg = image.getScaledInstance(256, 256,  java.awt.Image.SCALE_DEFAULT);
 

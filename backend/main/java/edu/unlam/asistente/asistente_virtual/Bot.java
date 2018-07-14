@@ -14,6 +14,7 @@ import edu.unlam.asistente.cordialidad.Cordialidad;
 import edu.unlam.asistente.financiera.acciones.Acciones;
 import edu.unlam.asistente.financiera.moneda.ValorMoneda;
 import edu.unlam.asistente.imagenes.gif.Gif;
+import edu.unlam.asistente.imagenes.gif.Meme;
 import edu.unlam.asistente.leyes_robotica.LeyesRobotica;
 import edu.unlam.asistente.noticias.NoticiasActaules;
 import edu.unlam.asistente.recordatorioEventos.GestionRecordatorio;
@@ -60,6 +61,7 @@ public class Bot implements IDecision {
 		Blog blog = new Blog(mensajeOriginal);
 		Acciones acciones = new Acciones();
 		ValorMoneda valorMoneda = new ValorMoneda();
+		Meme meme = new Meme();
 		Default def = new Default();
 
 		this.setSiguienteDecision(climaCiudad);
@@ -78,11 +80,11 @@ public class Bot implements IDecision {
 		acciones.setSiguienteDecision(valorMoneda);
 		valorMoneda.setSiguienteDecision(blog);
 		blog.setSiguienteDecision(calendario);
-		
+		calendario.setSiguienteDecision(meme);
 		/*
 		 * @def debe quedar siempre al final dado que es el que mostrará el mensaje por default.
 		 */
-		calendario.setSiguienteDecision(def);
+		meme.setSiguienteDecision(def);
 
 		return siguienteDecision.leerMensaje(mensaje, usuario);
 
