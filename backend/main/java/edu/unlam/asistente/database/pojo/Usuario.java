@@ -122,15 +122,6 @@ public class Usuario implements java.io.Serializable {
 			return false;
 		return true;
 	}
-	// TODO: REVISAR POR QUE SE ROMPE CON HASHCODE
-	// @Override
-	// public int hashCode() {
-	// final int prime = 31;
-	// int result = 1;
-	// result = prime * result + ((id == null) ? 0 : id.hashCode());
-	// result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
-	// return result;
-	// }
 
 	/**
 	 * Agrega un fact al usuario. <br>

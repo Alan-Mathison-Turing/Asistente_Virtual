@@ -18,12 +18,15 @@ public class UsuarioDao extends BaseDao {
 
 		Usuario user = null;
 		Session session = null;
+		Transaction tx = null;
 		try {
 			session = factory.openSession();
-
+			tx = session.beginTransaction();
 			Query query = session.createQuery("from Usuario where usuario =:login")
 					.setParameter("login", login);
 			user = (Usuario)query.getSingleResult();
+			
+			tx.commit();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
