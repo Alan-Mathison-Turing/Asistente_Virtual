@@ -116,12 +116,7 @@ public class Home extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String contactoAgregar = JOptionPane.showInputDialog("Ingrese el nombre del contacto a agregar:");
 				if(contactoAgregar != null) {
-					if(agregarContacto(contactoAgregar)) {
-						JOptionPane.showMessageDialog(null, "Se agrego correctamente el usuario: " + contactoAgregar + " a la lista de contactos", 
-								"Confirmacion exitosa", JOptionPane.INFORMATION_MESSAGE);
-					}else {
-						JOptionPane.showMessageDialog(null, "Hubo un error al agregar el contacto", "Error", JOptionPane.ERROR_MESSAGE);
-					}
+					Main.cliente.agregarContacto(contactoAgregar);
 				}
 			}
 		});
@@ -355,4 +350,15 @@ public class Home extends JFrame {
 		
 
 	}
+	
+	public void showDialogUsuarioEncontrado(boolean encontrado) {
+		if(encontrado) {
+			JOptionPane.showMessageDialog(null, "Se agrego correctamente el contacto", 
+					"Confirmacion exitosa", JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(null, "Hubo un error al agregar el contacto", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		
+	}
+	
 }

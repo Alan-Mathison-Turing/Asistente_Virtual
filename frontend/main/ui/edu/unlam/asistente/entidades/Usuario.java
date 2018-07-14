@@ -98,11 +98,12 @@ public class Usuario {
 		
 		String nombreSala;
 		if (usuarios[0].equals(nombreUsuario)) {
-			nombreSala = usuarios[1]; 
+			nombreSala = usuarios[1];
 		} else {
 			nombreSala = usuarios[0];
 		}
 		
+		this.contactos.addElement(nombreSala);
 		chat.setNombre(nombreSala);
 		this.chats.add(chat);
 	}
