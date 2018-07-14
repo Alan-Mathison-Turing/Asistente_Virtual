@@ -363,7 +363,7 @@ public class Home extends JFrame {
 		return true;
 	}
 	
-	private void showDialogUsuarioEncontrado(boolean encontrado) {
+	public void showDialogUsuarioEncontrado(boolean encontrado) {
 		if(encontrado) {
 			JOptionPane.showMessageDialog(null, "Se agrego correctamente el contacto", 
 					"Confirmacion exitosa", JOptionPane.INFORMATION_MESSAGE);
