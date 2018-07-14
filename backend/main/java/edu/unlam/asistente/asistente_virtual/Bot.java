@@ -7,6 +7,7 @@ import edu.unlam.asistente.busqueda_web.BusquedaWeb;
 import edu.unlam.asistente.calculadora.Calculadora;
 import edu.unlam.asistente.calendario.Calendario;
 import edu.unlam.asistente.chucknorris.ChuckNorrisFact;
+import edu.unlam.asistente.clima.ClimaCiudad;
 import edu.unlam.asistente.clima.DiaLluvioso;
 import edu.unlam.asistente.conversor_unidades.ConversorUnidad;
 import edu.unlam.asistente.cordialidad.Cordialidad;
@@ -50,6 +51,7 @@ public class Bot implements IDecision {
 		Calendario calendario = new Calendario();
 		GestionRecordatorio gestionRecordatorio = new GestionRecordatorio();
 		BusquedaWeb busquedaWeb = new BusquedaWeb();
+		ClimaCiudad climaCiudad = new ClimaCiudad();
 		DiaLluvioso diaLluvioso = new DiaLluvioso();
 		Noticias noticias = new Noticias();
 		Gif gif = new Gif();
@@ -57,7 +59,10 @@ public class Bot implements IDecision {
 		ValorMoneda valorMoneda = new ValorMoneda();
 		Default def = new Default();
 
-		this.setSiguienteDecision(cordialidad);
+		this.setSiguienteDecision(climaCiudad);
+		// SI PREGUNTAN POR BUENOS AIRES PIENSA QUE LO ESTOY SALUDANDO EN VEZ DE PREGUNTAR POR EL CLIMA.
+		climaCiudad.setSiguienteDecision(diaLluvioso);
+		diaLluvioso.setSiguienteDecision(cordialidad);
 		cordialidad.setSiguienteDecision(leyesRobotica);
 		leyesRobotica.setSiguienteDecision(chuckFacts);
 		chuckFacts.setSiguienteDecision(calculadora);
@@ -65,8 +70,7 @@ public class Bot implements IDecision {
 		gestionRecordatorio.setSiguienteDecision(conversorUnidad);
 		conversorUnidad.setSiguienteDecision(busquedaWeb);
 		busquedaWeb.setSiguienteDecision(gif);
-		gif.setSiguienteDecision(diaLluvioso);
-		diaLluvioso.setSiguienteDecision(noticias);
+		gif.setSiguienteDecision(noticias);
 		noticias.setSiguienteDecision(acciones);
 		acciones.setSiguienteDecision(valorMoneda);
 		valorMoneda.setSiguienteDecision(calendario);

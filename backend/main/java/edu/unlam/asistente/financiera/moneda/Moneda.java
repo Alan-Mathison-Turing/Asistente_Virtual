@@ -71,7 +71,7 @@ public class Moneda implements Cotizacion {
 							.append(moneda).append("_ARS&compact=ultra").toString());
 			return "$" + json.getString(moneda + "_ARS");
 		} catch (IOException | JSONException e) {
-			return " ha ocurrido un error al obtener la cotización. Intente más tarde.";
+			return " Ha ocurrido un error al obtener la cotización. Intente más tarde.";
 		}
 	}
 

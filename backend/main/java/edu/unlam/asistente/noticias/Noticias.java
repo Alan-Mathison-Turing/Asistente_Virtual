@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 import edu.unlam.asistente.asistente_virtual.IDecision;
 import edu.unlam.asistente.clima.Clima;
-import edu.unlam.asistente.financiera.Moneda;
+import edu.unlam.asistente.financiera.moneda.Moneda;
 
 /**
  * Clase que administra las noticias generales que puede ver un usuario. <br>
@@ -52,7 +52,6 @@ public class Noticias implements IDecision {
 		noticias.append(this.getHoraLocal());
 		noticias.append(new Clima("Buenos Aires").obtenerClimaActual());
 		noticias.append(new Moneda().leerMoneda("dolar"));
-		// noticias.append(new Moneda().obtenerValorDolar());
 
 		return noticias.toString();
 	}

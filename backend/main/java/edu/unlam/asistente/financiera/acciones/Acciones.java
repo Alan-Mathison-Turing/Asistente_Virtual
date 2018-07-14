@@ -37,7 +37,7 @@ public class Acciones implements IDecision {
 	public String leerMensaje(String mensaje, String usuario) {
 		Matcher matcher = REGEX_VALOR_ACCIONES.matcher(mensaje);
 		if (matcher.find()) {
-			return new StringBuilder("@").append(usuario).append(this.obtenerAccion(matcher.group(1))).toString();
+			return this.obtenerAccion(matcher.group(1));
 		}
 		return this.siguienteDecision.leerMensaje(mensaje, usuario);
 	}
@@ -67,18 +67,18 @@ public class Acciones implements IDecision {
 					.getJSONObject("Time Series (Daily)")
 					.get(LocalDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires"))
 							.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-			StringBuilder acciones = new StringBuilder(" las acciones a la fecha de ").append(empresa.toUpperCase())
-					.append(":\n");
-			acciones.append("Acciones en la apertura: U$S ").append(json.get("1. open")).append("\n");
-			acciones.append("Alta: U$S ").append(json.get("2. high")).append("\n");
-			acciones.append("Baja: U$S ").append(json.get("3. low")).append("\n");
-			acciones.append("Acciones al cierre: U$S ").append(json.get("4. close")).append("\n");
-			acciones.append("Cierre redondeado: U$S ").append(json.get("5. adjusted close"));
-			return acciones.toString();
+			StringBuilder acciones = new StringBuilder(" Las acciones a la fecha de ").append(empresa.toUpperCase())
+					.append(": ");
+			acciones.append("Acciones en la apertura: U$S ").append(json.get("1. open"));
+			acciones.append(". Alta: U$S ").append(json.get("2. high"));
+			acciones.append(". Baja: U$S ").append(json.get("3. low"));
+			acciones.append(". Acciones al cierre: U$S ").append(json.get("4. close"));
+			acciones.append(". Cierre redondeado: U$S ").append(json.get("5. adjusted close"));
+			return acciones.append(".").toString();
 		} catch (JSONException e) {
-			return " el nombre de la empresa (BCBA) no esta bien escrito, por favor escribalo correctamente.";
+			return " El nombre de la empresa (BCBA) no esta bien escrito, por favor escribalo correctamente.";
 		} catch (IOException e) {
-			return " ha ocurrido un problema al obtener los datos financieros. Intente más tarde.";
+			return " Ha ocurrido un problema al obtener los datos financieros. Intente más tarde.";
 		}
 	}
 }

@@ -6,10 +6,9 @@ import java.util.regex.Pattern;
 import edu.unlam.asistente.asistente_virtual.IDecision;
 
 /**
- * Clase indica si esta lloviendo en este preciso momento en donde se encuentra
- * o en algún lugar particular. <br>
+ * Indica el clima en una ciudad solicitada. <br>
  */
-public class DiaLluvioso implements IDecision {
+public class ClimaCiudad implements IDecision {
 	/**
 	 * Siguiente decisión. <br>
 	 */
@@ -17,8 +16,7 @@ public class DiaLluvioso implements IDecision {
 	/**
 	 * Regex para saber si esta lloviendo en algún lugar específico. <br>
 	 */
-	private static final Pattern REGEX_LLUVIA_CIUDAD = Pattern
-			.compile("@\\w*(?:\\w|\\s|\\,)*(?:lloviendo|lluvia|llueve|llover|llovera)(?:\\w|\\s)* en ((?:\\w|\\s)+)");
+	private static final Pattern REGEX_CLIMA_CIUDAD = Pattern.compile("@\\w*(?:\\w|\\s|\\,)*(?:clima)+(?:\\w|\\s)* en ((?:\\w|\\s)+)");
 
 	/**
 	 * Lee un mensaje pedido por el usuario.
@@ -29,9 +27,9 @@ public class DiaLluvioso implements IDecision {
 	 */
 	@Override
 	public String leerMensaje(String mensaje, String usuario) {
-		Matcher matcher = REGEX_LLUVIA_CIUDAD.matcher(mensaje);
+		Matcher matcher = REGEX_CLIMA_CIUDAD.matcher(mensaje);
 		if (matcher.find()) {
-			return new Clima(matcher.group(1)).obtenerDiaLluvioso();
+			return new Clima(matcher.group(1)).obtenerClimaActual();
 		}
 		return siguienteDecision.leerMensaje(mensaje, usuario);
 	}

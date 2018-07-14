@@ -1,11 +1,6 @@
 package edu.unlam.asistente.clima;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,9 +53,20 @@ public class Clima {
 	public String obtenerClimaActual() {
 		try {
 			JSONObject json = JsonReads.readJsonFromUrl(this.url);
-			return null;
-		} catch (IOException | JSONException e) {
-			return "Ha ocurrido al obtener información sobre el clima. Intente más tarde.";
+			StringBuilder clima = new StringBuilder();
+			clima.append(" En este momento en ").append(json.get("name"));
+			clima.append(" hay un día ").append(this.obtenerCondicion(json));
+			clima.append(" con una temperatura de ").append(json.getJSONObject("main").get("temp")).append("°");
+			clima.append(" y una humedad del ").append(json.getJSONObject("main").get("humidity")).append("%")
+					.append(".");
+			clima.append(" La máxima registrada para hoy es de ").append(json.getJSONObject("main").get("temp_max"))
+					.append("°");
+			clima.append(" con una mínima de ").append(json.getJSONObject("main").get("temp_min")).append("°");
+			return clima.append(".").toString();
+		} catch (JSONException e) {
+			return " La ciudad solicitada no es encuentra disponible o no existe. Controle el nombre por si acaso.";
+		} catch (IOException e) {
+			return " Ha ocurrido al obtener información sobre el clima. Intente más tarde.";
 		}
 	}
 
@@ -74,25 +80,41 @@ public class Clima {
 	public String obtenerDiaLluvioso() {
 		try {
 			JSONObject json = JsonReads.readJsonFromUrl(this.url);
-			return ((JSONObject) json.getJSONArray("weather").get(0)).get("description").toString().contains("lluvia")
-					? "va a llover." : "no va a llover.";
-		} catch (IOException | JSONException e) {
-			return "Ha ocurrido al obtener información sobre el clima. Intente más tarde.";
+			return new StringBuilder(
+					((JSONObject) json.getJSONArray("weather").get(0)).get("description").toString().contains("lluvia")
+							? " Va" : " No va").append(" a llover en ").append(json.get("name")).append(".").toString();
+		} catch (JSONException e) {
+			return " La ciudad solicitada no es encuentra disponible o no existe. Controle el nombre por si acaso.";
+		} catch (IOException e) {
+			return " Ha ocurrido al obtener información sobre el clima. Intente más tarde.";
 		}
 	}
 
-	public String obtenerHora() {
+	private String obtenerCondicion(JSONObject json) {
+		StringBuilder condicion = new StringBuilder("con ");
 		try {
-
-			JSONObject json = JsonReads
-					.readJsonFromUrl("http://free.currencyconverterapi.com/api/v5/convert?q=USD_ARS&compact=ultra");
-			// System.out.println((json.getString("USD_ARS"));
-			System.out.println(
-					new BigDecimal(Double.parseDouble(json.getString("USD_ARS"))).setScale(2, RoundingMode.HALF_EVEN));
-		} catch (IOException | JSONException e) {
-			return "Ha ocurrido al obtener información sobre el clima. Intente más tarde.";
+			JSONObject clima = ((JSONObject) json.getJSONArray("weather").get(0));
+			switch (clima.get("main").toString()) {
+			case "Thunderstorm":
+				condicion.append("con alerta de ").append(clima.get("description"));
+				break;
+			case "Atomosphere":
+				condicion.append("con alerta de ").append(clima.get("description"));
+				break;
+			case "Rain":
+				condicion.append("con alerta de ").append(clima.get("description"));
+				break;
+			case "Drizzle":
+				condicion.append("con alerta de ").append(clima.get("description"));
+				break;
+			// Para los climas normales no hace falta aclarar.
+			default:
+				condicion.append(clima.get("description"));
+				break;
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
-		return LocalDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires"))
-				.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+		return condicion.toString();
 	}
 }

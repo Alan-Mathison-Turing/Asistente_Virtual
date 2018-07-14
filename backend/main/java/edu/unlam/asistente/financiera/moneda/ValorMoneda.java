@@ -25,8 +25,7 @@ public class ValorMoneda implements IDecision {
 		Matcher matcher = REGEX_VALOR_MONEDA.matcher(mensaje);
 		if (matcher.find()) {
 			String moneda = matcher.group();
-			return new StringBuilder("@").append(usuario).append(" su valor es de ")
-					.append(new Moneda().leerMoneda(moneda)).toString();
+			return new StringBuilder(" Su valor es de ").append(new Moneda().leerMoneda(moneda)).toString();
 		}
 		return this.siguienteDecision.leerMensaje(mensaje, usuario);
 	}
