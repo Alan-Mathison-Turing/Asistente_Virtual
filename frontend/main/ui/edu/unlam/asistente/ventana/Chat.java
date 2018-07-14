@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -31,6 +32,8 @@ import edu.unlam.asistente.herramienta.Navegador;
 
 public class Chat extends JFrame {
 
+	private Chat self = this;
+	
 	private static final long serialVersionUID = 2400628064788229910L;
 	private JPanel contentPane;
 	private JTextField textFieldEnviar;
@@ -77,10 +80,11 @@ public class Chat extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				char tecla=e.getKeyChar();
+				if(tecla == KeyEvent.VK_ESCAPE) {
+					cerrarChat();
+				}
 				if(tecla!=KeyEvent.VK_ENTER && tecla != KeyEvent.VK_ESCAPE) {
 					textFieldEnviar.grabFocus();
-				}else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-					cerrarChat();
 				}
 			}
 		});
@@ -129,9 +133,13 @@ public class Chat extends JFrame {
 		textFieldEnviar.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					cerrarChat();
+				}
 				if (e.getKeyCode()==KeyEvent.VK_ENTER){
 		            enviarMensaje();
 		        }
+				
 			}
 		});
 		btnEnviar.addActionListener(new ActionListener() {
@@ -152,7 +160,18 @@ public class Chat extends JFrame {
 		contentPane.add(scrollPane);
 		scrollPane.setViewportView(textAreaChat);
 		
+		textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
+		
 		JButton btnAgegarContacto = new JButton("Agregar contacto");
+		btnAgegarContacto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String contactoAgregar = JOptionPane.showInputDialog("Ingrese el nombre del contacto para invitar:");
+				if(contactoAgregar != null) {
+					Main.cliente.agregarContactoASala(self.idSala,contactoAgregar);
+				}
+			}
+		});
+		
 		btnAgegarContacto.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnAgegarContacto.setBounds(262, 4, 147, 23);
 		contentPane.add(btnAgegarContacto);
@@ -163,8 +182,6 @@ public class Chat extends JFrame {
 				if (this.dueñoId == Main.usuario.getID()) {
 					btnAgegarContacto.setVisible(true);
 				}
-			} else {
-				btnAgegarContacto.setVisible(true);
 			}
 		}
 	}

@@ -1,8 +1,14 @@
 package edu.unlam.asistente.ventana;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -14,16 +20,11 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.transaction.Transactional.TxType;
 
 import edu.unlam.asistente.comunicacion.Cliente;
-
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.awt.event.ActionEvent;
-import javax.swing.SwingConstants;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class Login extends JFrame {
 
@@ -42,6 +43,13 @@ public class Login extends JFrame {
 		
 		setResizable(false);
 		 
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent e) {
+				txtUsuario_1.requestFocus();
+			}
+		});
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -119,14 +127,6 @@ public class Login extends JFrame {
 		);
 		contentPane.add(btnIniciarSesion);
 
-		JLabel lblRegistrarse = new JLabel("Registrarse");
-		lblRegistrarse.setLocation(170, 205);
-		lblRegistrarse.setSize(70, 14);
-		lblRegistrarse.setVerticalAlignment(SwingConstants.BOTTOM);
-		lblRegistrarse.setHorizontalAlignment(SwingConstants.CENTER);
-		lblRegistrarse.setForeground(new Color(0, 0, 255));
-		contentPane.add(lblRegistrarse);
-
 		JLabel lblDatosDeConexin = new JLabel("Datos de Conexi\u00F3n:");
 		lblDatosDeConexin.setFont(new Font("Tahoma", Font.BOLD, 11));
 
@@ -140,7 +140,7 @@ public class Login extends JFrame {
 			public void keyPressed(KeyEvent arg0) {
 				char tecla=arg0.getKeyChar();
 				if(tecla==KeyEvent.VK_ENTER){
-					txtUsuario_1.grabFocus();
+					tfPuertoServidor.grabFocus();
 				}
 			}
 		});
@@ -187,7 +187,6 @@ public class Login extends JFrame {
 					.addGap(164))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(176)
-					.addComponent(lblRegistrarse, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(188, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
@@ -221,7 +220,6 @@ public class Login extends JFrame {
 					.addGap(13)
 					.addComponent(btnIniciarSesion)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblRegistrarse)
 					.addGap(48))
 		);
 		contentPane.setLayout(gl_contentPane);

@@ -111,7 +111,7 @@ public class ThreadEscucha extends Thread {
 								int esPrivado = salaInfo.getEsPrivada(); //Es Privado
 								int esGrupal = salaInfo.getEsGrupal(); //Es Grupal
 								
-								if(esPrivado == 1 && esGrupal == 0) {
+								if(!(esPrivado == 1 && esGrupal == 0)) {
 									Main.usuario.addChat(new Chat(
 											idSala,
 											nombreSala,
@@ -137,15 +137,14 @@ public class ThreadEscucha extends Thread {
 						}
 					} else if(msj.getType().equals("NUEVA_SALA")) {
 						if(!msj.getMensaje().equals("false")) {
-							String[] salaInfo = msj.getMensaje().split(",",-1);
-							int idSala = Integer.valueOf(salaInfo[0]); //Id de la sala
-							String nombreSala = salaInfo[1]; //Nombre de la sala
-							int ownerId = Integer.valueOf(salaInfo[2]); //ownerId
-							int esPrivado = Integer.valueOf(salaInfo[3]); //Es Privado
-							int esGrupal = Integer.valueOf(salaInfo[4]); //Es Grupal
+							SalaResponse salaInfo = this.gson.fromJson(msj.getMensaje(), SalaResponse.class);
+							int idSala = salaInfo.getId(); //Id de la sala
+							String nombreSala = salaInfo.getNombre(); //Nombre de la sala
+							int ownerId = salaInfo.getDueño(); //ownerId
+							int esPrivado = salaInfo.getEsPrivada(); //Es Privado
+							int esGrupal = salaInfo.getEsGrupal(); //Es Grupal
 							
-							
-							if (salaInfo.length == 5) {
+							if(!(esPrivado == 1 && esGrupal == 0)) {
 								Main.usuario.addChat(new Chat(
 										idSala,
 										nombreSala,
@@ -154,11 +153,8 @@ public class ThreadEscucha extends Thread {
 										esGrupal
 										));
 							} else {
-								
 								String[] usuarios = 
-										new String[] {salaInfo[5], salaInfo[6]};
-								
-								Main.home.showDialogUsuarioEncontrado(true);
+										new String[] {salaInfo.getNombreUsuario1(), salaInfo.getNombreUsuario2()};
 								
 								Main.usuario.addChat(new Chat(
 										idSala,
@@ -167,11 +163,17 @@ public class ThreadEscucha extends Thread {
 										esPrivado,
 										esGrupal),
 										usuarios);
+								
 							}
+							Main.usuario.obtenerContactos();
 							
 						}
 					} else if(msj.getType().equals("CONTACTO_NO_ENCONTRADO")) {
 						Main.home.showDialogUsuarioEncontrado(false);
+					} else if(msj.getType().equals("CONTACTO_YA_EXISTE_EN_SALA")) {
+						Main.home.showDialogUsuarioYaExisteEnChat();
+					} else if(msj.getType().equals("CONTACTO_AGREGADO_A_SALA")) {
+						Main.home.showDialogUsuarioEncontrado(true);
 					}
 					else if(msj.getType().equals("SALIR")) {
 						

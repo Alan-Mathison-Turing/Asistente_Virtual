@@ -86,7 +86,7 @@ public class Cliente {
 	 */
 	public void abrirChatCon(String usuarioDestino) {
 		try {
-			Mensaje m = new Mensaje(usuarioDestino, nombreUsuario, "CHAT_CON");
+			Mensaje m = new Mensaje(usuarioDestino, Main.usuario.getNombreUsuario(), "CHAT_CON");
 			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
 			salida.writeObject(m);
 		} catch (IOException e) {
@@ -98,7 +98,7 @@ public class Cliente {
 	
 	public void obtenerContactosUsuario(int idUsuario) {
 		try {
-			Mensaje m = new Mensaje("" + idUsuario, nombreUsuario, "CONTACTOS");
+			Mensaje m = new Mensaje("" + idUsuario, Main.usuario.getNombreUsuario(), "CONTACTOS");
  			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
 			salida.writeObject(m);
 		} catch (IOException e) {
@@ -108,7 +108,7 @@ public class Cliente {
 	
 	public void obtenerChatsUsuario(int idUsuario) {
 		try {
-			Mensaje m = new Mensaje("" + idUsuario, nombreUsuario, "GET_CHATS");
+			Mensaje m = new Mensaje("" + idUsuario, Main.usuario.getNombreUsuario(), "GET_CHATS");
 			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
 			salida.writeObject(m);
 		} catch (IOException e) {
@@ -119,7 +119,7 @@ public class Cliente {
 	
 	public void mensajeRecibido() {
 		try {
-			Mensaje m = new Mensaje("", nombreUsuario, "MENSAJE_RECIBIDO");
+			Mensaje m = new Mensaje("", Main.usuario.getNombreUsuario(), "MENSAJE_RECIBIDO");
 			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
 			salida.writeObject(m);
 		} catch (IOException e) {
@@ -135,7 +135,7 @@ public class Cliente {
 					+ String.valueOf(esPrivada) + ","
 					+ String.valueOf(esGrupal);
 			
-			Mensaje m = new Mensaje(mensajeTxt, nombreUsuario, "CREACION_SALA");
+			Mensaje m = new Mensaje(mensajeTxt, Main.usuario.getNombreUsuario(), "CREACION_SALA");
 			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
 			salida.writeObject(m);
 		} catch (IOException e) {
@@ -151,12 +151,28 @@ public class Cliente {
 	public void agregarContacto(String contactoAgregar) {
 		try {
 			
-			Mensaje m = new Mensaje(contactoAgregar, nombreUsuario, "AGREGAR_CONTACTO");
+			Mensaje m = new Mensaje(contactoAgregar, Main.usuario.getNombreUsuario(), "AGREGAR_CONTACTO");
 			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
 			salida.writeObject(m);
 		} catch (IOException e) {
 			System.err.println("-- Cliente/Agregar nuevo contacto ERROR");
 e.printStackTrace();
+		}
+		
+	}
+
+	public void agregarContactoASala(int idSala, String contactoAgregar) {
+try {
+			
+			AgregarContactoSalaOut request = new AgregarContactoSalaOut();
+			request.setIdSala(idSala);
+			request.setContacto(contactoAgregar);
+			
+			Mensaje m = new Mensaje(this.gson.toJson(request), Main.usuario.getNombreUsuario(), "AGREGAR_CONTACTO_SALA");
+			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
+			salida.writeObject(m);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 	}

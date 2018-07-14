@@ -75,11 +75,11 @@ public class Sala implements java.io.Serializable{
 		this.esGrupal = esGrupal;
 	}
 	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "usuarioSalas", joinColumns = { 
-		@JoinColumn(name = "id_sala", nullable = false, updatable = false) }, 
+		@JoinColumn(name = "id_sala", nullable = false) }, 
 			inverseJoinColumns = { @JoinColumn(name = "id_usuario", 
-	   	    nullable = false, updatable = false) })
+	   	    nullable = false) })
 	public Set<Usuario> getUsuarios() {
 		return usuarios;
 	}
