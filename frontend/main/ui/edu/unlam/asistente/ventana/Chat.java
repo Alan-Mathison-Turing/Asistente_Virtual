@@ -1,7 +1,6 @@
 package edu.unlam.asistente.ventana;
 
-
-
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -10,7 +9,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
@@ -28,9 +27,13 @@ import javax.swing.text.html.HTMLEditorKit;
 
 import edu.unlam.asistente.cliente.Main;
 import edu.unlam.asistente.entidades.MensajeChat;
+<<<<<<< HEAD
 import javax.swing.SwingConstants;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+=======
+import edu.unlam.asistente.herramienta.Navegador;
+>>>>>>> entrega_final
 
 public class Chat extends JFrame {
 
@@ -58,6 +61,10 @@ public class Chat extends JFrame {
 	
 	public String getNombre() {
 		return this.nombre;
+	}
+	
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 	
 	public int getidSala() {
@@ -115,7 +122,7 @@ public class Chat extends JFrame {
 
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		contentPane.setLayout(null);		
 		
 		htmlEditorKit = new HTMLEditorKit();
 		document = new HTMLDocument();
@@ -185,6 +192,7 @@ public class Chat extends JFrame {
 		this.setVisible(false);
 		
 	}
+	
 	public void enviarMensaje() {
 		String textoEnviar = textFieldEnviar.getText();
 		textFieldEnviar.setText(null);
@@ -204,7 +212,7 @@ public class Chat extends JFrame {
 				} else {
 					htmlEditorKit.insertHTML(document, document.getLength(), " > Yo: " + textoEnviar, 0, 0, null);
 					textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
-					Main.cliente.enviarMensaje("sala:" + this.idSala + "|" +  textoEnviar); //Al texto a enviar le agrego el id de la sala	
+					Main.cliente.enviarMensaje(this.idSala, textoEnviar);
 				}
 			} catch (BadLocationException | IOException e) {
 				System.out.println("INFO: No se pudo interpretar el mensaje enviado por el usuario.");
@@ -223,18 +231,33 @@ public class Chat extends JFrame {
 				textAreaChat.insertIcon(icon);
 				
 			} else if(txtMensaje.endsWith(".jpg")) {
-				ImageIcon icon = new ImageIcon(txtMensaje);
-				int ancho = (int) (icon.getIconWidth() * 0.5);
-				int largo = (int) (icon.getIconWidth() * 0.5);
-				ImageIcon newIcon = new ImageIcon(icon.getImage().getScaledInstance(ancho, largo,  java.awt.Image.SCALE_SMOOTH));
+				URL url = new URL(txtMensaje);
+				ImageIcon icon = new ImageIcon(url);
+				Image image = icon.getImage();
+				Image newimg = image.getScaledInstance(256, 256,  java.awt.Image.SCALE_DEFAULT);
+
+				icon = new ImageIcon(newimg);
 				
-				htmlEditorKit.insertHTML(document, document.getLength(), "<br/>", 0, 0, null);
+				htmlEditorKit.insertHTML(document, document.getLength(), "", 0, 0, null);
+				
 				textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
-				textAreaChat.insertIcon(newIcon);
+				textAreaChat.insertIcon(icon);
+				textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
+				
+			} else if(txtMensaje.contains("youtube")) {
+				JPanel videoPanel = new JPanel();
+				videoPanel.setSize(400,250);
+				Navegador browser = new Navegador();
+				browser.cargarURL(txtMensaje);
+				videoPanel.add(browser);
+				textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
+				textAreaChat.insertComponent(videoPanel);
 			} else {
+				//htmlEditorKit.insertHTML(document, document.getLength(), " > testBot: " + mensaje, 0, 0, null);	
 				htmlEditorKit.insertHTML(document, document.getLength(), " >> "+ mensaje.getUsuario() +": " + txtMensaje, 0, 0, null);	
 			}			
 			textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
+			
 		} catch (BadLocationException | IOException e) {
 			System.out.println("INFO: No se pudo interpretar el mensaje de respuesta.");
 		}

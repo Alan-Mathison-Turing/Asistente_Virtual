@@ -9,11 +9,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import edu.unlam.asistente.asistente_virtual.Bot;
 import edu.unlam.asistente.database.dao.SalaDao;
 import edu.unlam.asistente.database.dao.UsuarioDao;
 import edu.unlam.asistente.database.pojo.Sala;
 import edu.unlam.asistente.database.pojo.Usuario;
+import edu.unlam.asistente.recordatorioEventos.ThreadAlarma;
 
 public class ThreadCliente extends Thread{
 	
@@ -23,14 +30,16 @@ public class ThreadCliente extends Thread{
 	private Usuario usuario;
 	private UsuarioDao userDao;
 	private SalaDao salaDao;
+	Gson gson;
 	
 	public ThreadCliente(SocketUsuario socket,ArrayList<SocketUsuario> clientes) throws IOException, SQLException {
 		this.cliente = socket;
 		this.clientes = clientes;
 		bot = new Bot("argem");
-		System.out.println("INFO: Socket de cliente creado");
 		this.userDao = new UsuarioDao();
 		this.salaDao = new SalaDao();
+		GsonBuilder builder = new GsonBuilder();
+		this.gson = builder.create();
 	}
 	
 	@Override
@@ -43,7 +52,6 @@ public class ThreadCliente extends Thread{
 			while(true) {
 				mensajeOIS = new ObjectInputStream(this.cliente.getSocket().getInputStream());
 				Mensaje mensajeRecibido = (Mensaje) mensajeOIS.readObject();
-				System.out.println("INFO: Mensaje recibido");
 				
 				ObjectOutputStream mensajeEnviar = new ObjectOutputStream(this.cliente.getSocket().getOutputStream());
 				Mensaje respuesta;
@@ -51,15 +59,25 @@ public class ThreadCliente extends Thread{
 				if (mensajeRecibido.getType().equals("LOGIN")) {
 					String nombreUsuario = mensajeRecibido.getNombreUsuario();
 					String contrasena = mensajeRecibido.getMensaje();
+					
+					LoginResponse response = new LoginResponse();
+					
 					if(userDao.checkLogin(nombreUsuario, contrasena)) {
 						this.usuario = userDao.obtenerUsuarioPorLogin(nombreUsuario);
 						this.cliente.setUsuario(this.usuario.getId());
 						//Devuelve el id del usuario si es que se logueo correctamente
-						respuesta = new Mensaje("" + this.usuario.getId(), mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
+						response.setIdUsuario(this.usuario.getId());
+						response.setSuccess(true);
+						
+						//añado a lista de sockets de alarma durante auth exitosa
+						//ThreadAlarma.agregarUserSocket(this.cliente);
 					} else {
 						//Caso contrario devuelve false
-						respuesta = new Mensaje("false", mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
+						response.setIdUsuario(-1);
+						response.setSuccess(false);
 					}
+					
+					respuesta = new Mensaje(this.gson.toJson(response), mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
 					
 					mensajeEnviar.writeObject(respuesta);
 				} else if (mensajeRecibido.getType().equals("CHAT_CON")) {
@@ -67,24 +85,28 @@ public class ThreadCliente extends Thread{
 					respuesta = new Mensaje("true", mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
 					mensajeEnviar.writeObject(respuesta);
 				} else if (mensajeRecibido.getType().equals("CHAT")) {
-					System.out.println("Mensaje nuevo recibido");
-					String[] partesMensaje = mensajeRecibido.getMensaje().split("\\|",-1);
-					int idSala = Integer.valueOf(partesMensaje[0].substring(5));
-					String mensaje = partesMensaje[1];
 					
-					Sala salaActual = this.salaDao.obtenerSalaPorId(idSala);
+					ChatRequest chatRequest = gson.fromJson(mensajeRecibido.getMensaje(), ChatRequest.class);
+					Sala salaActual = this.salaDao.obtenerSalaPorId(chatRequest.getIdSala());
 					Set<Usuario> usuariosEnSala = salaActual.getUsuarios();
 					
 					
 					Mensaje respuestaBot = null;
+					
+					ChatResponse response = new ChatResponse();
+					response.setIdSala(chatRequest.getIdSala());
+
+		      
 					//Chequeo si el mensaje es especifico para el bot
-					//En el caso de que si lo sea, la respuesta se la mando a toda la sala
-					if(mensaje.contains(bot.getNombre())) {
-						respuestaBot = new Mensaje("sala:" + idSala + "|" + bot.leerMensaje(mensajeRecibido.getMensaje(), mensajeRecibido.getNombreUsuario()),
+					//En el caso de que si lo sea, la respuesta se la mando a toda la sala					
+					if(chatRequest.getMensaje().contains(bot.getNombre())) {
+						response.setMensaje(bot.leerMensaje(chatRequest.getMensaje(), mensajeRecibido.getNombreUsuario()));
+						respuestaBot = new Mensaje(this.gson.toJson(response),
 								bot.getNombre(), "CHAT_BOT");
 					}
 					
-					respuesta = new Mensaje("sala:" + idSala + "|" + mensaje, mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
+					response.setMensaje(chatRequest.getMensaje());
+					respuesta = new Mensaje(this.gson.toJson(response), mensajeRecibido.getNombreUsuario(), mensajeRecibido.getType());
 
 					Integer cantidadUsuariosEnSala = usuariosEnSala.size();
 					Integer usuariosContados = 0;
@@ -108,7 +130,10 @@ public class ThreadCliente extends Thread{
 					        	} else {
 					        		mensajeEnviarUsuario = mensajeEnviar;
 				        			if(respuestaBot == null) {
-				        				mensajeEnviarUsuario.writeObject(new Mensaje("","","CHAT"));
+				        				ChatResponse emptyResponse = new ChatResponse();
+				        				emptyResponse.setIdSala(-1);
+				        				emptyResponse.setMensaje("");
+				        				mensajeEnviarUsuario.writeObject(new Mensaje(this.gson.toJson(emptyResponse),"","CHAT"));
 					        		}
 					        	}
 					        	if(respuestaBot != null) {
@@ -138,37 +163,61 @@ public class ThreadCliente extends Thread{
 						mensajeEnviar.writeObject(this.cliente.getProximoMensajeBot());
 						this.cliente.clearProximoMensajeBot();
 					} else {
-						mensajeEnviar.writeObject(new Mensaje("","","CHAT"));
+						ChatResponse emptyResponse = new ChatResponse();
+        				emptyResponse.setIdSala(-1);
+        				emptyResponse.setMensaje("");
+        				mensajeEnviar.writeObject(new Mensaje(this.gson.toJson(emptyResponse),"","CHAT"));
 					}
 					
 				} else if(mensajeRecibido.getType().equals("CONTACTOS")) {
-					if(this.usuario.getContactos().isEmpty()) {
-						respuesta = new Mensaje("false",usuario.getUsuario(), mensajeRecibido.getType());
+					
+					List<Usuario> contactos = this.usuario.getContactos();
+					ContactosResponse response = new ContactosResponse();
+					
+					if(contactos.isEmpty()) {
+						respuesta = new Mensaje(this.gson.toJson(response),usuario.getUsuario(), mensajeRecibido.getType());
 					} else {
-						String mensajeTexto = "";
-						for (Usuario contacto : this.usuario.getContactos()) {
-							mensajeTexto += "" + contacto.getUsuario() + ",";
+						for (Usuario contacto : contactos) {
+							response.getContactos().add(contacto.getUsuario());
 						}
-						mensajeTexto = mensajeTexto.substring(0, mensajeTexto.length() - 1);
-						respuesta = new Mensaje(mensajeTexto,usuario.getUsuario(), mensajeRecibido.getType());
+						respuesta = new Mensaje(this.gson.toJson(response),usuario.getUsuario(), mensajeRecibido.getType());
 					}
 					mensajeEnviar.writeObject(respuesta);
 				} else if(mensajeRecibido.getType().equals("GET_CHATS")) {
 					List<Sala> salasUsuario = this.salaDao.obtenerSalasPorUsuario(this.usuario);
+					
+					ChatsResponse response = new ChatsResponse();
+					
 					if (salasUsuario == null || salasUsuario.isEmpty()) {
-						respuesta = new Mensaje("false", usuario.getUsuario(), mensajeRecibido.getType());
+						respuesta = new Mensaje(this.gson.toJson(response), usuario.getUsuario(), mensajeRecibido.getType());
 					} else {
-						String mensajeSalas = "";
 						for (Sala salaActual : salasUsuario) {
-							mensajeSalas += "" + salaActual.getId()
-							+ "," + salaActual.getNombre()
-							+ "," + salaActual.getDueño().getId()
-							+ "," + salaActual.getEsPrivada()
-							+ "," + salaActual.getEsGrupal()
-							+ ";";
+							
+							SalaResponseObj salaAgregar = new SalaResponseObj();
+							salaAgregar.setId(salaActual.getId());
+							salaAgregar.setNombre(salaActual.getNombre());
+							salaAgregar.setDueño(salaActual.getDueño().getId());
+							salaAgregar.setEsGrupal(salaActual.getEsGrupal());
+							salaAgregar.setEsPrivada(salaActual.getEsPrivada());
+							for(Usuario usuario : salaActual.getUsuarios()) {
+								salaAgregar.getUsuarios().add(usuario.getId());
+							}
+							
+							if (salaActual.getEsPrivada() == 1 && salaActual.getEsGrupal() == 0) {
+								int count = 0;
+								for (Usuario usuarioActual : salaActual.getUsuarios()) {
+									if(count == 0) {
+										salaAgregar.setNombreUsuario1(usuarioActual.getUsuario());
+									} else {
+										salaAgregar.setNombreUsuario2(usuarioActual.getUsuario());
+									}
+									count++;
+								}
+							}
+							
+							response.getSalas().add(salaAgregar);
 						}
-						mensajeSalas = mensajeSalas.substring(0, mensajeSalas.length() - 1);
-						respuesta = new Mensaje(mensajeSalas, usuario.getUsuario(), mensajeRecibido.getType());
+						respuesta = new Mensaje(this.gson.toJson(response), usuario.getUsuario(), mensajeRecibido.getType());
 						mensajeEnviar.writeObject(respuesta);
 					}
 				} else if(mensajeRecibido.getType().equals("CREACION_SALA")) {
@@ -188,10 +237,10 @@ public class ThreadCliente extends Thread{
 					salaNueva.setDueño(this.usuario);
 					salaNueva.setEsPrivada(valEsPrivada);
 					salaNueva.setEsGrupal(valEsGrupal);
+					//añado dueño a la tabla de relacion
+					salaNueva.getUsuarios().add(this.usuario);
 					
 					this.salaDao.crearSala(salaNueva);
-					
-					//TODO: Agregar la relacion salaUsuario en la tabla UsuarioSala
 					
 					String mensajeSalaNueva = "" + salaNueva.getId()
 					+ "," + salaNueva.getNombre()
@@ -200,7 +249,69 @@ public class ThreadCliente extends Thread{
 					+ "," + salaNueva.getEsGrupal();
 					
 					respuesta = new Mensaje(mensajeSalaNueva, mensajeRecibido.getNombreUsuario(), "NUEVA_SALA");
-					mensajeEnviar.writeObject(respuesta);
+					
+					if(salaNueva.getEsPrivada() == 0) {
+						for (SocketUsuario clienteActual : this.clientes) {
+							if (clienteActual.getUsuario() != this.usuario.getId()) {
+								ObjectOutputStream outputClienteActual = new ObjectOutputStream(clienteActual.getSocket().getOutputStream());
+								outputClienteActual.writeObject(respuesta);
+							} else {
+								mensajeEnviar.writeObject(respuesta);
+							}
+						}
+					} else {
+						mensajeEnviar.writeObject(respuesta);
+					}
+					
+					
+				} else if(mensajeRecibido.getType().equals("AGREGAR_CONTACTO")) {
+					
+					String nombreUsuario = mensajeRecibido.getMensaje();
+					
+					if(this.userDao.existePorNombre(nombreUsuario)) {
+						Usuario usuarioContacto = this.userDao.obtenerUsuarioPorLogin(nombreUsuario);
+						Sala salaNueva = new Sala();
+						salaNueva.setNombre("1a1");
+						salaNueva.setDueño(this.usuario);
+						salaNueva.setEsPrivada(1);
+						salaNueva.setEsGrupal(0);
+						salaNueva.getUsuarios().add(this.usuario);
+						salaNueva.getUsuarios().add(usuarioContacto);
+						
+						this.salaDao.crearSala(salaNueva);
+						
+						this.usuario.getContactos().add(usuarioContacto);
+						usuarioContacto.getContactos().add(this.usuario);
+						
+						this.userDao.guardar(this.usuario);
+						this.userDao.guardar(usuarioContacto);
+						
+						String mensajeSalaNueva = "" + salaNueva.getId()
+						+ "," + salaNueva.getNombre()
+						+ "," + salaNueva.getDueño().getId()
+						+ "," + salaNueva.getEsPrivada()
+						+ "," + salaNueva.getEsGrupal()
+						+ "," + mensajeRecibido.getNombreUsuario()
+						+ "," + usuarioContacto.getUsuario();
+						
+						mensajeSalaNueva += ";";
+						
+						respuesta = new Mensaje(mensajeSalaNueva, mensajeRecibido.getNombreUsuario(), "NUEVA_SALA");
+						mensajeEnviar.writeObject(respuesta);
+						
+						for (SocketUsuario clienteActual : this.clientes) {
+							if(clienteActual.getUsuario() == usuarioContacto.getId()) {
+								ObjectOutputStream outputClienteActual = new ObjectOutputStream(clienteActual.getSocket().getOutputStream());
+								outputClienteActual.writeObject(respuesta);
+								break;
+							}
+						}
+					} else {
+						respuesta = new Mensaje("", mensajeRecibido.getNombreUsuario(), "CONTACTO_NO_ENCONTRADO");
+						mensajeEnviar.writeObject(respuesta);
+					}
+					
+					
 					
 				}
 				else if(mensajeRecibido.getType().equals("SALIR")) {

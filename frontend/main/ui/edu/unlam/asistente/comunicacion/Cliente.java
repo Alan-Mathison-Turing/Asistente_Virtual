@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import edu.unlam.asistente.cliente.Main;
-import edu.unlam.asistente.ventana.Chat;
-import edu.unlam.asistente.ventana.Login;
-import edu.unlam.asistente.ventana.Home;
 
 
 public class Cliente {
@@ -16,8 +16,11 @@ public class Cliente {
 	private String ip;
 	private String nombreUsuario;
 	private Socket socket;
+	private Gson gson;
 	
 	public Cliente() {
+		GsonBuilder builder = new GsonBuilder();
+		this.gson = builder.create();
 	}
 	
 	public void createSocket(String ip, int puerto) throws IOException {
@@ -46,14 +49,17 @@ public class Cliente {
 	 * Metodo utilizado para enviar mensajes de texto en el chat
 	 * @param mensaje
 	 */
-	public void enviarMensaje(String mensaje) {
+	public void enviarMensaje(int idSala, String mensaje) {
 		try {
-			Mensaje m = new Mensaje(mensaje, Main.usuario.getNombreUsuario(), "CHAT");
+			
+			EnviarMensajeOut request = new EnviarMensajeOut();
+			request.setIdSala(idSala);
+			request.setMensaje(mensaje);
+			
+			Mensaje m = new Mensaje(this.gson.toJson(request), Main.usuario.getNombreUsuario(), "CHAT");
 			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
 			salida.writeObject(m);
 		} catch (IOException e) {
-			System.err.println("-- Cliente/enviarMensaje ERROR: ocurrio un error intentando enviar el siguiente mensaje: '" 
-					+ mensaje.substring(0, 150) + "...' \n del usuario: " + nombreUsuario);
 			e.printStackTrace();
 		}
 	}
@@ -70,8 +76,6 @@ public class Cliente {
 			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
 			salida.writeObject(m);
 		} catch (IOException e) {
-			System.err.println("-- Cliente/solicitarAutenticacion ERROR: ocurrio un error intentando autenticar al usuario" 
-									+ nombreUsuario);
 			e.printStackTrace();
 		}
 	}
@@ -98,8 +102,7 @@ public class Cliente {
  			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
 			salida.writeObject(m);
 		} catch (IOException e) {
-			System.err.println("-- Cliente/ObtenerContactos ERROR: ocurrio un error intentando Obtener contactos del usuario" + idUsuario);
-e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	
@@ -110,7 +113,7 @@ e.printStackTrace();
 			salida.writeObject(m);
 		} catch (IOException e) {
 			System.err.println("-- Cliente/ObtenerChats ERROR: ocurrio un error intentando Obtener contactos del usuario" + idUsuario);
-e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	
@@ -121,7 +124,7 @@ e.printStackTrace();
 			salida.writeObject(m);
 		} catch (IOException e) {
 			System.err.println("-- Cliente/Mensaje Recibido ERROR: Ocurrio un error informando que un mensaje fue recibido correctamente");
-e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	
@@ -137,11 +140,24 @@ e.printStackTrace();
 			salida.writeObject(m);
 		} catch (IOException e) {
 			System.err.println("-- Cliente/Creacion de nueva sala ERROR");
-e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
 	public String getNombreUsuario() {
 		return nombreUsuario;
+	}
+
+	public void agregarContacto(String contactoAgregar) {
+		try {
+			
+			Mensaje m = new Mensaje(contactoAgregar, nombreUsuario, "AGREGAR_CONTACTO");
+			ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
+			salida.writeObject(m);
+		} catch (IOException e) {
+			System.err.println("-- Cliente/Agregar nuevo contacto ERROR");
+e.printStackTrace();
+		}
+		
 	}
 }
