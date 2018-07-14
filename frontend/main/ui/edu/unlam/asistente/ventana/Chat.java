@@ -155,7 +155,7 @@ public class Chat extends JFrame {
 				} else {
 					htmlEditorKit.insertHTML(document, document.getLength(), " > Yo: " + textoEnviar, 0, 0, null);
 					textAreaChat.setCaretPosition(textAreaChat.getDocument().getLength());
-					Main.cliente.enviarMensaje("sala:" + this.idSala + "|" +  textoEnviar); //Al texto a enviar le agrego el id de la sala	
+					Main.cliente.enviarMensaje(this.idSala, textoEnviar);
 				}
 			} catch (BadLocationException | IOException e) {
 				System.out.println("INFO: No se pudo interpretar el mensaje enviado por el usuario.");
