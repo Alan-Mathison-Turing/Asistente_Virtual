@@ -181,7 +181,10 @@ public class ThreadEscucha extends Thread {
 							Main.login.setVisible(true);
 					
 
-				}
+					} else if(msj.getType().equals("ALARMA_EVENTO")) {
+						AlarmaInput response = this.gson.fromJson(msj.getMensaje(), AlarmaInput.class);
+						Main.home.showDialogRecordatorioAlarma(response.getNombreEvento(), response.getFecha());
+					}
 				}
 
 			} 

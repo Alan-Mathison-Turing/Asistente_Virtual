@@ -17,6 +17,7 @@ import edu.unlam.asistente.database.dao.SalaDao;
 import edu.unlam.asistente.database.dao.UsuarioDao;
 import edu.unlam.asistente.database.pojo.Sala;
 import edu.unlam.asistente.database.pojo.Usuario;
+import edu.unlam.asistente.recordatorioEventos.ThreadAlarma;
 
 public class ThreadCliente extends Thread{
 	
@@ -64,6 +65,9 @@ public class ThreadCliente extends Thread{
 						//Devuelve el id del usuario si es que se logueo correctamente
 						response.setIdUsuario(this.usuario.getId());
 						response.setSuccess(true);
+						
+						//añado a lista de sockets de alarma durante auth exitosa
+						ThreadAlarma.agregarUserSocket(this.cliente);
 					} else {
 						//Caso contrario devuelve false
 						response.setIdUsuario(-1);

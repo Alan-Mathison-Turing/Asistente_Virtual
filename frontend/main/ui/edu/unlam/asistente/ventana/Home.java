@@ -361,4 +361,10 @@ public class Home extends JFrame {
 		
 	}
 	
+	public void showDialogRecordatorioAlarma(String nombreEvento, String fecha) {
+			JOptionPane.showMessageDialog(null, "Recordatorio de evento " + nombreEvento, 
+					"No olvide que el evento " + nombreEvento + " ocurre " + fecha, JOptionPane.WARNING_MESSAGE);
+		
+	}
+	
 }
