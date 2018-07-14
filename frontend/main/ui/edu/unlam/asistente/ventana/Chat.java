@@ -70,24 +70,7 @@ public class Chat extends JFrame {
 	 * Create the frame.
 	 */
 	public Chat(int idSala, String nombre, int dueñoId, int esPrivado, int esGrupal) {
-		addComponentListener(new ComponentAdapter() {
-			public void componentMoved(ComponentEvent e) {
-				int x = getX();
-				int y = getY();
-			
-				}
-			@Override
-			public void componentResized(ComponentEvent e) {
-				int x = getX();
-				int y = getY();
-				int w = getWidth();
-				int h = getHeight();
-				textAreaChat.repaint(x, y, w, h);
-				textFieldEnviar.repaint(x, y, w, h);
-				//maximizar();
-			}
-		});
-		
+
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -175,7 +158,6 @@ public class Chat extends JFrame {
 		scrollPane.setViewportView(textAreaChat);
 		
 		JButton btnAgegarContacto = new JButton("Agregar contacto");
-		btnAgegarContacto.setSelectedIcon(new ImageIcon("C:\\Users\\Usuario\\Documents\\GitHub\\Asistente_Virtual\\icons8-contactos-26.png"));
 		btnAgegarContacto.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnAgegarContacto.setBounds(263, 4, 147, 23);
 		contentPane.add(btnAgegarContacto);
